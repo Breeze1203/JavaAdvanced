@@ -4,7 +4,7 @@ package org.example;
  * Hello world!
  *
  */
-public class App 
+public class EurekaProvider01Application
 {
     public static void main( String[] args )
     {
