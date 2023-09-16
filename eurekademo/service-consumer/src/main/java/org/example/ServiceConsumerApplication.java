@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+
 /**
  * Hello world!
  */
@@ -12,8 +13,10 @@ import org.springframework.web.client.RestTemplate;
 public class ServiceConsumerApplication {
     @Bean
     public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
+       return new RestTemplate();
+   }
+
+
 
     public static void main(String[] args) {
         SpringApplication.run(ServiceConsumerApplication.class, args);
