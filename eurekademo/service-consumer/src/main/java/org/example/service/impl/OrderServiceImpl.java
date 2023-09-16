@@ -19,8 +19,8 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
-    private RestTemplate restTemplate;
+   @Autowired
+  private RestTemplate restTemplate;
 
     @Autowired
     private DiscoveryClient discoveryClient;
@@ -67,6 +67,7 @@ public class OrderServiceImpl implements OrderService {
             return null;
         sb = new StringBuilder();
         sb.append("http://" + si.getHost() + ":" + si.getPort() + "/product/list");
+        System.out.println(sb.toString());
         // ResponseEntity: 封装了返回数据
         ResponseEntity<List<Product>> response = restTemplate.exchange(
                 sb.toString(),
