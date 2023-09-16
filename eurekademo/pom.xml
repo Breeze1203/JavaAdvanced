@@ -9,9 +9,12 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>eureka-server</module>
-        <module>eureka-provider</module>
+        <module>eureka-server01</module>
+        <module>eureka-provider01</module>
         <module>service-consumer</module>
+        <module>service-provider02</module>
+        <module>eureka-server02</module>
+        <module>eureka-server01</module>
     </modules>
 
     <!-- 继承 spring-boot-starter-parent 依赖 -->
