@@ -5,9 +5,9 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
- * Unit test for simple ServiceProviderApplication.
+ * Unit test for simple ServiceProviderApplication01.
  */
-public class ServiceProviderApplicationTest
+public class ServiceProviderApplication01Test
     extends TestCase
 {
     /**
@@ -15,7 +15,7 @@ public class ServiceProviderApplicationTest
      *
      * @param testName name of the test case
      */
-    public ServiceProviderApplicationTest(String testName )
+    public ServiceProviderApplication01Test(String testName )
     {
         super( testName );
     }
@@ -25,7 +25,7 @@ public class ServiceProviderApplicationTest
      */
     public static Test suite()
     {
-        return new TestSuite( ServiceProviderApplicationTest.class );
+        return new TestSuite( ServiceProviderApplication01Test.class );
     }
 
     /**
