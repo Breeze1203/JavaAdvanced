@@ -18,7 +18,10 @@ public class MailSend {
 
     public void sentThymeleafHtml(){
         Context context=new Context();
-        context.setVariable("username", "彭涛");
+        context.setVariable("name", "彭涛");
+        context.setVariable("posName", "研发工程师");
+        context.setVariable("joblevelName", "助教");
+        context.setVariable("departmentName", "技术部");
         String emailTemplate =this.templateEngine.process("emailTemplate", context);
         mailService.sendHtmlMail(emailTemplate);
     }

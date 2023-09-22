@@ -13,8 +13,8 @@ public class SpringbootmailApplicationTests {
 	@Test
 	void contextLoads() {
 //		mailSend.sendText();
-//		mailSend.sentThymeleafHtml();
-		mailSend.sendAttachment();
+		mailSend.sentThymeleafHtml();
+		//mailSend.sendAttachment();
 	}
 
 }

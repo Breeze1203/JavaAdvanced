@@ -54,7 +54,7 @@ public class MailService {
             mimeMessageHelper.setFrom("3548297839@qq.com");
             mimeMessageHelper.setSubject("利用template创建html邮件模版");
             mimeMessageHelper.setText(context,true);
-            mimeMessageHelper.setTo("19972552055@163.com");
+            mimeMessageHelper.setTo("3548297839@qq.com");
             javaMailSender.send(mimeMessage);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
