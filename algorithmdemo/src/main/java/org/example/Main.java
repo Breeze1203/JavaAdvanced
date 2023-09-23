@@ -2,8 +2,10 @@ package org.example;
 
 public class Main {
     public static void main(String[] args) {
-        boolean palindrome = isPalindrome(1212);
-        System.out.println(palindrome);
+        //boolean palindrome = isPalindrome(1212);
+        //System.out.println(palindrome);
+//     罗马数字测试
+
     }
 
     public static boolean isPalindrome(int x) {
