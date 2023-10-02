@@ -1,13 +1,15 @@
 package org.example;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
+
 /**
  * Hello world!
- *
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+@SpringBootApplication
+public class EurekaProviderApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaProviderApplication.class);
     }
 }

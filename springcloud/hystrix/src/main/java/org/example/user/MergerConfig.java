@@ -1,9 +1,6 @@
-package org.example.config;
+package org.example.user;
 
 import com.netflix.hystrix.*;
-import org.example.pojo.Product;
-import org.example.pojo.User;
-import org.example.service.UserService;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,6 +17,7 @@ import java.util.List;
 
 
 public class MergerConfig extends HystrixCollapser<List<User>, User, Integer> {
+    // id为请求的参数  usersrvice是HystrixCommand示例中要用到的
     private Integer id;
     private UserService userService;
 
@@ -44,37 +42,22 @@ public class MergerConfig extends HystrixCollapser<List<User>, User, Integer> {
     @Override
     protected HystrixCommand<List<User>> createCommand(Collection<CollapsedRequest<User, Integer>> collection) {
         // 将请求参数放在一个集合里面
-
+        System.out.println("  请求参数个数为："+collection.size());
         List<Integer> ids = new ArrayList<>(collection.size());
         for (CollapsedRequest<User,Integer> userIntegerCollapsedRequest: collection) {
             ids.add(userIntegerCollapsedRequest.getArgument());
         }
-
+        System.out.println("-------");
+        // 返回一个HystrixCommand示例，在那个方法里执行参数的具体调用逻辑
         return new UserCommand(ids,userService);
     }
 
-    /**
-     * List<user> users：这是一个List<user>类型的参数，表示合并请求的响应结果。
-     * 根据您的代码，它被命名为users，但是根据参数名来看，是User对象的集合。
-     * 在这个方法中，您可以使用users参数中的数据来映射到对应的合并请求。根据CollapsedRequest对象的定义，
-     * 它包含了合并请求的参数和响应类型等信息。您可以使用这些信息来将users中的数据分配给对应的合并请求。
-     *Collection<CollapsedRequest<User, Integer>> collection：
-     * 这是一个Collection<CollapsedRequest<User, Integer>>类型的参数，表示合并请求的集合。
-     * 在mapResponseToRequests()方法中，您可以通过遍历collection参数来获取每个合并请求的信息。
-     * 然后，您可以将users中的数据根据合适的逻辑分配给对应的合并请求。
-     * 请注意，CollapsedRequest是Hystrix提供的一个类，用于封装合并请求的相关信息。在这个参数中，
-     * 它被泛型化为CollapsedRequest<User, Integer>，表示合并请求的响应类型为User，合并请求的参数类型为Integer。
-     * @param users
-     * @param collection
-     */
-
-    // 这里包含的是请求返回的结果 分发请求结果
+    // 这里包含的是请求返回的结果 分发请求结果 这里包含三个请求的请求结果
     @Override
     protected void mapResponseToRequests(List<User> users, Collection<CollapsedRequest<User, Integer>> collection) {
         int count =0;
         for (CollapsedRequest<User,Integer> request:collection) {
-            request.setResponse(users.get(0));
-            break;
+            request.setResponse(users.get(count++));
         }
     }
 

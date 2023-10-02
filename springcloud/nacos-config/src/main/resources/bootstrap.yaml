@@ -1,10 +1,8 @@
 spring:
+  application:
+    name: nacos-config
   cloud:
     nacos:
-      discovery:
-        server-addr: 192.168.3.63:8848
-  application:
-    name: provider
-
-server:
-  port: 8080
+      config:
+        server-addr: 192.68.3.63:8848
+        file-extension: yaml
