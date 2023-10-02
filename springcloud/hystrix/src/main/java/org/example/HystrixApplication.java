@@ -1,13 +1,22 @@
 package org.example;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
+
 /**
- * Hello world!
- *
+ * 用于启用断路器功能
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+@SpringBootApplication
+@EnableCircuitBreaker
+public class HystrixApplication {
+    @Bean
+    public RestTemplate template(){
+        return new RestTemplate();
+    }
+    public static void main(String[] args) {
+        SpringApplication.run(HystrixApplication.class);
     }
 }

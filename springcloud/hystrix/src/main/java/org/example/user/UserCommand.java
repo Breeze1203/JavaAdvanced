@@ -1,8 +1,6 @@
-package org.example.config;
+package org.example.user;
 
 import com.netflix.hystrix.*;
-import org.example.pojo.User;
-import org.example.service.UserService;
 
 import java.util.List;
 

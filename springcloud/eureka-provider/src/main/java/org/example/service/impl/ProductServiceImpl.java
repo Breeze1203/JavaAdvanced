@@ -2,10 +2,12 @@ package org.example.service.impl;
 
 import org.example.pojo.Product;
 import org.example.service.ProductService;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service("ProductService")
 public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getById(int id) {
