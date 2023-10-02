@@ -1,2 +1,12 @@
-package org.example.service;public interface ProductService {
+package org.example.service;
+
+import org.example.pojo.Product;
+
+import java.util.List;
+import java.util.Map;
+
+public interface ProductService {
+    List<Product> setlectProductList();
+
+    Map<Object,Object> createProduct(Product product);
 }
