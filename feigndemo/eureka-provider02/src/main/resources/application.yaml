@@ -1,0 +1,17 @@
+server:
+  port: 7072 # 端口
+
+spring:
+  application:
+    name: service-provider # 应用名称(集群下相同)
+
+  # 配置 Eureka Server 注册中心
+eureka:
+  instance:
+    prefer-ip-address: true       # 是否使用 ip 地址注册
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} # ip:port
+  client:
+    register-with-eureka: true  # 是否将自己注册到注册中心，默认为 true
+    fetch-registry: true
+    service-url: # 设置服务注册中心地址
+      defaultZone: http://localhost:8761/eureka/,http://localhost:8762/eureka

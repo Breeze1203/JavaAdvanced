@@ -1,2 +1,19 @@
-package org.example.pojo;public class Order {
+package org.example.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.List;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class Order implements Serializable {
+    private Integer id;
+    private String orderNo;
+    private String orderAddress;
+    private Double totalPrice;
+    private List<Product> ProductList;
 }

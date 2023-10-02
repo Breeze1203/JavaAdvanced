@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.3.63:8848
+  application:
+    name: provider
+
+server:
+  port: 8080
