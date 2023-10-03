@@ -20,6 +20,7 @@
         <module>eureka-server</module>
         <module>hystrix</module>
         <module>eureka-provider</module>
+        <module>openfeign</module>
     </modules>
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
