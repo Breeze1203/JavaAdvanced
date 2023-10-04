@@ -30,7 +30,7 @@ public class ProductController {
     //其中{id}表示URL路径中的参数@PathVariable("id")注解将该路径参数绑定到方法的id参数上，
     @DeleteMapping("/product2/{id}")
     void deleteProductById(@PathVariable("id")Integer id){
-
+        System.out.println(id);
     }
 
     //RequestHeader("name")注解将HTTP请求头参数的值绑定到方法的参数上
