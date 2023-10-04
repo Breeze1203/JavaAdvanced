@@ -13,3 +13,16 @@ eureka:
   client:
     service-url: # 设置服务注册中心地址
       defaultZone: http://localhost:8761/eureka/
+
+# 配置日志
+feign:
+  hystrix:
+    enabled: true
+  compression:
+    request: # 请求数据压缩
+      enabled: true
+      mime-types: text/html,application/json
+      min-request-size: 2048 #压缩数据下限，表示当前传输的数据量大于2048需要压缩
+    response:
+      enabled: true # 响应数据压缩
+
