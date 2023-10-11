@@ -1,0 +1,45 @@
+# 创建user表
+CREATE TABLE user (
+id INT PRIMARY KEY AUTO_INCREMENT,
+name VARCHAR(255) NOT NULL,
+phone BIGINT NOT NULL,
+address VARCHAR(255) NOT NULL,
+username VARCHAR(50) NOT NULL,
+password VARCHAR(50) NOT NULL
+);
+# 创建role表
+CREATE TABLE role (
+id INT NOT NULL AUTO_INCREMENT,
+role_name VARCHAR(30) NOT NULL,
+nameZh VARCHAR(30) NOT NULL,
+PRIMARY KEY (id)
+);
+#创建菜单角色关联表
+CREATE TABLE menu_role (
+id INT NOT NULL AUTO_INCREMENT,
+menu_id INT NOT NULL,
+role_id INT NOT NULL,
+PRIMARY KEY (id)
+);
+
+#创建menu表
+create TABLE menu(
+id INT NOT NULL AUTO_INCREMENT,
+url VARCHAR(30) NOT NULL,
+path VARCHAR(30) NOT NULL,
+component VARCHAR(30) NOT NULL,
+name VARCHAR(30) NOT NULL,
+parentId INT NOT NULL,
+PRIMARY KEY (id)
+);
+# 创建用户角色关联表
+create TABLE user_role(
+id INT NOT NULL AUTO_INCREMENT,
+user_id INT NOT NULL,
+role_id INT NOT NULL,
+PRIMARY KEY (id)
+);
+
+
+
+
