@@ -1,4 +1,4 @@
-package org.example;
+package org.example.lock;
 
 import redis.clients.jedis.Jedis;
 

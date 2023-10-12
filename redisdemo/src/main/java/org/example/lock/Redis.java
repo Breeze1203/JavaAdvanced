@@ -1,6 +1,7 @@
-package org.example;
+package org.example.lock;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.example.lock.CallWithJedis;
 import redis.clients.jedis.JedisPool;
 
 public class Redis{
