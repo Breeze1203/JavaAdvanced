@@ -1,2 +1,5 @@
-package org.example.test;public interface Authentication {
+package org.example.test;
+
+public interface Authentication {
+    void success();
 }
