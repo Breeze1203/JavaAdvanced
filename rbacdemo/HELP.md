@@ -22,7 +22,7 @@ role_id INT NOT NULL,
 PRIMARY KEY (id)
 );
 
-#创建menu表
+# 创建menu表
 create TABLE menu(
 id INT NOT NULL AUTO_INCREMENT,
 url VARCHAR(30) NOT NULL,
@@ -39,6 +39,31 @@ user_id INT NOT NULL,
 role_id INT NOT NULL,
 PRIMARY KEY (id)
 );
+
+# 菜单架构
+系统管理
+    权限设置
+    部门设置
+    职位设置
+人事管理
+    员工基本资料
+    员工高级资料
+日志管理
+    登录日志
+    操作日志
+    访问日志
+消息通知
+    入职通知
+    公告信息
+    聊天管理
+
+当用户登录成功将用户的信息存入到redis数据库中，
+同时在mysql数据库中根据当前用户id查询出role角色id，
+在redis数据库中存入键 roleId(角色id)
+role(角色)
+根据角色id查询出角色
+    
+    
 
 
 

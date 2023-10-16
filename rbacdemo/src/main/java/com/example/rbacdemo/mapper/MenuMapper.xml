@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.rbacdemo.mapper.MenuMapper" >
+    <resultMap id="BaseResultMap" type="com.example.rbacdemo.model.menu">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="path" property="path" jdbcType="VARCHAR"/>
+        <result column="component" property="component" jdbcType="VARCHAR"/>
+        <result column="parentId" property="parentId" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="BaseResultMap2" type="com.example.rbacdemo.model.menu" extends="BaseResultMap">
+        <collection property="children" ofType="com.example.rbacdemo.model.menu">
+            <id column="id2" property="id" jdbcType="INTEGER"/>
+            <result column="url2" property="url" jdbcType="VARCHAR"/>
+            <result column="name2" property="name" jdbcType="VARCHAR"/>
+            <result column="path2" property="path" jdbcType="VARCHAR"/>
+            <result column="component2" property="component" jdbcType="VARCHAR"/>
+            <result column="parentId2" property="parentId" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+    <select id="getMenuByRole" resultMap="BaseResultMap2" parameterType="int">
+        select m1.*,
+               m2.id        as id2,
+               m2.url       as url2,
+               m2.name      as name2,
+               m2.path      as path2,
+               m2.component as component2,
+               m2.parentId  as parentId2
+        from menu_role mr,
+             menu m1,
+             role r,
+             menu m2
+        where mr.role_id = r.id
+          and mr.menu_id = m1.id
+          and m1.id = m2.parentId
+          and r.id = #{rid};
+    </select>
+</mapper>
