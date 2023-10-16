@@ -1,17 +1,22 @@
 package com.example.rbacdemo.config;
 
 import com.example.rbacdemo.interceptor.CheckPermissionInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+    @Autowired
+    CheckPermissionInterceptor checkPermissionInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 将自定义的拦截器进行添加
-        registry.addInterceptor(new CheckPermissionInterceptor());
+        registry.addInterceptor(checkPermissionInterceptor);
     }
 
     @Override
@@ -23,6 +28,5 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true) // 允许发送凭证信息（如 cookies）
                 .maxAge(3600); // 设置响应的最大存活时间（缓存时间））
     }
-
 
 }
