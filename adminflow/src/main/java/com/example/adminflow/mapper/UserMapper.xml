@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.adminflow.mapper.UserMapper" >
+    <resultMap id="BaseResult" type="com.example.adminflow.model.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="phone" property="phone" jdbcType="BIGINT"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="userFace" property="userFace" jdbcType="VARCHAR"/>
+        <result column="embod" property="embod" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+    </resultMap>
+<!-- 根据用户名查找用户-->
+    <select id="getUserByName" resultMap="BaseResult" parameterType="java.lang.String">
+        select * from user where username=#{username}
+    </select>
+<!--   根据id查询用户-->
+    <select id="getUser" resultMap="BaseResult" parameterType="java.lang.Integer">
+        select * from user where id=#{id}
+    </select>
+<!--    根据id修改用户-->
+    <update id="update" parameterType="com.example.adminflow.model.User">
+        update user
+        <set>
+            <if test="phone!=null">
+                phone=#{phone,jdbcType=BIGINT},
+            </if>
+            <if test="address!=null">
+                address=#{address,jdbcType=VARCHAR},
+            </if>
+            <if test="username!=null">
+                username=#{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password!=null">
+                password=#{password,jdbcType=VARCHAR},
+            </if>
+            <if test="userFace!=null">
+                userFace=#{userFace,jdbcType=VARCHAR},
+            </if>
+            <if test="embod!=null">
+                embod=#{embod,jdbcType=VARCHAR},
+            </if>
+            <if test="email!=null">
+                email=#{email,jdbcType=VARCHAR}
+            </if>
+        </set>
+        <if test="id!=null">
+            where id = #{id,jdbcType=INTEGER}
+        </if>
+    </update>
+</mapper>
