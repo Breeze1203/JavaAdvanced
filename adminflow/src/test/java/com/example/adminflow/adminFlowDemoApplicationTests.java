@@ -102,12 +102,12 @@ class adminFlowDemoApplicationTests {
         HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
         String hashKey = "loginCount"; // 哈希表的键
 // 存入 "2023-10-21" 的数据并自增
-        String dateKey1 = "2023-10-21";
+        String dateKey1 = "2023-10-22";
         String value1 = hashOps.get(hashKey, dateKey1);
-        Long newValue1 = value1 != null ? Long.parseLong(value1) + 1 : 1;
+        Long newValue1 = value1 != null ? Long.parseLong(value1) + 3 : 1;
         hashOps.put(hashKey, dateKey1, newValue1.toString());
 // 存入 "2023-10-22" 的数据并自增
-        String dateKey2 = "2023-10-22";
+        String dateKey2 = "2023-10-23";
         String value2 = hashOps.get(hashKey, dateKey2);
         Long newValue2 = value2 != null ? Long.parseLong(value2) + 3 : 1;
         hashOps.put(hashKey, dateKey2, newValue2.toString());
@@ -119,5 +119,26 @@ class adminFlowDemoApplicationTests {
             System.out.println("Key: " + key + ", Value: " + value);
         }
 
+    }
+
+    @Test
+    void getIndex(){
+        HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
+        String hashKey = "loginCount"; // 哈希表的键
+// 定义范围
+        int startIndex = 1; // 范围开始索引（从0开始）
+        int endIndex = 3; // 范围结束索引（包括结束索引）
+
+// 获取指定范围的字段和对应的值
+        List<String> rangeValues = new ArrayList<>();
+        Set<String> keys = hashOps.keys(hashKey);
+        for (String s:keys) {
+            rangeValues.add(s);
+        }
+        for (int i=rangeValues.size()-5;i<rangeValues.size();i++){
+            String s = rangeValues.get(i);
+            System.out.println(rangeValues.get(i));
+            System.out.println(hashOps.get("loginCount",s));
+        }
     }
 }
