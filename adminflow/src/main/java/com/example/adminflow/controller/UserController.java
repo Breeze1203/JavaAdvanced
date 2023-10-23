@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -121,16 +120,25 @@ public class UserController {
         }
     }
 
+    /*
+    该方法是获取最近五天项目访问人数
+     */
     @GetMapping("/getCount")
     public CountResult getAccessCount() {
+        HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
         List<String> numbers=new ArrayList<>();
         List<Long> score=new ArrayList<>();
-        HashOperations<String, String, String> operations = redisTemplate.opsForHash();
-        Map<String, String> loginCount = operations.entries("loginCount");
-        for (Map.Entry<String, String> entry : loginCount.entrySet()) {
-            numbers.add(entry.getKey());
-            Long value = Long.parseLong(entry.getValue());
-            score.add(value);
+        // 获取指定范围的字段和对应的值
+        List<String> rangeValues = new ArrayList<>();
+        Set<String> keys = hashOps.keys("loginCount");
+        // 将set集合里面的元素放入list集合
+        rangeValues.addAll(keys);
+        for (int i=rangeValues.size()-5;i<rangeValues.size();i++){
+            String s = rangeValues.get(i);
+            numbers.add(s);
+            String s1 = hashOps.get("loginCount", s);
+            long l = Long.parseLong(s1);
+            score.add(l);
         }
         return new CountResult(numbers, score);
     }
