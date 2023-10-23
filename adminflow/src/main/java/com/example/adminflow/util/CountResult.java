@@ -11,6 +11,6 @@ import java.util.Set;
 @ToString
 @AllArgsConstructor
 public class CountResult {
-    private Set<String> numbers;
-    private List<Double> scores;
+    private List<String> numbers;
+    private List<Long> count;
 }
