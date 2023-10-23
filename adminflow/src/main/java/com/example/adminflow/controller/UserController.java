@@ -14,6 +14,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -46,8 +47,11 @@ public class UserController {
         if (u != null && password.equals(u.getPassword())) {
             String format = DateUtil.format(new Date());
             // 每次用户登录成功，访问次数加一
-            ZSetOperations<String, String> count = redisTemplate.opsForZSet();
-            count.incrementScore("count", format, 1);
+            HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
+            String s = hashOps.get("loginCount", format);
+            // 如果s不为null,就将起初的值先转为long，然后加一
+            Long count = s != null ? Long.parseLong(s) + 1 : 1;
+            hashOps.put("loginCount",format,count.toString());
             // 将用户信息存入到redis中
             try {
                 ValueOperations<String, String> operations = redisTemplate.opsForValue();
@@ -119,15 +123,14 @@ public class UserController {
 
     @GetMapping("/getCount")
     public CountResult getAccessCount() {
-        Set<String> numbers = new HashSet<>();
-        List<Double> score=new ArrayList<>();
-        ZSetOperations<String, String> operations = redisTemplate.opsForZSet();
-        Set<String> count = operations.range("count", 0, -1);
-        if (count != null) {
-            for (String s : count) {
-                numbers.add(s);
-                score.add(redisTemplate.opsForZSet().score("count", s));
-            }
+        List<String> numbers=new ArrayList<>();
+        List<Long> score=new ArrayList<>();
+        HashOperations<String, String, String> operations = redisTemplate.opsForHash();
+        Map<String, String> loginCount = operations.entries("loginCount");
+        for (Map.Entry<String, String> entry : loginCount.entrySet()) {
+            numbers.add(entry.getKey());
+            Long value = Long.parseLong(entry.getValue());
+            score.add(value);
         }
         return new CountResult(numbers, score);
     }
