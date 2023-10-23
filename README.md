@@ -10,6 +10,7 @@
 2023-10-22 3
 因为zset是按score排序的，所有这种数据结构在此时并不合适，转而用hash来实现
 具体实现代码
+、、、
 String format = DateUtil.format(new Date());
             // 每次用户登录成功，访问次数加一
             HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
@@ -37,3 +38,4 @@ String format = DateUtil.format(new Date());
         }
         return new CountResult(numbers, score);
     }
+    、、、
