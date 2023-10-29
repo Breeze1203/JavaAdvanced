@@ -6,7 +6,11 @@ import java.util.Date;
 public class DateUtil {
     public static String format(Date date){
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String format = simpleDateFormat.format(date);
-        return format;
+        return simpleDateFormat.format(date);
+    }
+
+    public static String formatLog(Date date){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return simpleDateFormat.format(date);
     }
 }

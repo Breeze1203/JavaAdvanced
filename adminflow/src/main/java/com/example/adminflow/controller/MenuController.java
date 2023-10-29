@@ -23,7 +23,7 @@ public class MenuController {
 
     @GetMapping("/init")
     private List<Menu> getAllMenu(@RequestParam("id") int id) {
-        String s = redisTemplate.opsForValue().get("role_" + id);
+        String s = redisTemplate.opsForValue().get("roleId_" + id);
         if (s != null) {
             return menuService.getMenuByRole(Integer.valueOf(s));
         }

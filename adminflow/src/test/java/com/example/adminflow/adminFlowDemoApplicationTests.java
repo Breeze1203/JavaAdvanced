@@ -1,16 +1,16 @@
 package com.example.adminflow;
 
-import com.example.adminflow.mapper.MenuMapper;
-import com.example.adminflow.mapper.UserMapper;
-import com.example.adminflow.mapper.UserRoleMapper;
+import com.example.adminflow.mapper.*;
+import com.example.adminflow.model.LoginData;
 import com.example.adminflow.model.User;
 import com.example.adminflow.model.Menu;
+import com.example.adminflow.util.JwtToken;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.*;
+
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -37,12 +37,13 @@ class adminFlowDemoApplicationTests {
 
     @Test
     void testRedis() {
-        RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
-        Set<byte[]> keys = connection.keys("*".getBytes());
-        for (byte[] key : keys) {
-            connection.del(key);
-        }
-        connection.close();
+        redisTemplate.delete("1token");
+//        RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
+//        Set<byte[]> keys = connection.keys("*".getBytes());
+//        for (byte[] key : keys) {
+//            connection.del(key);
+//        }
+//        connection.close();
     }
 
     @Test
@@ -128,7 +129,6 @@ class adminFlowDemoApplicationTests {
 // 定义范围
         int startIndex = 1; // 范围开始索引（从0开始）
         int endIndex = 3; // 范围结束索引（包括结束索引）
-
 // 获取指定范围的字段和对应的值
         List<String> rangeValues = new ArrayList<>();
         Set<String> keys = hashOps.keys(hashKey);
@@ -141,4 +141,51 @@ class adminFlowDemoApplicationTests {
             System.out.println(hashOps.get("loginCount",s));
         }
     }
+
+    @Autowired
+    RoleMapper roleMapper;
+
+    @Test
+    void getRole(){
+        // 测试根据id获取身份信息
+        String roleById = roleMapper.getRoleById(1);
+        System.out.println(roleById);
+    }
+
+
+
+    // 测试登录日志插入
+    @Test
+    void insertLog(){
+        LoginData loginData = new LoginData();
+        loginData.setId(1);
+        loginData.setOperation_log("xxcd");
+//        loginData.setLogin_user("admin");
+//        int i = logDataMapper.insertLogin(loginData);
+//        System.out.println(i);
+    }
+
+    // 测试查询日志
+    @Test
+    void selectLogData(){
+        //List<LoginData> logData = logDataMapper.getLogData();
+        //System.out.println(logData);
+    }
+
+    // 测试生成token
+    @Test
+    void generateToken(){
+        User user = new User();
+        user.setUsername("admin");
+        user.setEmbod("xxx");
+        user.setPhone(19243243L);
+        user.setAddress("中国深圳");
+        user.setUserFace("csdfsdf");
+        user.setId(5);
+        String s = JwtToken.generateToken(user);
+        System.out.println(s);
+        Integer b= JwtToken.verifyToken(s);
+        System.out.println(b);
+    }
+
 }

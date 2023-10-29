@@ -19,8 +19,8 @@ public class UserService {
         int update = userMapper.update(u);
         if (update != 0) {
             User user = userMapper.getUser(u.getId());
-            return new StatusUtil("修改成功",user);
+            return new StatusUtil("修改成功",200,user);
         }
-        return new StatusUtil("网络异常，请稍后再试",null);
+        return new StatusUtil("网络异常，请稍后再试",300,null);
     }
 }
