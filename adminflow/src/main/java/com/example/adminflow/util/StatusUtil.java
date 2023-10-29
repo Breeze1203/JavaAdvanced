@@ -2,18 +2,15 @@ package com.example.adminflow.util;
 
 
 import com.example.adminflow.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
+@AllArgsConstructor
 public class StatusUtil {
-
-    private String  message;
-
-
-    private User u;
-
-    public StatusUtil(String message, User u) {
-        this.message = message;
-        this.u = u;
-    }
+    public String message;
+    public Integer code;
+    public User user;
 }

@@ -39,7 +39,9 @@ user_id INT NOT NULL,
 role_id INT NOT NULL,
 PRIMARY KEY (id)
 );
-
+# 角色操作权限关联表
+将不同角色可以访问的权限添加到这个表里，例如，角色id为1的admin
+可以操作的权限为log:edit,log:delete
 # 菜单架构
 系统管理
     权限设置
@@ -57,11 +59,11 @@ PRIMARY KEY (id)
     公告信息
     聊天管理
 
+### 基本权限设计思路
 当用户登录成功将用户的信息存入到redis数据库中，
 同时在mysql数据库中根据当前用户id查询出role角色id，
 在redis数据库中存入键 roleId(角色id)
-role(角色)
-根据角色id查询出角色
+根据角色id查询角色权限表查询出可以访问的角色
     
     
 

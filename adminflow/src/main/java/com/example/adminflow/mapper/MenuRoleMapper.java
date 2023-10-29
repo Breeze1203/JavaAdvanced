@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository("MenuRoleMapper")
 public interface MenuRoleMapper {
-    public List<Menu> getMenuByRoleId(@Param("roleId")int roleId);
+    List<Menu> getMenuByRoleId(@Param("roleId") int roleId);
 }
