@@ -8,6 +8,8 @@ import com.example.adminflow.util.CountResult;
 import com.example.adminflow.util.DateUtil;
 import com.example.adminflow.util.JwtToken;
 import com.example.adminflow.util.StatusUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +31,9 @@ public class UserController {
 
     @Resource(name = "UserService")
     private UserService userService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     // 登录认证的方法
     @GetMapping("/login")
@@ -53,10 +58,16 @@ public class UserController {
             if (operations.get(token_name) == null) {
                 operations.set(token_name, token, 60 * 60 * 24, TimeUnit.MINUTES);
             } else {
-                return new StatusUtil("当前已存在登录用户，请稍后再试",500,null);
+                return new StatusUtil("当前已存在登录用户，请稍后再试", 500, null);
+            }
+            try {
+                // 将用户信息存入缓存
+                operations.set("user_" + username, objectMapper.writeValueAsString(u));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
             }
             // 将用户信息生成token返回给前端
-            Cookie c3 = new Cookie(u.getUsername()+"token", token);
+            Cookie c3 = new Cookie(u.getUsername() + "token", token);
             c3.setMaxAge(24 * 60 * 60);
             c3.setPath("/");
             c3.setDomain("localhost");
@@ -69,8 +80,8 @@ public class UserController {
                 response.addCookie(c1);
                 Cookie c2 = new Cookie("password", password);
                 c2.setMaxAge(24 * 60 * 60);
-                c2.setDomain("localhost");
                 c2.setPath("/");
+                c2.setDomain("localhost");
                 response.addCookie(c2);
             } else {
                 Cookie cookie1 = new Cookie("username", username);
@@ -84,37 +95,30 @@ public class UserController {
             redisTemplate.opsForValue().set(u.getUsername() + "token", token);
             // 设置键的生命周期为24小时
             redisTemplate.expire(u.getUsername() + "token", 24, TimeUnit.HOURS);
-            return new StatusUtil("登录成功", 200,null);
+            return new StatusUtil("登录成功", 200, u);
         } else {
-            return new StatusUtil("用户名或密码错误", 401,null);
+            return new StatusUtil("用户名或密码错误", 401, null);
         }
 
     }
 
-    @GetMapping("/getUser")
-    public StatusUtil getUser(@RequestParam("username")String username){
-        User user = userService.getUserByName(username);
-        user.setPassword(null);
-        return new StatusUtil(null,200,user);
-    }
-
-    @PostMapping("/updateUser")
-    public StatusUtil updateUser(@RequestBody User u) {
-//        StatusUtil statusUtil = userService.upUser(u);
-//        if (statusUtil.getU() != null) {
-//            return statusUtil;
-//        }
-        return new StatusUtil("网络出现异常，请稍后再试", 300,null);
-    }
 
     @GetMapping("/loginOut")
-    public StatusUtil loginOut(@RequestParam("id") int id) {
+    public StatusUtil loginOut(@RequestParam("username") String username) {
         // 删除redis里面存储的用户信息
-        Boolean roleId = redisTemplate.delete("roleId_" + id);
-        if (roleId) {
-            return new StatusUtil("注销成功", 200,null);
-        } else {
-            return new StatusUtil("网络出现异常，请稍后再试", 300,null);
+        String s = redisTemplate.opsForValue().get("user_" + username);
+        try {
+            User user = objectMapper.readValue(s, User.class);
+            // 删除token及用户信息
+            Boolean token = redisTemplate.delete(user.getId() + "token");
+            Boolean u = redisTemplate.delete("user_" + user.getUsername());
+            if (Boolean.TRUE.equals(token) && Boolean.TRUE.equals(u)) {
+                return new StatusUtil("注销成功", 200, null);
+            } else {
+                return new StatusUtil("网络出现异常，请稍后再试", 500, null);
+            }
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -144,7 +148,7 @@ public class UserController {
     }
 
     @GetMapping("/hello")
-    @CheckPermission(permission = "User")
+    @CheckPermission(permission = {"admin", "guest"})
     public String hello() {
         return "欢迎你";
     }
