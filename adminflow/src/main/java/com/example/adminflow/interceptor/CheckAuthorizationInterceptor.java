@@ -25,7 +25,6 @@ public class CheckAuthorizationInterceptor implements HandlerInterceptor {
         } else {
             String authorization = request.getHeader("Authorization");
             Integer i = JwtToken.verifyToken(authorization);
-            System.out.println(i);
             String s = redisTemplate.opsForValue().get(i + "token");
             if (i > 0 && s != null && authorization != null) {
                 return true;
