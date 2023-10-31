@@ -1,7 +1,7 @@
 package com.example.adminflow;
 
 import com.example.adminflow.mapper.*;
-import com.example.adminflow.model.LoginData;
+import com.example.adminflow.model.OperationData;
 import com.example.adminflow.model.User;
 import com.example.adminflow.model.Menu;
 import com.example.adminflow.util.JwtToken;
@@ -157,18 +157,18 @@ class adminFlowDemoApplicationTests {
     // 测试登录日志插入
     @Test
     void insertLog(){
-        LoginData loginData = new LoginData();
-        loginData.setId(1);
-        loginData.setOperation_log("xxcd");
-//        loginData.setLogin_user("admin");
-//        int i = logDataMapper.insertLogin(loginData);
+        OperationData operationData = new OperationData();
+        operationData.setId(1);
+        operationData.setType("xxcd");
+//        operationData.setLogin_user("admin");
+//        int i = logDataMapper.insertLogin(operationData);
 //        System.out.println(i);
     }
 
     // 测试查询日志
     @Test
     void selectLogData(){
-        //List<LoginData> logData = logDataMapper.getLogData();
+        //List<OperationData> logData = logDataMapper.getLogData();
         //System.out.println(logData);
     }
 
