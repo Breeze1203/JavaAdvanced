@@ -3,7 +3,8 @@
     <el-row :gutter="5">
       <el-col :span="8">
         <el-select
-            multiple
+            v-model="keyword"
+            :clearable="true"
             placeholder="操作类型"
             style="width: 240px"
         >
@@ -16,19 +17,19 @@
         </el-select>
       </el-col>
       <el-col :span="3">
-        <el-button type="primary">刷新日志</el-button>
+        <el-button type="primary" @click="initLogData(this.keyword,this.offset,this.pageSize)">刷新日志</el-button>
       </el-col>
       <el-col :span="3">
-      <el-button type="danger">清空日志</el-button>
+      <el-button type="danger" @click="deleteLog">清空日志</el-button>
       </el-col>
     </el-row>
   </div>
   <div style="margin-top: 20px">
-    <el-table :data="LogData" style="width: 85%" border>
+    <el-table :data="LogData" style="width: 90%" border>
       <el-table-column prop="id" label="id" align="center" width="100" />
       <el-table-column prop="user" label="用户名" align="center" width="100" />
-      <el-table-column prop="type" label="操作类型" align="center" width="100" />
-      <el-table-column prop="operation" label="说明" align="center" width="300" />
+      <el-table-column prop="type" label="操作类型" align="center" width="200" />
+      <el-table-column prop="operation" label="说明" align="center" width="250" />
       <el-table-column prop="date" label="操作时间" align="center" width="250"/>
     </el-table>
   </div>
@@ -45,6 +46,8 @@
 </template>
 <script>
 import request from "@/util/requestUtil";
+import {ElMessage} from "element-plus";
+
 export default {
   name:'LogSet',
   data(){
@@ -56,35 +59,51 @@ export default {
       pageSize:10,
       options:[
         {
-          value: 'Option1',
-          label: 'Option1',
+          value: '用户登录',
+          label: '用户登录',
         },
         {
-          value: 'Option2',
-          label: 'Option2',
-        },
-        {
-          value: 'Option3',
-          label: 'Option3',
+          value: '退出登录',
+          label: '退出登录',
         }]
     }
   },
   methods:{
     // 初始化日期数据
-    initLogData(){
-      console.log(typeof this.keyword);
-      console.log(this.offset);
-      console.log(this.pageSize)
-      request.initLogData(this.keyword,this.offset,this.pageSize).then(resp=>{
+    initLogData(keyword,offset,pageSize){
+      request.initLogData(keyword,offset,pageSize).then(resp=>{
         if(resp){
           this.LogData=resp.data.operationData;
           this.total=resp.data.total;
         }
       })
+    },
+    // 每页展示条数改变
+    handleSizeChange(size){
+      this.initLogData(this.keyword,this.offset,size);
+    },
+    handleCurrentChange(offset){
+      this.initLogData(this.keyword,offset,this.pageSize);
+    },
+    // 清空日志
+    deleteLog(){
+      request.deleteLog().then(resp=>{
+        if(resp.data.code===200){
+          ElMessage.success(resp.data.message);
+          this.initLogData(this.keyword,this.offset,this.pageSize);
+        }else {
+          ElMessage.error(resp.data.message)
+        }
+      })
     }
   },
   mounted() {
-    this.initLogData();
+    this.initLogData(this.keyword,this.offset,this.pageSize);
+  },
+  watch:{
+    keyword(newValue,oldValue){
+        this.initLogData(newValue,this.offset,this.pageSize);
+    }
   }
 }
 </script>

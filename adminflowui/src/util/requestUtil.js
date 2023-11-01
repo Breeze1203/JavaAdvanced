@@ -54,6 +54,16 @@ const request = {
                 pageSize: pageSize
             }
         })
+    },
+    // 删除日志
+    deleteLog(){
+        return instance({
+            method: 'get',
+            url: '/log/deleteLog',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
     }
 }
 
