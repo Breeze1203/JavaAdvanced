@@ -27,7 +27,7 @@
                   <span>系统管理</span>
                 </template>
                 <el-menu-item-group>
-                  <el-menu-item>
+                  <el-menu-item @click=change index="/UserSet">
                     <el-icon><UserFilled /></el-icon>用户管理</el-menu-item>
                   <el-menu-item><el-icon><Tickets /></el-icon>角色管理</el-menu-item>
                   <el-menu-item><el-icon><Collection /></el-icon>权限管理</el-menu-item>
@@ -153,7 +153,7 @@ export default {
       showUser: false,
       showSet: false,
       upWord: false,
-      userInfo:JSON.parse(sessionStorage.getItem("user"))
+      userInfo:JSON.parse(sessionStorage.getItem("user")),
     }
   },
   methods: {

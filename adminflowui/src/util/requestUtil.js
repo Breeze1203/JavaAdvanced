@@ -64,6 +64,50 @@ const request = {
                 "Content-Type": "application/json"
             }
         })
+    },
+    // 组织架构的请求
+    initOrganization(){
+        return instance({
+            method: 'get',
+            url: '/Organization/',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+    },
+    // 初始化所有用户
+    initAllUser() {
+        return instance({
+            method: 'get',
+            url: '/getAllUser',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+    },
+    // 删除节点
+    deleteNode(id){
+        return instance({
+            method: 'get',
+            url: '/Organization/deleteById',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            params:{
+                id:id
+            }
+        })
+    },
+    // 添加节点
+    addNode(organization){
+        return instance({
+            method: 'post',
+            url: '/Organization/addOrganization',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data:organization
+        })
     }
 }
 
