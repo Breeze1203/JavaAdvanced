@@ -17,6 +17,11 @@ const routes = [
                 path:'/log',
                 name:'操作日志',
                 component:import('../components/log/LogSet.vue')
+            },
+            {
+                path: '/UserSet',
+                name: '用户管理',
+                component: import('../components/set/UserSet.vue')
             }
         ]
     },
