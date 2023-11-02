@@ -11,6 +11,12 @@
         <result column="embod" property="embod" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="state" property="state" jdbcType="BIT"/>
+        <result column="oId" property="organ" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="result" type="com.example.admin.model.User" extends="BaseResult">
+        <association property="organization" javaType="com.example.admin.model.Organization">
+            <result property="name" column="oname" jdbcType="VARCHAR"/>
+        </association>
     </resultMap>
 <!-- 根据用户名查找用户-->
     <select id="getUserByName" resultMap="BaseResult" parameterType="java.lang.String">
@@ -53,4 +59,21 @@
             where id = #{id,jdbcType=INTEGER}
         </if>
     </update>
+<!--    获取所有用户并获取其所在组织名-->
+    <select id="getAllUser" resultMap="result">
+        select u.id,
+               u.address,
+               u.username,
+               u.userFace,
+               u.embod,
+               u.email,
+               u.state,
+               o.name as oname
+        from user as u
+                 left join organization as o on u.oId = o.id
+    </select>
+<!--    根据节点id查看是否用用户-->
+    <select id="getUserByOid" resultMap="BaseResult">
+        select * from user where oId=#{oId}
+    </select>
 </mapper>
