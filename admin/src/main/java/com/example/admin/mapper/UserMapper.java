@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository(value = "UserMapper")
 public interface UserMapper {
@@ -15,4 +17,9 @@ public interface UserMapper {
     int update(User u);
 
     User getUser(@Param("id") Integer id);
+
+    List<User> getAllUser();
+
+    // 根据节点id,获取用户
+    List<User> getUserByOid(@Param("oId")Integer id);
 }

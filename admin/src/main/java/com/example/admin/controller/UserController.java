@@ -152,6 +152,11 @@ public class UserController {
         }
         return new CountResult(numbers, score);
     }
+    // 获取所有用户
+    @GetMapping("/getAllUser")
+    public List<User> getAllUser() {
+        return userService.getAllUser();
+    }
 
     @GetMapping("/hello")
     @CheckPermission(permission = {"admin", "guest"})
