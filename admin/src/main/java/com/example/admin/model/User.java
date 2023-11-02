@@ -17,4 +17,6 @@ public class User {
     private String embod;
     private String email;
     private boolean state;
+    private Integer organ;
+    private Organization organization;
 }
