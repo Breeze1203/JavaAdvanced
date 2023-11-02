@@ -2,6 +2,7 @@ package com.example.admin;
 
 import com.example.admin.mapper.*;
 import com.example.admin.model.OperationData;
+import com.example.admin.model.Organization;
 import com.example.admin.model.User;
 import com.example.admin.util.JwtToken;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,9 @@ class adminApplicationTests {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    OrganizationMapper organizationMapper;
 
     @Autowired
     UserRoleMapper userRoleMapper;
@@ -199,4 +203,19 @@ class adminApplicationTests {
         System.out.println(i);
     }
 
+    // 部门查询所有
+    @Test
+    void getOrganization(){
+        List<Organization> all = organizationMapper.getAll(-1);
+        System.out.println(all);
+    }
+
+    // 获取所有用户
+    @Test
+    void getAllUser(){
+//        List<User> allUser = userMapper.getAllUser();
+//        System.out.println(allUser);
+        List<User> userByOid = userMapper.getUserByOid(6);
+        System.out.println(userByOid);
+    }
 }
