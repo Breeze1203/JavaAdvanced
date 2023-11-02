@@ -6,6 +6,8 @@ import com.example.admin.util.StatusUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service(value = "UserService")
 public class UserService {
     @Resource(name = "UserMapper")
@@ -15,12 +17,12 @@ public class UserService {
         return userMapper.getUserByName(username);
     }
 
-    public StatusUtil upUser(User u) {
-        int update = userMapper.update(u);
-        if (update != 0) {
-            User user = userMapper.getUser(u.getId());
-            return new StatusUtil("修改成功",200,user);
-        }
-        return new StatusUtil("网络异常，请稍后再试",300,null);
+    public List<User> getAllUser() {
+        return userMapper.getAllUser();
     }
+    // 根据节点id查看是否有用户
+    public List<User> getUserByOid(Integer id){
+        return userMapper.getUserByOid(id);
+    }
+
 }
