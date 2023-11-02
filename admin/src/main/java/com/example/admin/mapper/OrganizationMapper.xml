@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.admin.mapper.OrganizationMapper">
+    <resultMap id="BaseResult" type="com.example.admin.model.Organization">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="parentId" property="parentId" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="BaseResultChildren" type="com.example.admin.model.Organization" extends="BaseResult">
+<!--        这里可以理解为递归查询 会将column中实体字段作为参数传给association的select属性关联的查询语句，如此一来就形成了递归查询关系。-->
+        <collection column="id" property="children" select="com.example.admin.mapper.OrganizationMapper.getAll"/>
+    </resultMap>
+    <select id="getAll" resultMap="BaseResultChildren" parameterType="java.lang.Integer">
+        select * from organization where parentId=#{parentId}
+    </select>
+<!--    根据id删除组织-->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        delete from organization where id=#{id}
+    </delete>
+<!--    添加组织-->
+    <insert id="addOrganization" parameterType="com.example.admin.model.Organization">
+        insert into organization(id, name, parentId)
+        values (#{id}, #{name}, #{parentId})
+    </insert>
+</mapper>
