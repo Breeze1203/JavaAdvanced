@@ -5,9 +5,6 @@ const request = {
         return instance({
             method: 'get',
             url: '/login',
-            headers: {
-                "Content-Type": "application/json",
-            },
             params: {
                 username: username,
                 password: password,
@@ -17,15 +14,12 @@ const request = {
     }
     ,
     // 退出登录
-    loginOut(username) {
+    loginOut(id) {
         return instance({
             method: 'get',
             url: '/loginOut',
-            headers: {
-                "Content-Type": "application/json"
-            },
             params: {
-                username: username
+                id: id
             }
         })
     },
@@ -34,9 +28,6 @@ const request = {
         return instance({
             method: 'get',
             url: '/getCount',
-            headers: {
-                "Content-Type": "application/json"
-            }
         })
     }
     ,
@@ -45,9 +36,6 @@ const request = {
         return instance({
             method: 'get',
             url: '/log/getAllLog',
-            headers: {
-                "Content-Type": "application/json"
-            },
             params: {
                 keyword: keyword,
                 offset: offset,
@@ -60,9 +48,6 @@ const request = {
         return instance({
             method: 'get',
             url: '/log/deleteLog',
-            headers: {
-                "Content-Type": "application/json"
-            }
         })
     },
     // 组织架构的请求
@@ -70,19 +55,14 @@ const request = {
         return instance({
             method: 'get',
             url: '/Organization/',
-            headers: {
-                "Content-Type": "application/json"
-            }
         })
     },
     // 初始化所有用户
-    initAllUser() {
+    initAllUser(user) {
         return instance({
-            method: 'get',
+            method: 'post',
             url: '/getAllUser',
-            headers: {
-                "Content-Type": "application/json"
-            }
+            data:user
         })
     },
     // 删除节点
@@ -90,9 +70,6 @@ const request = {
         return instance({
             method: 'get',
             url: '/Organization/deleteById',
-            headers: {
-                "Content-Type": "application/json"
-            },
             params:{
                 id:id
             }
@@ -103,12 +80,67 @@ const request = {
         return instance({
             method: 'post',
             url: '/Organization/addOrganization',
-            headers: {
-                "Content-Type": "application/json"
-            },
             data:organization
         })
-    }
+    },
+    // 修改用户
+    updateUser(user){
+        return instance({
+            method: 'post',
+            url: '/updateUser',
+            data:user
+        })
+    },
+    // 删除用户
+    deleteUser(id){
+        return instance({
+            method: 'get',
+            url: '/deleteUser',
+            params:{
+                id:id
+            }
+        })
+    },
+    // 添加用户
+    addUser(user){
+        return instance({
+            method: 'post',
+            url: '/addUser',
+            data:user
+        })
+    },
+    // 获取所有节点
+    getAllOrganization(){
+        return instance({
+            method: 'get',
+            url: '/Organization/getAllOrganization',
+        })
+    },
+    // 获取所有角色
+    getAllRoles(){
+        return instance({
+            method: 'get',
+            url: '/getAllRole',
+        })
+    },
+    // 获取所有权限
+    getAllPermission(){
+        return instance({
+            method: 'get',
+            url: '/getAllPermission',
+        })
+    },
+    // 根据用户获取用户的权限
+    getPermissionByRole(id){
+        return instance({
+            method: 'get',
+            url: '/getPermissionByrId',
+            params:{
+                rid:id
+            }
+        })
+    },
+
 }
 
 export default request;
