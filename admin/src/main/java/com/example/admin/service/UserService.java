@@ -17,12 +17,31 @@ public class UserService {
         return userMapper.getUserByName(username);
     }
 
-    public List<User> getAllUser() {
-        return userMapper.getAllUser();
+    public List<User> getAllUser(User user) {
+        return userMapper.getAllUser(user);
     }
     // 根据节点id查看是否有用户
     public List<User> getUserByOid(Integer id){
-        return userMapper.getUserByOid(id);
+        return userMapper.getUserByoId(id);
     }
 
+    // 修改用户
+    public Integer updateUser(User user) {
+        return userMapper.updateUser(user);
+    }
+
+    // 根据用户id获取用户
+    public User getUserById(Integer id){
+        return userMapper.getUserById(id);
+    }
+
+    // 删除用户
+    public Integer deleteById(Integer id){
+        return userMapper.deleteById(id);
+    }
+
+    // 添加用户
+    public Integer insertUser(User user) {
+        return userMapper.addUser(user);
+    }
 }

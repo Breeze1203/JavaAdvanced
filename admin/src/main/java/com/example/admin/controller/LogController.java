@@ -1,6 +1,7 @@
 package com.example.admin.controller;
 
 import com.example.admin.model.OperationData;
+import com.example.admin.permission.CheckPermission;
 import com.example.admin.service.OperationDataService;
 import com.example.admin.util.LogResult;
 import com.example.admin.util.StatusUtil;
@@ -28,6 +29,7 @@ public class LogController {
     }
     // 删除日志
     @GetMapping("/deleteLog")
+    @CheckPermission(permission = "delete_log")
     public StatusUtil deleteLog(){
         Integer i = operationDataService.deleteLog();
         if(i>0){

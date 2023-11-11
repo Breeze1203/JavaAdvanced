@@ -1,16 +1,24 @@
 package com.example.admin;
 
+
+import com.aliyun.dysmsapi20170525.Client;
+import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
+import com.aliyun.teaopenapi.models.Config;
+import com.example.admin.config.MessageConsumer;
+import com.example.admin.config.MessageProducer;
 import com.example.admin.mapper.*;
+import com.example.admin.model.Authorization;
 import com.example.admin.model.OperationData;
 import com.example.admin.model.Organization;
 import com.example.admin.model.User;
+import com.example.admin.service.AuthorizationService;
+import com.example.admin.service.RoleService;
 import com.example.admin.util.JwtToken;
+import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.*;
-
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -32,6 +40,7 @@ class adminApplicationTests {
 
     @Autowired
     OperationDataMapper operationDataMapper;
+
 
     @Test
     void contextLoads() {
@@ -132,7 +141,7 @@ class adminApplicationTests {
     }
 
     @Test
-    void getIndex(){
+    void getIndex() {
         HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
         String hashKey = "loginCount"; // 哈希表的键
 // 定义范围
@@ -141,13 +150,13 @@ class adminApplicationTests {
 // 获取指定范围的字段和对应的值
         List<String> rangeValues = new ArrayList<>();
         Set<String> keys = hashOps.keys(hashKey);
-        for (String s:keys) {
+        for (String s : keys) {
             rangeValues.add(s);
         }
-        for (int i=rangeValues.size()-5;i<rangeValues.size();i++){
+        for (int i = rangeValues.size() - 5; i < rangeValues.size(); i++) {
             String s = rangeValues.get(i);
             System.out.println(rangeValues.get(i));
-            System.out.println(hashOps.get("loginCount",s));
+            System.out.println(hashOps.get("loginCount", s));
         }
     }
 
@@ -155,17 +164,16 @@ class adminApplicationTests {
     RoleMapper roleMapper;
 
     @Test
-    void getRole(){
+    void getRole() {
         // 测试根据id获取身份信息
         String roleById = roleMapper.getRoleById(1);
         System.out.println(roleById);
     }
 
 
-
     // 测试登录日志插入
     @Test
-    void insertLog(){
+    void insertLog() {
         OperationData operationData = new OperationData();
         operationData.setId(1);
         operationData.setType("xxcd");
@@ -176,14 +184,14 @@ class adminApplicationTests {
 
     // 测试查询日志
     @Test
-    void selectLogData(){
+    void selectLogData() {
         //List<OperationData> logData = logDataMapper.getLogData();
         //System.out.println(logData);
     }
 
     // 测试生成token
     @Test
-    void generateToken(){
+    void generateToken() {
         User user = new User();
         user.setUsername("admin");
         user.setEmbod("xxx");
@@ -193,29 +201,103 @@ class adminApplicationTests {
         user.setId(5);
         String s = JwtToken.generateToken(user);
         System.out.println(s);
-        Integer b= JwtToken.verifyToken(s);
+        Integer b = JwtToken.verifyToken(s);
         System.out.println(b);
     }
+
     // 删除日志
     @Test
-    void deleteLog(){
+    void deleteLog() {
         Integer i = operationDataMapper.deleteLog();
         System.out.println(i);
     }
 
     // 部门查询所有
     @Test
-    void getOrganization(){
+    void getOrganization() {
         List<Organization> all = organizationMapper.getAll(-1);
         System.out.println(all);
     }
 
     // 获取所有用户
     @Test
-    void getAllUser(){
+    void getAllUser() {
 //        List<User> allUser = userMapper.getAllUser();
 //        System.out.println(allUser);
-        List<User> userByOid = userMapper.getUserByOid(6);
+        List<User> userByOid = userMapper.getUserByoId(6);
         System.out.println(userByOid);
     }
+
+    // 是否禁用用户
+    @Test
+    void disableUser() {
+        //userMapper.disableUser(3,true);
+        Integer i = userMapper.deleteById(3);
+        System.out.println(i);
+    }
+
+    // 查询用户
+    @Test
+    void getUser() {
+        User user = new User();
+//        user.setUsername("breeze");
+//        user.setState(true);
+        List<User> allUser = userMapper.getAllUser(new User());
+        System.out.println(allUser);
+    }
+
+    @Resource(name = "AuthorizationMapper")
+    AuthorizationMapper authorizationMapper;
+
+    @Resource(name = "AuthorizationService")
+    AuthorizationService authorizationService;
+
+    // 查看所有权限
+    @Test
+    void getAllPer() {
+//        List<Authorization> allPermission = authorizationMapper.getAllPermission();
+//        System.out.println(allPermission);
+        List<Authorization> permissionByrId = authorizationService.getPermissionByrId(1);
+        System.out.println(permissionByrId);
+    }
+
+    @Autowired
+    RoleService roleService;
+
+    // 测试根据用户id获取角色id
+    @Test
+    void getRoleId() {
+        Integer ridByuId = roleService.getRidByuId(1);
+        List<Authorization> permissionByrId = authorizationMapper.getPermissionByrId(ridByuId);
+        System.out.println(permissionByrId);
+    }
+
+    @Autowired
+    RoleAuthorizationMapper roleAuthorizationMapper;
+
+
+    // 测试根据角色，插入权限
+    @Test
+    void insertPermission() {
+        Integer role = userRoleMapper.getRole(22);
+        System.out.println(role);
+    }
+
+    // 测试发短信
+    @Test
+    void sendMessage() throws Exception {
+        Config config = new Config();
+        // 必填，您的 AccessKey ID
+        config.setAccessKeyId("LTAI5tCKYkSjSgVnawvexE64");
+        config.setAccessKeySecret("6XOoX8RiVKtSYvEjem8YVq4B32Bf68");
+        config.endpoint = "dysmsapi.aliyuncs.com";
+        Client client = new Client(config);
+        SendSmsRequest sendSmsRequest = new SendSmsRequest();
+        sendSmsRequest.setPhoneNumbers("19972552055");
+        sendSmsRequest.setSignName("adminflow");
+        sendSmsRequest.setTemplateCode("SMS_463720732");
+        sendSmsRequest.setTemplateParam("{\"user\":\"1234\",\"password\":\"123\"}");
+        client.sendSms(sendSmsRequest);
+    }
+
 }

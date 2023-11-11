@@ -15,4 +15,7 @@ public interface OrganizationMapper {
 
     // 添加组织
     Integer addOrganization(Organization organization);
+
+    // 查询所有节点
+    List<Organization> getAllOrganization();
 }

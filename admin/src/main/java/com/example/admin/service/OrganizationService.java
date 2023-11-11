@@ -34,4 +34,8 @@ public class OrganizationService {
     public Integer add(Organization organization) {
         return organizationMapper.addOrganization(organization);
     }
+
+    public List<Organization> getAll(){
+        return organizationMapper.getAllOrganization();
+    }
 }

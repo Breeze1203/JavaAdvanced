@@ -6,7 +6,28 @@
         <result column="role_name" property="role_name" jdbcType="VARCHAR"/>
         <result column="nameZh" property="nameZh" jdbcType="VARCHAR"/>
     </resultMap>
+<!--    根据id获取角色-->
     <select id="getRoleById" parameterType="java.lang.Integer" resultType="java.lang.String">
         select role_name from role where id=#{id}
     </select>
+<!--    获取所有角色-->
+    <select id="getAllRole" resultMap="BaseResult">
+        select * from role
+    </select>
+<!--    添加角色-->
+    <insert id="addRole" parameterType="com.example.admin.model.Role">
+        insert into role(role_name, nameZh)
+        values (#{role_name}, #{nameZh})
+    </insert>
+<!--    删除角色-->
+    <delete id="deleteRoleById" parameterType="java.lang.Integer">
+        delete from role where id=#{id}
+    </delete>
+<!--    修改角色-->
+    <update id="updateRole" parameterType="com.example.admin.model.Role">
+        update role
+        set role_name=#{role_name},
+            nameZh=#{nameZh}
+        where id = #{id}
+    </update>
 </mapper>

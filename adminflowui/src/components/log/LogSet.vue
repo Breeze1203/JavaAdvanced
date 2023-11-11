@@ -67,7 +67,35 @@ export default {
         {
           value: '退出登录',
           label: '退出登录',
-        }]
+        },
+        {
+          value: '添加组织',
+          label: '添加组织',
+        },
+        {
+          value: '删除组织',
+          label: '删除组织',
+        },
+        {
+          value: '添加用户',
+          label: '添加用户',
+        },
+        {
+          value: '删除用户',
+          label: '删除用户',
+        },{
+          value: '添加角色',
+          label: '添加角色',
+        },
+        {
+          value: '删除角色',
+          label: '删除角色',
+        },
+        {
+          value: '修改权限',
+          label: '修改权限',
+        }
+      ]
     }
   },
   methods: {

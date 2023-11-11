@@ -1,11 +1,9 @@
 package com.example.admin.model;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@NoArgsConstructor
 @ToString
 public class User {
     private Integer id;
@@ -16,7 +14,8 @@ public class User {
     private String userFace;
     private String embod;
     private String email;
-    private boolean state;
-    private Integer organ;
+    private Boolean state;
+    private Integer organizationId;
     private Organization organization;
+    private Role role;
 }
