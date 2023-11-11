@@ -22,4 +22,7 @@
         insert into organization(id, name, parentId)
         values (#{id}, #{name}, #{parentId})
     </insert>
+    <select id="getAllOrganization" resultMap="BaseResult">
+        select * from organization
+    </select>
 </mapper>

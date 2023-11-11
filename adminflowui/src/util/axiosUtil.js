@@ -31,7 +31,8 @@ const instance = axios.create({
     // 网络请求的公共配置信息
     baseURL: '/api',
     timeout: 50000,
-    withCredentials: true
+    withCredentials: true,
+   // headers:{'Content-Type': 'application/json'}
 })
 
 // 请求拦截器(发送请求之前)

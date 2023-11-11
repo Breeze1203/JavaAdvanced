@@ -7,8 +7,8 @@ const routes = [
         path: '/',
         name: 'Login',
         component: Login
-    }
-    , {
+    },
+   {
         path: '/home',
         name: 'Home',
         component: import('../components/Home.vue'),
@@ -22,6 +22,16 @@ const routes = [
                 path: '/UserSet',
                 name: '用户管理',
                 component: import('../components/set/UserSet.vue')
+            },
+            {
+                path: '/RoleSet',
+                name: '角色管理',
+                component: import('../components/set/RoleSet.vue')
+            },
+            {
+                path: '/Permissions',
+                name: '权限资源',
+                component: import('../components/set/Permission.vue')
             }
         ]
     },

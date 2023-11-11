@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.example.admin.mapper.UserMapper" >
+<mapper namespace="com.example.admin.mapper.UserMapper">
     <resultMap id="BaseResult" type="com.example.admin.model.User">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="phone" property="phone" jdbcType="BIGINT"/>
@@ -11,23 +11,30 @@
         <result column="embod" property="embod" jdbcType="VARCHAR"/>
         <result column="email" property="email" jdbcType="VARCHAR"/>
         <result column="state" property="state" jdbcType="BIT"/>
-        <result column="oId" property="organ" jdbcType="INTEGER"/>
+        <result column="organizationId" property="organizationId" jdbcType="INTEGER"/>
     </resultMap>
     <resultMap id="result" type="com.example.admin.model.User" extends="BaseResult">
         <association property="organization" javaType="com.example.admin.model.Organization">
             <result property="name" column="oname" jdbcType="VARCHAR"/>
         </association>
+        <association property="role" javaType="com.example.admin.model.Role">
+            <result property="nameZh" column="nameZh" jdbcType="VARCHAR"/>
+        </association>
     </resultMap>
-<!-- 根据用户名查找用户-->
+    <!-- 根据用户名查找用户-->
     <select id="getUserByName" resultMap="BaseResult" parameterType="java.lang.String">
-        select * from user where username=#{username}
+        select *
+        from user
+        where username = #{username}
     </select>
-<!--   根据id查询用户-->
+    <!--   根据id查询用户-->
     <select id="getUser" resultMap="BaseResult" parameterType="java.lang.Integer">
-        select * from user where id=#{id}
+        select *
+        from user
+        where id = #{id}
     </select>
-<!--    根据id修改用户-->
-    <update id="update" parameterType="com.example.admin.model.User">
+    <!--    根据id修改用户-->
+    <update id="updateUser" parameterType="com.example.admin.model.User">
         update user
         <set>
             <if test="phone!=null">
@@ -52,28 +59,51 @@
                 email=#{email,jdbcType=VARCHAR},
             </if>
             <if test="state!=null">
-                state=#{state,jdbcType=BIT}
+                state=#{state,jdbcType=BIT},
+            </if>
+            <if test="organizationId!=null">
+                organizationId=#{organizationId,jdbcType=INTEGER}
             </if>
         </set>
-        <if test="id!=null">
-            where id = #{id,jdbcType=INTEGER}
-        </if>
+        where id = #{id,jdbcType=INTEGER}
     </update>
-<!--    获取所有用户并获取其所在组织名-->
-    <select id="getAllUser" resultMap="result">
-        select u.id,
-               u.address,
-               u.username,
-               u.userFace,
-               u.embod,
-               u.email,
-               u.state,
-               o.name as oname
-        from user as u
-                 left join organization as o on u.oId = o.id
+    <!--    获取所有用户并获取其所在组织名-->
+    <select id="getAllUser" parameterType="com.example.admin.model.User" resultMap="result">
+        SELECT u.id, u.address, u.username, u.userFace,u.phone, u.embod, u.email, u.state, o.name AS oname,r.nameZh as nameZh
+        FROM user AS u
+        LEFT JOIN organization AS o ON u.organizationId = o.id
+        LEFT JOIN user_role AS ur on u.id=ur.user_id
+        LEFT JOIN role AS r on ur.role_id=r.id
+        <where>
+            <if test="username != null">
+                AND u.username LIKE CONCAT('%', #{username}, '%')
+            </if>
+            <if test="state !=null">
+                AND u.state = #{state}
+            </if>
+        </where>
     </select>
-<!--    根据节点id查看是否用用户-->
-    <select id="getUserByOid" resultMap="BaseResult">
-        select * from user where oId=#{oId}
+    <!--    根据节点id查看是否用用户-->
+    <select id="getUserByoId" resultMap="BaseResult">
+        select *
+        from user
+        where organizationId = #{organizationId}
+    </select>
+    <!--    删除用户-->
+    <delete id="deleteById">
+        delete
+        from user
+        where id = #{id}
+    </delete>
+    <!--    添加用户-->
+    <insert id="addUser" parameterType="com.example.admin.model.User">
+        INSERT INTO user (id, phone, address, username, password, userFace, embod, email, state, organizationId)
+        VALUES (#{id}, #{phone}, #{address}, #{username}, #{password}, #{userFace}, #{embod}, #{email}, #{state},
+                #{organizationId})
+    </insert>
+<!--    根据id搜索用户-->
+    <select id="getUserById" parameterType="java.lang.Integer">
+        select *
+        from user where id=#{id}
     </select>
 </mapper>

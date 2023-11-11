@@ -10,7 +10,7 @@
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item @click="show">个人中心</el-dropdown-item>
-                <el-dropdown-item @click="showSetting">基本设置</el-dropdown-item>
+                <el-dropdown-item @click="showSetting">密码设置</el-dropdown-item>
                 <el-dropdown-item @click="loginOut">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -18,33 +18,55 @@
         </div>
       </el-header>
       <el-container>
-          <el-aside width="200px">
-            <div class="common-layout">
-              <el-menu style="height: 100%">
-                <el-sub-menu index="1">
+        <el-aside width="200px">
+          <div class="common-layout">
+            <el-menu style="height: 100%">
+              <el-sub-menu index="1">
                 <template #title>
-                  <el-icon><Setting /></el-icon>
+                  <el-icon>
+                    <Setting/>
+                  </el-icon>
                   <span>系统管理</span>
                 </template>
                 <el-menu-item-group>
                   <el-menu-item @click=change index="/UserSet">
-                    <el-icon><UserFilled /></el-icon>用户管理</el-menu-item>
-                  <el-menu-item><el-icon><Tickets /></el-icon>角色管理</el-menu-item>
-                  <el-menu-item><el-icon><Collection /></el-icon>权限管理</el-menu-item>
+                    <el-icon>
+                      <UserFilled/>
+                    </el-icon>
+                    用户管理
+                  </el-menu-item>
+                  <el-menu-item @click="change" index="/RoleSet">
+                    <el-icon>
+                      <Tickets/>
+                    </el-icon>
+                    角色管理
+                  </el-menu-item>
+                  <el-menu-item @click="change" index="/Permissions">
+                    <el-icon>
+                      <Collection/>
+                    </el-icon>
+                    权限管理
+                  </el-menu-item>
                 </el-menu-item-group>
               </el-sub-menu>
-                <el-sub-menu>
-                  <template #title>
-                    <el-icon><Timer /></el-icon>
-                    <span>日志管理</span>
-                  </template>
-                  <el-menu-item-group>
-                    <el-menu-item @click="change" index="/log">
-                      <el-icon><EditPen /></el-icon>操作日志</el-menu-item>
-                  </el-menu-item-group>
-                </el-sub-menu>
-              </el-menu>
-            </div>
+              <el-sub-menu>
+                <template #title>
+                  <el-icon>
+                    <Timer/>
+                  </el-icon>
+                  <span>日志管理</span>
+                </template>
+                <el-menu-item-group>
+                  <el-menu-item @click="change" index="/log">
+                    <el-icon>
+                      <EditPen/>
+                    </el-icon>
+                    操作日志
+                  </el-menu-item>
+                </el-menu-item-group>
+              </el-sub-menu>
+            </el-menu>
+          </div>
         </el-aside>
         <el-main>
           <div v-if="this.$router.currentRoute.value.path==='/home'">
@@ -55,38 +77,16 @@
             <div id="main" style="width: 100%;height:350px">
             </div>
           </div>
-          <el-breadcrumb v-if="this.$router.currentRoute.value.path!=='/home'">
-            <el-breadcrumb-item @click="toHome">返回首页</el-breadcrumb-item>
-            <el-breadcrumb-item>{{ this.$router.currentRoute.value.name }}</el-breadcrumb-item>
-          </el-breadcrumb>
+          <el-page-header v-if="this.$router.currentRoute.value.path!=='/home'" @back="toHome">
+            <template #content>
+              <span> {{ this.$router.currentRoute.value.name }}</span>
+            </template>
+          </el-page-header>
           <router-view/>
         </el-main>
       </el-container>
     </el-container>
   </div>
-  <el-dialog
-      v-model="upWord"
-      title="修改密码"
-      width="30%"
-      align-center
-  >
-    <span>
-      <el-form-item label="旧密码" size="small">
-        <el-input type="text" size="small"/>
-      </el-form-item>
-      <el-form-item label="新密码" size="small">
-        <el-input type="text" size="small"/>
-      </el-form-item>
-    </span>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button>取消</el-button>
-        <el-button type="primary">
-         确定
-        </el-button>
-      </span>
-    </template>
-  </el-dialog>
   <el-drawer v-model="showUser" title="个人信息" size="23%">
     <el-form>
       <el-form-item label="头像：">
@@ -99,23 +99,14 @@
       <el-form-item label="个性签名：">{{ userInfo.embod }}</el-form-item>
     </el-form>
   </el-drawer>
-  <el-dialog v-model="showSet" width="30%" title="修改用户信息">
+  <el-dialog v-model="showSet" width="30%" title="修改用户密码">
     <template #default>
       <el-form size="small">
-        <el-form-item label="用户名：">
-          <el-input v-model="user.username" placeholder="请输入用户名"/>
+        <el-form-item label="新密码：">
+          <el-input type="password" v-model="userInfo.password" placeholder="请输入新密码"/>
         </el-form-item>
-        <el-form-item label="地址：">
-          <el-input v-model="user.address" placeholder="请输入地址"/>
-        </el-form-item>
-        <el-form-item label="电话号码：">
-          <el-input v-model="user.phone" placeholder="请输入电话号码"/>
-        </el-form-item>
-        <el-form-item label="邮箱地址：">
-          <el-input v-model="user.email" placeholder="请输入邮箱地址"/>
-        </el-form-item>
-        <el-form-item label="个性签名：">
-          <el-input v-model="user.embod" placeholder="请输入个性签名"/>
+        <el-form-item label="确认密码：">
+          <el-input type="password" v-model="newPassword" placeholder="请再次输入密码"/>
         </el-form-item>
       </el-form>
     </template>
@@ -141,19 +132,10 @@ export default {
   name: "Home",
   data() {
     return {
-      user: {
-        id: null,
-        username: null,
-        password: null,
-        address: null,
-        phone: null,
-        email: null,
-        embod: null
-      },
+      newPassword: null,
       showUser: false,
       showSet: false,
-      upWord: false,
-      userInfo:JSON.parse(sessionStorage.getItem("user")),
+      userInfo: JSON.parse(sessionStorage.getItem("user")),
     }
   },
   methods: {
@@ -168,14 +150,12 @@ export default {
           }
       )
           .then(() => {
-            console.log(this.userInfo.username);
-            request.loginOut(this.userInfo.username).then(resp => {
+            request.loginOut(this.userInfo.id).then(resp => {
               if (resp.data.code === 200) {
-                console.log(resp.data);
                 // 删除用户信息
                 sessionStorage.removeItem("user");
                 // 删除token
-                store.state.token=null;
+                store.state.token = null;
                 router.push("/");
                 ElMessage.success(resp.data.message);
               } else {
@@ -190,11 +170,6 @@ export default {
             })
           })
     },
-    // 展开菜单
-    change(data) {
-      console.log(data.index);
-      router.push(data.index);
-    },
     show() {
       this.showUser = true;
     }
@@ -203,34 +178,48 @@ export default {
       this.showSet = true;
     }
     ,
-    // 将user里面某些属性变为空
-    init() {
-      this.user.username = null;
-      this.user.password = null;
-      this.user.embod = null;
-      this.user.email = null;
-      this.user.phone = null;
-      this.user.address = null;
-    }
-    ,
-    // 取消修改用户
+    // 取消修改密码
     cancel() {
-      this.init();
+      this.userInfo.password = null;
+      this.newPassword = null
       ElMessage.info("取消修改");
       this.showSet = false;
     }
     ,
     // 确定修改用户
     update() {
-      let user = JSON.stringify(this.user);
-
+      if (this.userInfo.password !== this.newPassword) {
+        ElMessage.error("两次密码不一致，请重新输入");
+        this.userInfo.password=null;
+        this.newPassword=null;
+        return;
+      }
+      request.updatePassword(this.userInfo).then(resp=>{
+        if(resp.data.code===200){
+          ElMessage.success(resp.data.message);
+          request.loginOut(this.userInfo.id).then(resp => {
+            if (resp.data.code === 200) {
+              // 删除用户信息
+              sessionStorage.removeItem("user");
+              // 删除token
+              store.state.token = null;
+              router.push("/");
+            } else {
+              ElMessage.error("网络出现异常，请稍后再试");
+            }
+          })
+        }else {
+          ElMessage.error(resp.data.message);
+        }
+        this.showSet = false;
+      })
     },
-    //修改密码显示dialog
-    upPass() {
-      this.upWord = true;
+    // 展开菜单
+    change(data) {
+      router.push(data.index);
     },
     // 回到 /home路径
-    toHome(){
+    toHome() {
       this.initCount();
       router.push('/home');
     },

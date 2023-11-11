@@ -44,14 +44,14 @@ const request = {
         })
     },
     // 删除日志
-    deleteLog(){
+    deleteLog() {
         return instance({
             method: 'get',
             url: '/log/deleteLog',
         })
     },
     // 组织架构的请求
-    initOrganization(){
+    initOrganization() {
         return instance({
             method: 'get',
             url: '/Organization/',
@@ -62,85 +62,167 @@ const request = {
         return instance({
             method: 'post',
             url: '/getAllUser',
-            data:user
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: user
         })
     },
     // 删除节点
-    deleteNode(id){
+    deleteNode(id) {
         return instance({
             method: 'get',
             url: '/Organization/deleteById',
-            params:{
-                id:id
+            params: {
+                id: id
             }
         })
     },
     // 添加节点
-    addNode(organization){
+    addNode(organization) {
         return instance({
             method: 'post',
             url: '/Organization/addOrganization',
-            data:organization
+            data: organization
         })
     },
     // 修改用户
-    updateUser(user){
+    updateUser(user) {
         return instance({
             method: 'post',
             url: '/updateUser',
-            data:user
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: user
         })
     },
     // 删除用户
-    deleteUser(id){
+    deleteUser(id) {
         return instance({
             method: 'get',
             url: '/deleteUser',
-            params:{
-                id:id
+            params: {
+                id: id
             }
         })
     },
     // 添加用户
-    addUser(user){
+    addUser(user) {
         return instance({
             method: 'post',
             url: '/addUser',
-            data:user
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: user
         })
     },
     // 获取所有节点
-    getAllOrganization(){
+    getAllOrganization() {
         return instance({
             method: 'get',
             url: '/Organization/getAllOrganization',
         })
     },
     // 获取所有角色
-    getAllRoles(){
+    getAllRoles() {
         return instance({
             method: 'get',
             url: '/getAllRole',
         })
     },
     // 获取所有权限
-    getAllPermission(){
+    getAllPermission() {
         return instance({
             method: 'get',
             url: '/getAllPermission',
         })
     },
     // 根据用户获取用户的权限
-    getPermissionByRole(id){
+    getPermissionByRole(id) {
         return instance({
             method: 'get',
             url: '/getPermissionByrId',
-            params:{
-                rid:id
+            params: {
+                rid: id
             }
         })
     },
-
+    updatePermission(permission) {
+        return instance({
+            method:'post',
+            url:'/updatePermission',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data:permission
+        })
+    },
+    // 添加角色
+    addRole(role){
+        return instance({
+            method:'post',
+            url:'/addRole',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data:role
+        })
+    },
+    // 删除角色
+    deleteRole(id){
+        return instance({
+            method:'get',
+            url:'/deleteRole',
+            params: {
+                id:id
+            }
+        })
+    },
+    // 修改用户角色
+    updateUserRole(rid,id){
+        return instance({
+            method:'post',
+            url:'/updateUserRole',
+            params: {
+                rid:rid,
+                id:id
+            }
+        })
+    },
+    // 修改角色
+    updateRole(role){
+        return instance({
+            method:'post',
+            url:'/updateRole',
+            data:role,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+    },
+    // 修改用户
+    updatePassword(user) {
+        return instance({
+            method: 'post',
+            url: '/updatePassword',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: user
+        })
+    },
+    // 根据用户id获取用户
+    getUserById(id){
+        return instance({
+            method: 'get',
+            url: '/getUserById',
+            params: {
+                id:id
+            }
+        })
+    }
 }
 
 export default request;

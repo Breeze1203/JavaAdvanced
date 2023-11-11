@@ -1,9 +1,10 @@
 package com.example.admin.controller;
 
 
-
+import com.example.admin.config.MessageProducer;
 import com.example.admin.model.User;
 import com.example.admin.permission.CheckPermission;
+import com.example.admin.service.RoleService;
 import com.example.admin.service.UserService;
 import com.example.admin.util.CountResult;
 import com.example.admin.util.DateUtil;
@@ -19,9 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -38,14 +37,17 @@ public class UserController {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Resource(name = "RoleService")
+    RoleService roleService;
+
     // 登录认证的方法
     @GetMapping("/login")
     public StatusUtil login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("remember") String remember, HttpServletRequest httpServletRequest, HttpServletResponse response) {
         User u = userService.getUserByName(username);
         boolean rem = Boolean.parseBoolean(remember);
         if (u != null && password.equals(u.getPassword())) {
-            if(!u.isState()){
-                return new StatusUtil("账号被锁定，请联系管理员",500,null);
+            if (!u.getState()) {
+                return new StatusUtil("账号被锁定，请联系管理员", 500, null);
             }
             String format = DateUtil.format(new Date());
             // 每次用户登录成功，访问次数加一
@@ -68,7 +70,7 @@ public class UserController {
             }
             try {
                 // 将用户信息存入缓存
-                operations.set("user_" + username, objectMapper.writeValueAsString(u));
+                operations.set("user_" + u.getId(), objectMapper.writeValueAsString(u));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
@@ -110,21 +112,14 @@ public class UserController {
 
 
     @GetMapping("/loginOut")
-    public StatusUtil loginOut(@RequestParam("username") String username) {
-        // 删除redis里面存储的用户信息
-        String s = redisTemplate.opsForValue().get("user_" + username);
-        try {
-            User user = objectMapper.readValue(s, User.class);
-            // 删除token及用户信息
-            Boolean token = redisTemplate.delete(user.getId() + "token");
-            Boolean u = redisTemplate.delete("user_" + user.getUsername());
-            if (Boolean.TRUE.equals(token) && Boolean.TRUE.equals(u)) {
-                return new StatusUtil("注销成功", 200, null);
-            } else {
-                return new StatusUtil("网络出现异常，请稍后再试", 500, null);
-            }
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+    public StatusUtil loginOut(@RequestParam("id") Integer id) {
+        // 删除token及用户信息
+        Boolean token = redisTemplate.delete(id + "token");
+        Boolean u = redisTemplate.delete("user_" + id);
+        if (Boolean.TRUE.equals(token) && Boolean.TRUE.equals(u)) {
+            return new StatusUtil("注销成功", 200, null);
+        } else {
+            return new StatusUtil("网络出现异常，请稍后再试", 500, null);
         }
     }
 
@@ -152,20 +147,82 @@ public class UserController {
         }
         return new CountResult(numbers, score);
     }
-    // 获取所有用户
-    @GetMapping("/getAllUser")
-    public List<User> getAllUser() {
-        return userService.getAllUser();
+
+    //获取所有用户
+    @PostMapping("/getAllUser")
+    public List<User> getAllUser(@RequestBody User user) {
+        return userService.getAllUser(user);
     }
 
-    @GetMapping("/hello")
-    @CheckPermission(permission = {"admin", "guest"})
-    public String hello() {
-        return "欢迎你";
+    // 根据id是否禁用用户
+    @CheckPermission(permission = "update_user")
+    @PostMapping("/updateUser")
+    public StatusUtil disable(@RequestBody User user) {
+        if (user.getState() != null) {
+            user.setState(!user.getState());
+        }
+        Integer i = userService.updateUser(user);
+        if (i > 0) {
+            return new StatusUtil("修改成功", 200, null);
+        } else {
+            return new StatusUtil("网络出现异常,请稍后再试", 500, null);
+        }
     }
 
-    @GetMapping("/per/emp")
-    public String loin() {
-        return "发送请求了";
+    @CheckPermission(permission = "delete_user")
+    @GetMapping("/deleteUser")
+    public StatusUtil deleteUser(@RequestParam("id") Integer id) {
+        // 删除用户前，先判断该用户是否登录
+        String s = redisTemplate.opsForValue().get("user_" + id);
+        if (s != null) {
+            return new StatusUtil("该用户已经登录，请稍后再试", 500, null);
+        } else {
+            Integer result = userService.deleteById(id);
+            Integer i = roleService.deleteRoleById(id);
+            if (result > 0 && i != null) {
+                return new StatusUtil("删除成功", 200, null);
+            } else {
+                return new StatusUtil("网络出现异常,请稍后再试", 500, null);
+            }
+        }
+    }
+
+    @PostMapping("/addUser")
+    @CheckPermission(permission = "add_user")
+    public StatusUtil addUser(@RequestBody User user) {
+        user.setState(true);
+        Integer i = userService.insertUser(user);
+        if (i > 0) {
+            return new StatusUtil("添加成功", 200, null);
+        } else {
+            return new StatusUtil("网络出现异常,请稍后再试", 500, null);
+        }
+    }
+
+    @PostMapping("/updateUserRole")
+    public StatusUtil updateUserRole(@RequestParam("rid") Integer rid, @RequestParam("id") Integer id) {
+        int i = roleService.updateUserById(rid, id);
+        if (i > 0) {
+            return new StatusUtil("修改成功", 200, null);
+        } else {
+            return new StatusUtil("网络出现异常,请稍后再试", 500, null);
+        }
+    }
+
+    @PostMapping("/updatePassword")
+    public StatusUtil updatePassword(@RequestBody User user) {
+        Integer i = userService.updateUser(user);
+        if (i > 0) {
+            MessageProducer.pushMessage(user);
+            return new StatusUtil("修改成功", 200, null);
+        } else {
+            return new StatusUtil("网络出现异常,请稍后再试", 500, null);
+        }
+    }
+
+    @GetMapping("/getUserById")
+    public StatusUtil updatePassword(@RequestParam("id") Integer id) {
+        User user = userService.getUserById(id);
+        return new StatusUtil(null, 200, user);
     }
 }
