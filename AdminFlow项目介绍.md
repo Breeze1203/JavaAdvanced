@@ -22,14 +22,14 @@
 
 ![](./photo/5.png)
 
-![权限设置](.\photo\4.png)
+![权限设置](./photo/4.png)
 
-![日志](.\photo\3.png)
+![日志](./photo/3.png)
 
-![访问权限](.\photo\9.png)
+![访问权限](./photo/9.png)
 
-![会话管理](.\photo\6.jpg)
+![会话管理](./photo/6.jpg)
 
-![token认证](.\photo\7.png)
+![token认证](./photo/7.png)
 
-![rocketmq短信服务](.\photo\8.jpg)
+![rocketmq短信服务](./photo/8.jpg)
