@@ -136,13 +136,25 @@ public class UserController {
         Set<String> keys = hashOps.keys("loginCount");
         // 将set集合里面的元素放入list集合
         rangeValues.addAll(keys);
-        for (int i = rangeValues.size() - 5; i < rangeValues.size(); i++) {
-            String s = rangeValues.get(i);
-            numbers.add(s);
-            String s1 = hashOps.get("loginCount", s);
-            if (s1 != null) {
-                long l = Long.parseLong(s1);
-                score.add(l);
+        if(rangeValues.size()>5){
+            for (int i = rangeValues.size() - 5; i < rangeValues.size(); i++) {
+                String s = rangeValues.get(i);
+                numbers.add(s);
+                String s1 = hashOps.get("loginCount", s);
+                if (s1 != null) {
+                    long l = Long.parseLong(s1);
+                    score.add(l);
+                }
+            }
+        }else {
+            for (int i = 0; i < rangeValues.size(); i++) {
+                String s = rangeValues.get(i);
+                numbers.add(s);
+                String s1 = hashOps.get("loginCount", s);
+                if (s1 != null) {
+                    long l = Long.parseLong(s1);
+                    score.add(l);
+                }
             }
         }
         return new CountResult(numbers, score);

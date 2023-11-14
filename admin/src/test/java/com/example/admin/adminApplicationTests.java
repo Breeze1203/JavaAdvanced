@@ -53,7 +53,7 @@ class adminApplicationTests {
 
     @Test
     void testRedis() {
-        redisTemplate.delete("1token");
+        redisTemplate.delete("2token");
 //        RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
 //        Set<byte[]> keys = connection.keys("*".getBytes());
 //        for (byte[] key : keys) {
