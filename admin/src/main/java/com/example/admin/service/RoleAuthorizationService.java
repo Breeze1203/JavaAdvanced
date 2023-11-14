@@ -18,6 +18,9 @@ public class RoleAuthorizationService {
     @Transactional
     public int insertPerByRid(Integer rId,Integer[] aIds){
         roleAuthorizationMapper.deletePerByRid(rId);
+        if(aIds.length==0){
+            return 1;
+        }
         return roleAuthorizationMapper.insertPerByRid(rId,aIds);
     }
 }

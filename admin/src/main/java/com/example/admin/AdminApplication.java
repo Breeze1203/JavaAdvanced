@@ -14,7 +14,7 @@ public class AdminApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext run = SpringApplication.run(AdminApplication.class, args);
-		run.getBean(MessageConsumer.class).receive();
+		//run.getBean(MessageConsumer.class).receive();
 	}
 
 }

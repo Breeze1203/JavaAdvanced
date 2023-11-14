@@ -158,6 +158,10 @@ export default {
     },
     // 添加角色
     addRole(){
+      if(this.role.nameZh==null||this.role.role_name==null){
+        ElMessage.error("请输入要添加的角色名称");
+        return;
+      }
       request.addRole(this.role).then(resp=>{
         if(resp.data.code===200){
           ElMessage.success(resp.data.message);

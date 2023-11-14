@@ -445,7 +445,6 @@ export default {
         this.user.state = null;
         request.updateUser(this.user).then(resp => {
               if (resp.data.code === 200) {
-                ElMessage.success(resp.data.message);
 // 如果修改的是当前登录用户，则重新获取当前用户信息，并存入sessionStorage
                 if (this.user.id === JSON.parse(sessionStorage.getItem("user")).id) {
                   request.getUserById(this.user.id).then(resp => {
@@ -459,12 +458,12 @@ export default {
                     if (resp.data.code === 200) {
                       this.initUser();
                       this.initAllUser(this.user);
-                      ElMessage.success(resp.data.message);
                     } else {
                       ElMessage.error(resp.data.message);
                     }
                   })
                 }
+                ElMessage.success(resp.data.message);
               } else {
                 ElMessage.error(resp.data.message);
               }

@@ -18,7 +18,7 @@ import java.util.List;
 public class MessageConsumer {
     public void receive(){
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("shortMessage-consumer");
-        consumer.setNamesrvAddr("192.168.3.81:9876");
+        consumer.setNamesrvAddr("192.168.3.49:9876");
         try {
             consumer.subscribe("short_message","*");
             consumer.registerMessageListener(new MessageListenerConcurrently() {
