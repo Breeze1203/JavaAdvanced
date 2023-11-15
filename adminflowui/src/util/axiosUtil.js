@@ -32,7 +32,7 @@ const instance = axios.create({
     baseURL: '/api',
     timeout: 50000,
     withCredentials: true,
-   // headers:{'Content-Type': 'application/json'}
+    headers:{'Content-Type': 'application/json'}
 })
 
 // 请求拦截器(发送请求之前)

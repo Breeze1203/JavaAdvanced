@@ -218,9 +218,7 @@ const request = {
         return instance({
             method: 'get',
             url: '/getUserById',
-            params: {
-                id:id
-            }
+            params: id
         })
     }
 }

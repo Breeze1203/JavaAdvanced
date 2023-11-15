@@ -126,7 +126,7 @@
         <span>用户名：</span>
       </el-col>
       <el-col :span="5">
-        <el-input disabled style="width: 180px" v-model="user.username" size="small"/>
+        <el-input :disabled="this.dialogTitle==='修改用户'" style="width: 180px" v-model="user.username" size="small"/>
       </el-col>
     </el-row>
     <el-row style="margin-top: 10px">
@@ -439,6 +439,7 @@ export default {
             ElMessage.error(resp.data.message);
             this.initUser();
             this.UserVisible = false;
+            ElMessage.success(resp.data.message);
           }
         })
       } else {
