@@ -14,7 +14,7 @@
 - 记住秘密功能
 - 所有接口都有测试用例覆盖，保证功能可用
 #### 在线预览地址
-[adminflow](http://121.40.93.139:8087/static/index.html)。
+[adminflow](http://121.40.93.139:8087/static/index.html)
 
 #### 项目效果图
 
