@@ -8,7 +8,6 @@ import com.example.admin.model.User;
 public class MessageUtil {
     public static void sendMessage(User user) throws Exception {
         Config config = new Config();
-        System.out.println(user);
         // 必填，您的 AccessKey ID
         config.setAccessKeyId("LTAI5tCKYkSjSgVnawvexE64");
         config.setAccessKeySecret("6XOoX8RiVKtSYvEjem8YVq4B32Bf68");
