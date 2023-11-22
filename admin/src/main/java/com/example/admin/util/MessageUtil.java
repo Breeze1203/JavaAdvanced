@@ -9,8 +9,8 @@ public class MessageUtil {
     public static void sendMessage(User user) throws Exception {
         Config config = new Config();
         // 必填，您的 AccessKey ID
-        config.setAccessKeyId("LTAI5tCKYkSjSgVnawvexE64");
-        config.setAccessKeySecret("6XOoX8RiVKtSYvEjem8YVq4B32Bf68");
+        config.setAccessKeyId("自己的");
+        config.setAccessKeySecret("自己的");
         config.endpoint = "dysmsapi.aliyuncs.com";
         Client client = new Client(config);
         SendSmsRequest sendSmsRequest = new SendSmsRequest();
