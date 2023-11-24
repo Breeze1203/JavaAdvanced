@@ -1,6 +1,7 @@
 import instance from "@/util/axiosUtil";
 
 const request = {
+    // 用户名登录
     login(username, password, remember) {
         return instance({
             method: 'get',
@@ -8,6 +9,19 @@ const request = {
             params: {
                 username: username,
                 password: password,
+                remember: remember
+            }
+        })
+    }
+    ,
+    // 手机号登录
+    loginByPhone(phone,code,remember){
+        return instance({
+            method: 'get',
+            url: '/loginByPhone',
+            params: {
+                phone: phone,
+                code: code,
                 remember: remember
             }
         })
@@ -219,6 +233,16 @@ const request = {
             method: 'get',
             url: '/getUserById',
             params: id
+        })
+    },
+    // 用户验证码登录 获取短信验证码
+    getCode(phone){
+        return instance({
+            method:'get',
+            url:'/getVerification',
+            params:{
+                phone:phone
+            }
         })
     }
 }

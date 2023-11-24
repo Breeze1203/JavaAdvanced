@@ -11,6 +11,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>admin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>admin</name>
 	<description>admin</description>
 	<properties>
@@ -97,6 +98,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.example.admin.AdminApplication</mainClass>
+				</configuration>
 			</plugin>
 		</plugins>
 		<!--        这里要将mapper文件所在的位置标记为资源文件-->

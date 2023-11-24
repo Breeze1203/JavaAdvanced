@@ -25,4 +25,6 @@ public interface UserMapper {
     Integer addUser(User user);
 
     User getUserById(@Param("id") Integer id);
+
+    User getUserByPhone(@Param("phone") Long phone);
 }

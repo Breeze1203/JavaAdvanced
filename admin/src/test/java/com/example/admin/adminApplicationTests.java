@@ -4,8 +4,6 @@ package com.example.admin;
 import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.teaopenapi.models.Config;
-import com.example.admin.config.MessageConsumer;
-import com.example.admin.config.MessageProducer;
 import com.example.admin.mapper.*;
 import com.example.admin.model.Authorization;
 import com.example.admin.model.OperationData;
@@ -82,6 +80,9 @@ class adminApplicationTests {
 //        System.out.println(update);
         //User admin = userMapper.getUserByName("admin");
         //System.out.println(admin.getUsername());
+        Random random = new Random();
+        double v = random.nextDouble();
+        System.out.println(v*100000);
     }
 
     @Test

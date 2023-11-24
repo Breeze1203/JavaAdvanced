@@ -106,4 +106,8 @@
         select *
         from user where id=#{id}
     </select>
+<!--    根据手机号查询用户-->
+    <select id="getUserByPhone" parameterType="java.lang.Long">
+        select * from user where phone=#{phone}
+    </select>
 </mapper>

@@ -15,23 +15,17 @@ import java.util.List;
 
 public class ConsumerTest {
     public static void main(String[] args) {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("message-consumer");
-        consumer.setNamesrvAddr("192.168.3.81:9876");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("code-consumer");
+        consumer.setNamesrvAddr("192.168.3.84:9876");
         try {
-            consumer.subscribe("short_message","*");
+            consumer.subscribe("code_var","*");
             consumer.registerMessageListener(new MessageListenerConcurrently() {
                 @Override
                 public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> list, ConsumeConcurrentlyContext consumeConcurrentlyContext) {
                     for(MessageExt m:list){
                         byte[] body = m.getBody();
                         String s=new String(body);
-                        User user = JSON.parseObject(s, User.class);
-                        System.out.println(user);
-                        try {
-                            MessageUtil.sendMessage(user);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+                        System.out.println(s);
                     }
                     return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
                 }

@@ -31,7 +31,7 @@ public class CheckPermissionInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 在请求处理之前进行拦截逻辑的编写 返回true表示继续执行请求，返回false表示拦截请求
+        // 在请求处理之前进行拦截逻辑的编写 返回true表示继续执行
         if (handler instanceof HandlerMethod handMethod) {
             String authorization = request.getHeader("Authorization");
             Integer i = JwtToken.verifyToken(authorization);

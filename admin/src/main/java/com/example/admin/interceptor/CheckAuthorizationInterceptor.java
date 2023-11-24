@@ -21,23 +21,19 @@ public class CheckAuthorizationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (request.getRequestURI().equals("/login")) {
+        String authorization = request.getHeader("Authorization");
+        Integer i = JwtToken.verifyToken(authorization);
+        String s = redisTemplate.opsForValue().get(i + "token");
+        if (i > 0 && s != null && authorization != null) {
             return true;
-        } else {
-            String authorization = request.getHeader("Authorization");
-            Integer i = JwtToken.verifyToken(authorization);
-            String s = redisTemplate.opsForValue().get(i + "token");
-            if (i > 0 && s != null && authorization != null) {
-                return true;
-            }
-            response.setContentType("application/json;charset=utf-8");
-            PrintWriter out = response.getWriter();
-            StatusUtil statusUtil = new StatusUtil("请进行登录授权", 401, null);
-            out.write(new ObjectMapper().writeValueAsString(statusUtil));
-            out.flush(); //刷新输出流
-            out.close(); // 关闭输出流
-            return false;
         }
+        response.setContentType("application/json;charset=utf-8");
+        PrintWriter out = response.getWriter();
+        StatusUtil statusUtil = new StatusUtil("请进行登录授权", 401, null);
+        out.write(new ObjectMapper().writeValueAsString(statusUtil));
+        out.flush(); //刷新输出流
+        out.close(); // 关闭输出流
+        return false;
     }
 
     @Override
