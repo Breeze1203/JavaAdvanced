@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/log")
+@RequestMapping("/api/log")
 public class LogController {
 
     @Resource(name = "OperationDataService")

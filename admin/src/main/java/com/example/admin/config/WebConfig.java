@@ -7,7 +7,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Configuration
@@ -20,9 +24,17 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(checkAuthorizationInterceptor).order(1);
+        List<String> path=new ArrayList<>();
+        path.add("/static/**");
+        path.add("/api/login");
+        path.add("/api/getVerification");
+        path.add("/api/loginByPhone");
+        registry.addInterceptor(checkAuthorizationInterceptor)
+                .addPathPatterns("/**")   // 所有路径都被拦截
+                .excludePathPatterns(path).order(1);
         // 将自定义的拦截器进行添加
-        registry.addInterceptor(checkPermissionInterceptor).order(2);
+        registry.addInterceptor(checkPermissionInterceptor).addPathPatterns("/**")   // 所有路径都被拦截
+                .excludePathPatterns(path).order(2);
     }
 
     @Override
@@ -35,4 +47,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .maxAge(3600); // 设置响应的最大存活时间（缓存时间））
     }
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
+    }
 }

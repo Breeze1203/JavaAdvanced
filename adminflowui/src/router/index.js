@@ -1,6 +1,10 @@
-import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 import Login from "@/components/Login.vue";
-
+import Home from "@/components/Home.vue";
+import LogSet from "@/components/log/LogSet.vue";
+import UserSet from "@/components/set/UserSet.vue";
+import RoleSet from "@/components/set/RoleSet.vue";
+import Permission from "@/components/set/Permission.vue";
 
 const routes = [
     {
@@ -11,27 +15,27 @@ const routes = [
    {
         path: '/home',
         name: 'Home',
-        component: import('../components/Home.vue'),
+        component: Home,
         children:[
             {
                 path:'/log',
                 name:'操作日志',
-                component:import('../components/log/LogSet.vue')
+                component:LogSet
             },
             {
                 path: '/UserSet',
                 name: '用户管理',
-                component: import('../components/set/UserSet.vue')
+                component: UserSet
             },
             {
                 path: '/RoleSet',
                 name: '角色管理',
-                component: import('../components/set/RoleSet.vue')
+                component: RoleSet
             },
             {
                 path: '/Permissions',
                 name: '权限资源',
-                component: import('../components/set/Permission.vue')
+                component: Permission
             }
         ]
     },

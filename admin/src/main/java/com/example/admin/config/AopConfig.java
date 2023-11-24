@@ -38,7 +38,7 @@ public class AopConfig {
         StatusUtil status = (StatusUtil) result;
         // 这个是获取方法的参数
         Object[] args = joinPoint.getArgs();
-        if (status.getMessage().equals("用户名或密码错误")) return;
+        if (status.getCode()!=200) return;
         OperationData operationData = new OperationData();
         String u = args[0].toString();
         operationData.setUser(u);

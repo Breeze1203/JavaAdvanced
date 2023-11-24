@@ -44,4 +44,9 @@ public class UserService {
     public Integer insertUser(User user) {
         return userMapper.addUser(user);
     }
+
+    // 根据手机号查询用户
+    public User getUserByPhone(Long phone) {
+        return userMapper.getUserByPhone(phone);
+    }
 }

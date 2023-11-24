@@ -14,13 +14,13 @@ public class RoleController {
     @Resource(name = "RoleService")
     RoleService roleService;
 
-    @GetMapping("/getAllRole")
+    @GetMapping("/api/getAllRole")
     public List<Role> getAllROle() {
         return roleService.getAllRole();
     }
 
     @CheckPermission(permission = "add_role")
-    @PostMapping("/addRole")
+    @PostMapping("/api/addRole")
     public StatusUtil addRole(@RequestBody Role role){
         if(!role.getRole_name().startsWith("role_")){
             role.setRole_name("role_"+role.getRole_name());
@@ -33,7 +33,7 @@ public class RoleController {
     }
 
     @CheckPermission(permission = "delete_role")
-    @GetMapping("/deleteRole")
+    @GetMapping("/api/deleteRole")
     public StatusUtil deleteRole(@RequestParam("id")Integer id){
         int i = roleService.deleteRole(id);
         if(i>0){
@@ -42,7 +42,7 @@ public class RoleController {
         return new StatusUtil("该角色下存在用户，无法删除",500,null);
     }
 
-    @PostMapping("/updateRole")
+    @PostMapping("/api/updateRole")
     @CheckPermission(permission = "update_role")
     public StatusUtil updateRole(@RequestBody Role role){
         Integer i = roleService.updateRole(role);

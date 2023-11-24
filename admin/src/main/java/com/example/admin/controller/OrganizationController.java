@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Organization")
+@RequestMapping("/api/Organization")
 public class OrganizationController {
 
     @Resource(name = "OrganizationService")
@@ -33,7 +33,6 @@ public class OrganizationController {
     @PostMapping("/addOrganization")
     @CheckPermission(permission = "add_org")
     public StatusUtil add(@RequestBody Organization organization){
-        System.out.println(organization);
         Integer add = organizationService.add(organization);
         if(add>0){
             return new StatusUtil("添加成功",200,null);
