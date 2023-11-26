@@ -10,14 +10,11 @@ import com.example.admin.util.DateUtil;
 import com.example.admin.util.IpUtil;
 import com.example.admin.util.Permission;
 import com.example.admin.util.StatusUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -38,7 +35,7 @@ public class AopConfig {
         StatusUtil status = (StatusUtil) result;
         // 这个是获取方法的参数
         Object[] args = joinPoint.getArgs();
-        if (status.getCode()!=200) return;
+        if (status.getCode()==500) return;
         OperationData operationData = new OperationData();
         String u = args[0].toString();
         operationData.setUser(u);
@@ -179,6 +176,18 @@ public class AopConfig {
         Permission permission = (Permission) arg[0];
         operationData.setDate(DateUtil.formatLog(new Date()));
         operationData.setOperation("修改id为" + permission.getRid() + "角色权限,新的权限id为"+ Arrays.toString(permission.getAllId()));
+        operationDataService.insetOperationLog(operationData);
+    }
+
+    @AfterReturning(pointcut = "execution(* com.example.admin.controller.UserController.loginByPhone(..))",returning = "result")
+    public void loginByPhone(JoinPoint joinPoint,StatusUtil result){
+        Object[] args = joinPoint.getArgs();
+        String phone= args[0].toString();
+        if (result.getCode() == 500) return;
+        OperationData operationData = new OperationData();
+        operationData.setType("用户登录");
+        operationData.setDate(DateUtil.formatLog(new Date()));
+        operationData.setOperation("手机号为" + phone + "用户登录");
         operationDataService.insetOperationLog(operationData);
     }
 }
