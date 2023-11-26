@@ -7,7 +7,6 @@ import com.example.admin.permission.CheckPermission;
 import com.example.admin.service.RoleService;
 import com.example.admin.service.UserService;
 import com.example.admin.util.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 
 @RestController
@@ -31,9 +31,6 @@ public class UserController {
     @Resource(name = "UserService")
     private UserService userService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Resource(name = "RoleService")
     RoleService roleService;
 
@@ -43,7 +40,7 @@ public class UserController {
         User u = userService.getUserByName(username);
         boolean rem = Boolean.parseBoolean(remember);
         if (u != null && password.equals(u.getPassword())) {
-            return loginPublic(u,response,rem);
+            return loginPublic(u, response, rem);
         } else {
             return new StatusUtil("用户名或密码错误", 401, null);
         }
@@ -54,14 +51,16 @@ public class UserController {
     @GetMapping("/api/loginByPhone")
     public StatusUtil loginByPhone(@RequestParam("phone") String phone, @RequestParam("code") String code, @RequestParam("remember") String remember, HttpServletResponse response) {
         String s = redisTemplate.opsForValue().get("code_" + phone);
-        if(s==null){
-            return new StatusUtil("验证码已过期，请稍后再试",500,null);
-        }else if(!s.equals(code)){
-            return new StatusUtil("验证码错误，请稍后再试",500,null);
+        if (s == null) {
+            return new StatusUtil("验证码已过期，请稍后再试", 500, null);
         }
-        User userByPhone = userService.getUserByPhone(Long.parseLong(phone));
-        boolean rem = Boolean.parseBoolean(remember);
-        return loginPublic(userByPhone, response, rem);
+        if(code.equals(s)) {
+            User userByPhone = userService.getUserByPhone(Long.parseLong(phone));
+            boolean rem = Boolean.parseBoolean(remember);
+            return loginPublic(userByPhone, response, rem);
+        }else {
+            return new StatusUtil("验证码已过期，请稍后再试", 500, null);
+        }
     }
 
 
@@ -69,8 +68,7 @@ public class UserController {
     public StatusUtil loginOut(@RequestParam("id") Integer id) {
         // 删除token及用户信息
         Boolean token = redisTemplate.delete(id + "token");
-        Boolean u = redisTemplate.delete("user_" + id);
-        if (Boolean.TRUE.equals(token) && Boolean.TRUE.equals(u)) {
+        if (Boolean.TRUE.equals(token)) {
             return new StatusUtil("注销成功", 200, null);
         } else {
             return new StatusUtil("网络出现异常，请稍后再试", 500, null);
@@ -198,28 +196,27 @@ public class UserController {
      */
     @GetMapping("/api/getVerification")
     public StatusUtil getVerification(@RequestParam("phone") String phone) {
-        Long userPhone=null;
-        try {
-            userPhone = Long.parseLong(phone);
-        }catch (Exception e){
+        String pattern = "^1\\d{10}$"; // 匹配以1开头，后面跟着10位数字的手机号码
+        boolean matches = Pattern.matches(pattern, phone);
+        if (!matches) {
             return new StatusUtil("请输入正确的手机号格式", 500, null);
         }
         // 查看有没有该手机号注册的用户
-        User userByPhone = userService.getUserByPhone(userPhone);
-        if (userByPhone!=null) {
+        User userByPhone = userService.getUserByPhone(Long.parseLong(phone));
+        if (userByPhone != null) {
             double v = new Random().nextDouble();
-            int code= (int) (v*10000);
-            MessageUtil.sendVerificationCode(phone,code);
-            redisTemplate.opsForValue().set("code_"+phone,String.valueOf(code));
+            int code = (int) (v * 10000);
+            MessageUtil.sendVerificationCode(phone, code);
+            redisTemplate.opsForValue().set("code_" + phone, String.valueOf(code));
             // 设置5分钟过期
-            redisTemplate.expire("code_"+phone,5, TimeUnit.MINUTES);
+            redisTemplate.expire("code_" + phone, 5, TimeUnit.MINUTES);
             return new StatusUtil("验证码发送成功，请注意接收", 200, null);
         } else {
             return new StatusUtil("该手机号尚未注册，请稍后再试", 500, null);
         }
     }
 
-    private StatusUtil loginPublic(User u,HttpServletResponse response,boolean rem){
+    private StatusUtil loginPublic(User u, HttpServletResponse response, boolean rem) {
         String format = DateUtil.format(new Date());
         // 每次用户登录成功，访问次数加一
         HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
@@ -233,15 +230,11 @@ public class UserController {
         // 根据当前登录成功用户不同将用户信息变成token存储到redis中 因为用户id唯一
         String token_name = u.getId() + "token";
         if (operations.get(token_name) == null) {
-            operations.set(token_name, token, 60 * 60 * 24, TimeUnit.MINUTES);
+            System.out.println(token);
+            redisTemplate.opsForValue().set(token_name, token);
+            redisTemplate.expire(token_name, 24, TimeUnit.HOURS);
         } else {
             return new StatusUtil("当前已存在登录用户，请稍后再试", 500, null);
-        }
-        try {
-            // 将用户信息存入缓存
-            operations.set("user_" + u.getId(), objectMapper.writeValueAsString(u));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         }
         // 将用户信息生成token返回给前端
         Cookie c3 = new Cookie(u.getUsername() + "token", token);
@@ -273,10 +266,6 @@ public class UserController {
             cookie2.setDomain("localhost");
             response.addCookie(cookie2);
         }
-        // 将token放入到redis中
-        redisTemplate.opsForValue().set(u.getUsername() + "token", token);
-        // 设置键的生命周期为24小时
-        redisTemplate.expire(u.getUsername() + "token", 24, TimeUnit.HOURS);
         u.setPassword(null);
         return new StatusUtil("登录成功", 200, u);
     }

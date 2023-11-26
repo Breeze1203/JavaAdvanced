@@ -88,7 +88,7 @@ export default {
         let rem = this.remember.toString();
         request.login(this.username, this.password, rem).then(resp => {
           if (resp.data.code === 200) {
-            let token = this.getCookieValue(this.username + 'token');
+            let token = this.getCookieValue(resp.data.user.username + 'token');
             // 将token存入到store
             store.commit('getToken', token);
             // 获取当前用户信息
@@ -111,7 +111,7 @@ export default {
       }
       request.loginByPhone(this.phoneNumber, this.verificationCode, this.rememberWithPhone).then(resp => {
         if(resp.data.code===200){
-          let token = this.getCookieValue(this.username + 'token');
+          let token = this.getCookieValue(resp.data.user.username + 'token');
           // 将token存入到store
           store.commit('getToken', token);
           // 获取当前用户信息
