@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+
 @MapperScan(basePackages = "com.example.admin.mapper")
 @EnableTransactionManagement
 @SpringBootApplication

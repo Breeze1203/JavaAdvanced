@@ -30,7 +30,7 @@ public class AopConfig {
     OperationDataService operationDataService;
 
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.UserController.login(..))", returning = "result")
-    public void afterLoginSuccess(JoinPoint joinPoint, Object result) {
+    private void afterLoginSuccess(JoinPoint joinPoint, Object result) {
         // 这个是方法返回值 将Object类型的参数转换为 StatusUtil 类型
         StatusUtil status = (StatusUtil) result;
         // 这个是获取方法的参数
@@ -55,7 +55,7 @@ public class AopConfig {
     退出登录
      */
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.UserController.loginOut(..))", returning = "result")
-    public void afterLoginOutSuccess(JoinPoint joinPoint, Object result) {
+    private void afterLoginOutSuccess(JoinPoint joinPoint, Object result) {
         StatusUtil status = (StatusUtil) result;
         // 这个是获取方法的参数
         Object[] args = joinPoint.getArgs();
@@ -73,7 +73,7 @@ public class AopConfig {
     添加组织
      */
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.OrganizationController.add(..))", returning = "result")
-    public void addOrganizationLog(JoinPoint joinPoint, StatusUtil result) {
+    private void addOrganizationLog(JoinPoint joinPoint, StatusUtil result) {
         // 这个是获取方法的参数
         Object[] args = joinPoint.getArgs();
         if (result.getCode() == 500) return;
@@ -89,7 +89,7 @@ public class AopConfig {
     删除组织
      */
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.OrganizationController.deleteById(..))", returning = "result")
-    public void deleteOrganizationLog(JoinPoint joinPoint, StatusUtil result) {
+    private void deleteOrganizationLog(JoinPoint joinPoint, StatusUtil result) {
         // 这个是获取方法的参数
         Object[] arg = joinPoint.getArgs();
         if (result.getCode() == 500) return;
@@ -105,7 +105,7 @@ public class AopConfig {
     添加用户
      */
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.UserController.addUser(..))", returning = "result")
-    public void addUser(JoinPoint joinPoint, StatusUtil result) {
+    private void addUser(JoinPoint joinPoint, StatusUtil result) {
         // 这个是获取方法的参数
         Object[] arg = joinPoint.getArgs();
         if (result.getCode() == 500) return;
@@ -121,7 +121,7 @@ public class AopConfig {
     删除用户
      */
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.UserController.deleteUser(..))", returning = "result")
-    public void deleteUser(JoinPoint joinPoint, StatusUtil result) {
+    private void deleteUser(JoinPoint joinPoint, StatusUtil result) {
         // 这个是获取方法的参数
         Object[] arg = joinPoint.getArgs();
         if (result.getCode() == 500) return;
@@ -136,7 +136,7 @@ public class AopConfig {
     添加角色
      */
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.RoleController.addRole(..))", returning = "result")
-    public void addRole(JoinPoint joinPoint,StatusUtil result){
+    private void addRole(JoinPoint joinPoint,StatusUtil result){
         // 这个是获取方法的参数
         Object[] arg = joinPoint.getArgs();
         if (result.getCode() == 500) return;
@@ -152,7 +152,7 @@ public class AopConfig {
     删除角色
      */
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.RoleController.deleteRole(..))", returning = "result")
-    public void deleteRole(JoinPoint joinPoint,StatusUtil result){
+    private void deleteRole(JoinPoint joinPoint,StatusUtil result){
         // 这个是获取方法的参数
         Object[] arg = joinPoint.getArgs();
         if (result.getCode() == 500) return;
@@ -167,7 +167,7 @@ public class AopConfig {
     修改权限
      */
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.RoleAuthorizationController.updatePer(..))", returning = "result")
-    public void updatePermission(JoinPoint joinPoint,StatusUtil result){
+    private void updatePermission(JoinPoint joinPoint,StatusUtil result){
         // 这个是获取方法的参数
         Object[] arg = joinPoint.getArgs();
         if (result.getCode() == 500) return;
@@ -180,7 +180,7 @@ public class AopConfig {
     }
 
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.UserController.loginByPhone(..))",returning = "result")
-    public void loginByPhone(JoinPoint joinPoint,StatusUtil result){
+    private void loginByPhone(JoinPoint joinPoint,StatusUtil result){
         Object[] args = joinPoint.getArgs();
         String phone= args[0].toString();
         if (result.getCode() == 500) return;
