@@ -5,6 +5,7 @@ import LogSet from "@/components/log/LogSet.vue";
 import UserSet from "@/components/set/UserSet.vue";
 import RoleSet from "@/components/set/RoleSet.vue";
 import Permission from "@/components/set/Permission.vue";
+import About from "@/components/pub/About.vue";
 
 const routes = [
     {
@@ -36,7 +37,12 @@ const routes = [
                 path: '/Permissions',
                 name: '权限资源',
                 component: Permission
-            }
+            },
+            {
+                path: '/about',
+                name: '关于项目',
+                component: About
+            },
         ]
     },
 

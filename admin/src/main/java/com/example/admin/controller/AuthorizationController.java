@@ -22,7 +22,6 @@ public class AuthorizationController {
         return authorizationService.getAll();
     }
 
-    // 根据角色id获取权限资源
     @GetMapping("/api/getPermissionByrId")
     public List<Integer> getByRid(@RequestParam("rid")Integer rid){
         List<Authorization> all = authorizationService.getPermissionByrId(rid);

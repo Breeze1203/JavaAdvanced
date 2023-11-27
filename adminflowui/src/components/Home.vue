@@ -65,6 +65,10 @@
                   </el-menu-item>
                 </el-menu-item-group>
               </el-sub-menu>
+              <el-menu-item @click="about">
+                <el-icon><Document /></el-icon>
+                <span>关于项目</span>
+              </el-menu-item>
             </el-menu>
           </div>
         </el-aside>
@@ -223,6 +227,10 @@ export default {
       this.initCount();
       router.push('/home');
     },
+    // 跳到关于项目介绍
+    about(){
+      router.push('/about');
+    },
     // 初始化折现图
     initCount() {
       request.getCount().then(resp => {
@@ -300,7 +308,8 @@ export default {
 }
 
 .welcome-container {
-  padding: 20px;
+  padding: 10px;
+  height: 100px;
   text-align: center;
 }
 

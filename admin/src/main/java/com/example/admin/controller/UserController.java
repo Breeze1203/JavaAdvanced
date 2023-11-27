@@ -230,7 +230,6 @@ public class UserController {
         // 根据当前登录成功用户不同将用户信息变成token存储到redis中 因为用户id唯一
         String token_name = u.getId() + "token";
         if (operations.get(token_name) == null) {
-            System.out.println(token);
             redisTemplate.opsForValue().set(token_name, token);
             redisTemplate.expire(token_name, 24, TimeUnit.HOURS);
         } else {
