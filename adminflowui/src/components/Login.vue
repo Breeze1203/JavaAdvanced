@@ -54,6 +54,7 @@
 import request from "@/util/requestUtil";
 import {ElMessage} from 'element-plus';
 import store from "@/store";
+import {getCookie} from "@/util/cookieUtil";
 
 
 export default {
@@ -88,9 +89,9 @@ export default {
         let rem = this.remember.toString();
         request.login(this.username, this.password, rem).then(resp => {
           if (resp.data.code === 200) {
-            let token = this.getCookieValue(resp.data.user.username + 'token');
-            // 将token存入到store
-            store.commit('getToken', token);
+            // let token = this.getCookieValue(resp.data.user.username + 'token');
+            // // 将token存入到store
+            // store.commit('getToken', token);
             // 获取当前用户信息
             let user = JSON.stringify(resp.data.user);
             sessionStorage.setItem("user", user);
@@ -111,9 +112,6 @@ export default {
       }
       request.loginByPhone(this.phoneNumber, this.verificationCode, this.rememberWithPhone).then(resp => {
         if(resp.data.code===200){
-          let token = this.getCookieValue(resp.data.user.username + 'token');
-          // 将token存入到store
-          store.commit('getToken', token);
           // 获取当前用户信息
           let user = JSON.stringify(resp.data.user);
           sessionStorage.setItem("user", user);
@@ -138,17 +136,6 @@ export default {
           ElMessage.error(resp.data.message);
         }
       })
-    },
-    // 获取cookie
-    getCookieValue(cookie) {
-      //  按冒号分割cookie;
-      let cookies = document.cookie.split(";");
-      for (let i = 0; i < cookies.length; i++) {
-        let strings = cookies[i].trim().split("=");
-        if (strings[0] === cookie) {
-          return strings[1];
-        }
-      }
     },
     // 生成验证码
     generateCode() {
@@ -201,8 +188,8 @@ export default {
   ,
   mounted() {
     this.generateCode();
-    let c1 = this.getCookieValue("username");
-    let c2 = this.getCookieValue("password");
+    let c1 = getCookie("username");
+    let c2 = getCookie("password");
     if (c1 !== null && c2 !== null) {
       this.username = c1;
       this.password = c2;

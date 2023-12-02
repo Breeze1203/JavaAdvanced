@@ -4,6 +4,16 @@
       <el-header class="header">
         <div class="head">AdminFlow</div>
         <div class="header-wrapper">
+          <div style="margin-right: 30px;">
+            <el-icon @click="fill" style="color: #ffffff">
+              <FullScreen/>
+            </el-icon>
+          </div>
+          <div style="margin-right: 30px;">
+            <el-icon style="color: #ffffff">
+              <Bell/>
+            </el-icon>
+          </div>
           <el-avatar size="large" class="avater" :src="userInfo.userFace"/>
           <el-dropdown trigger="hover">
             <p style="font-weight: bolder;color: white">{{ userInfo.username }}</p>
@@ -66,7 +76,9 @@
                 </el-menu-item-group>
               </el-sub-menu>
               <el-menu-item @click="about">
-                <el-icon><Document /></el-icon>
+                <el-icon>
+                  <Document/>
+                </el-icon>
                 <span>关于项目</span>
               </el-menu-item>
             </el-menu>
@@ -158,8 +170,6 @@ export default {
               if (resp.data.code === 200) {
                 // 删除用户信息
                 sessionStorage.removeItem("user");
-                // 删除token
-                store.state.token = null;
                 router.push("/");
                 ElMessage.success(resp.data.message);
               } else {
@@ -194,25 +204,23 @@ export default {
     update() {
       if (this.userInfo.password !== this.newPassword) {
         ElMessage.error("两次密码不一致，请重新输入");
-        this.userInfo.password=null;
-        this.newPassword=null;
+        this.userInfo.password = null;
+        this.newPassword = null;
         return;
       }
-      request.updatePassword(this.userInfo).then(resp=>{
-        if(resp.data.code===200){
+      request.updatePassword(this.userInfo).then(resp => {
+        if (resp.data.code === 200) {
           ElMessage.success(resp.data.message);
           request.loginOut(this.userInfo.id).then(resp => {
             if (resp.data.code === 200) {
               // 删除用户信息
               sessionStorage.removeItem("user");
-              // 删除token
-              store.state.token = null;
               router.push("/");
             } else {
               ElMessage.error("网络出现异常，请稍后再试");
             }
           })
-        }else {
+        } else {
           ElMessage.error(resp.data.message);
         }
         this.showSet = false;
@@ -228,9 +236,18 @@ export default {
       router.push('/home');
     },
     // 跳到关于项目介绍
-    about(){
+    about() {
       router.push('/about');
     },
+    // 全屏显示
+    fill(){
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        document.documentElement.requestFullscreen();
+      }
+    }
+    ,
     // 初始化折现图
     initCount() {
       request.getCount().then(resp => {
