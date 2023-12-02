@@ -10,9 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.io.PrintWriter;
-import java.util.Enumeration;
 
 @Component
 public class CheckAuthorizationInterceptor implements HandlerInterceptor {

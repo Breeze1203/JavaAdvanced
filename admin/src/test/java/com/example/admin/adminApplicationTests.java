@@ -107,7 +107,6 @@ class adminApplicationTests {
         Set<String> count = operations.range("count", 0, -1);
         for (String s : count) {
             members.add(s);
-            System.out.println(s);
             double a = redisTemplate.opsForZSet().score("count", s);
             System.out.println(a);
             score.add(redisTemplate.opsForZSet().score("count", s));

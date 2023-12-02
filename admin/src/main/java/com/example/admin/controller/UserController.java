@@ -224,14 +224,14 @@ public class UserController {
         // 如果s不为null,就将起初的值先转为long，然后加一
         long count = s != null ? Long.parseLong(s) + 1 : 1;
         hashOps.put("loginCount", format, Long.toString(count));
-        // 将token信息存入到redis中
+        // 将用户信息生成token
         String token = JwtToken.generateToken(u);
         ValueOperations<String, String> operations = redisTemplate.opsForValue();
         // 根据当前登录成功用户不同将用户信息变成token存储到redis中 因为用户id唯一
         String token_name = u.getId() + "token";
         if (operations.get(token_name) == null) {
             redisTemplate.opsForValue().set(token_name, token);
-            redisTemplate.expire(token_name, 24, TimeUnit.HOURS);
+            redisTemplate.expire(token_name, 60*24, TimeUnit.MINUTES);
         } else {
             return new StatusUtil("当前已存在登录用户，请稍后再试", 500, null);
         }
