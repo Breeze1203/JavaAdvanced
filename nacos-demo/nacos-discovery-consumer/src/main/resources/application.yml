@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: nacos-discovery-consumer
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+server:
+  port: 8851
