@@ -1,0 +1,23 @@
+server:
+  port: 8853
+spring:
+  application:
+    name: nacos-discovery-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      routes:
+        - id: nacos-discovery-provider
+          uri: lb://nacos-discovery-provider
+          predicates:
+            - Path=/provider/**
+          filters:
+            - StripPrefix=1
+        - id: nacos-discovery-consumer
+          uri: lb://nacos-discovery-consumer
+          predicates:
+            - Path=/consumer/**
+          filters:
+            - StripPrefix=1
