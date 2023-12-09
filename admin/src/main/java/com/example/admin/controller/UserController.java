@@ -35,7 +35,7 @@ public class UserController {
     RoleService roleService;
 
     // 用户用户名登录认证的方法
-    @GetMapping("/api/login")
+    @GetMapping("/login")
     public StatusUtil login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("remember") String remember, HttpServletRequest request, HttpServletResponse response) {
         User u = userService.getUserByName(username);
         boolean rem = Boolean.parseBoolean(remember);
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     // 短信验证码登录
-    @GetMapping("/api/loginByPhone")
+    @GetMapping("/loginByPhone")
     public StatusUtil loginByPhone(@RequestParam("phone") String phone, @RequestParam("code") String code, @RequestParam("remember") String remember, HttpServletResponse response) {
         String s = redisTemplate.opsForValue().get("code_" + phone);
         if (s == null) {
@@ -64,7 +64,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/api/loginOut")
+    @GetMapping("/loginOut")
     public StatusUtil loginOut(@RequestParam("id") Integer id) {
         // 删除token及用户信息
         Boolean token = redisTemplate.delete(id + "token");
@@ -78,7 +78,7 @@ public class UserController {
     /*
     该方法是获取最近五天项目访问人数
      */
-    @GetMapping("/api/getCount")
+    @GetMapping("/getCount")
     public CountResult getAccessCount() {
         HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
         redisTemplate.opsForHash().delete("loginCount", "2023-10-23");
@@ -114,14 +114,14 @@ public class UserController {
     }
 
     //获取所有用户
-    @PostMapping("/api/getAllUser")
+    @PostMapping("/getAllUser")
     public List<User> getAllUser(@RequestBody User user) {
         return userService.getAllUser(user);
     }
 
     // 根据id是否禁用用户
     @CheckPermission(permission = "update_user")
-    @PostMapping("/api/updateUser")
+    @PostMapping("/updateUser")
     public StatusUtil disable(@RequestBody User user) {
         if (user.getState() != null) {
             user.setState(!user.getState());
@@ -135,7 +135,7 @@ public class UserController {
     }
 
     @CheckPermission(permission = "delete_user")
-    @GetMapping("/api/deleteUser")
+    @GetMapping("/deleteUser")
     public StatusUtil deleteUser(@RequestParam("id") Integer id) {
         // 删除用户前，先判断该用户是否登录
         String s = redisTemplate.opsForValue().get("user_" + id);
@@ -152,7 +152,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/api/addUser")
+    @PostMapping("/addUser")
     @CheckPermission(permission = "add_user")
     public StatusUtil addUser(@RequestBody User user) {
         user.setState(true);
@@ -164,7 +164,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/api/updateUserRole")
+    @PostMapping("/updateUserRole")
     public StatusUtil updateUserRole(@RequestParam("rid") Integer rid, @RequestParam("id") Integer id) {
         int i = roleService.updateUserById(rid, id);
         if (i > 0) {
@@ -174,7 +174,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/api/updatePassword")
+    @PostMapping("/updatePassword")
     public StatusUtil updatePassword(@RequestBody User user) {
         Integer i = userService.updateUser(user);
         if (i > 0) {
@@ -185,7 +185,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/api/getUserById")
+    @GetMapping("/getUserById")
     public StatusUtil updatePassword(@RequestParam("id") Integer id) {
         User user = userService.getUserById(id);
         return new StatusUtil(null, 200, user);
@@ -194,7 +194,7 @@ public class UserController {
     /*
     获取短信验证码
      */
-    @GetMapping("/api/getVerification")
+    @GetMapping("/getVerification")
     public StatusUtil getVerification(@RequestParam("phone") String phone) {
         String pattern = "^1\\d{10}$"; // 匹配以1开头，后面跟着10位数字的手机号码
         boolean matches = Pattern.matches(pattern, phone);
@@ -267,5 +267,13 @@ public class UserController {
         }
         u.setPassword(null);
         return new StatusUtil("登录成功", 200, u);
+    }
+
+    /*
+    获取当前登录用户除外的所有用户
+     */
+    @GetMapping("/WithOutUser")
+    public List<User> getOutLogin(@RequestParam("id")Integer id){
+        return userService.getOutLogin(id);
     }
 }

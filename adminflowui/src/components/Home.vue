@@ -5,14 +5,63 @@
         <div class="head">AdminFlow</div>
         <div class="header-wrapper">
           <div style="margin-right: 30px;">
+            <el-icon style="color: #ffffff" @click="showMessage=true">
+              <Edit/>
+            </el-icon>
+          </div>
+          <div style="margin-right: 30px;">
             <el-icon @click="fill" style="color: #ffffff">
               <FullScreen/>
             </el-icon>
           </div>
           <div style="margin-right: 30px;">
-            <el-icon style="color: #ffffff">
-              <Bell/>
-            </el-icon>
+            <el-badge :value="messCount" type="danger" :max="10">
+              <el-dropdown trigger="click">
+                <el-icon size="20" style="color: #ffffff;border: none">
+                  <Bell/>
+                </el-icon>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <div style="width: 300px;">
+                      <div v-for="(item,index) in messages" :key="index"
+                           style="border-bottom: 1px solid;margin-left: 10px;margin-right:10px;display: flex;">
+                        <div v-if="item.send_id===userInfo.id">
+                          <el-avatar size="small" :src="userInfo.userFace"/>
+                        </div>
+                        <div v-if="item.send_id===userInfo.id"
+                             style="width: 100%;margin-left: 10px">
+                          <el-row>我发送给{{ item.receive_user.username }}：{{ item.content }}</el-row>
+                          <el-row>
+                            <el-col style="color: orange" :span="9">{{ item.time }}</el-col>
+                            <el-col :span="10">
+                              <span style="color: red" @click="deleteMess(item.id)">删除</span>
+                            </el-col>
+                          </el-row>
+                        </div>
+                        <div v-if="item.send_id!==userInfo.id">
+                          <el-avatar size="small" :src="item.send_user.userFace"/>
+                        </div>
+                        <div v-if="item.send_id!==userInfo.id"
+                             style="width: 100%;margin-left: 10px">
+                          <el-row>{{ item.send_user.username }}发送给我：{{ item.content }}</el-row>
+                          <el-row>
+                            <el-col style="color: orange" :span="9">{{ item.time }}</el-col>
+                            <el-col :span="10">
+                              <el-space>
+                                <span style="color: red" @click="deleteMess(item.id)">删除</span>
+                                <span style="color: dimgray" @click="replyMessage(item.send_id)">回复</span>
+                                <span v-if="item.state===false" style="color: darkcyan"
+                                      @click="havaRead(item.id)">已读</span>
+                              </el-space>
+                            </el-col>
+                          </el-row>
+                        </div>
+                      </div>
+                    </div>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </el-badge>
           </div>
           <el-avatar size="large" class="avater" :src="userInfo.userFace"/>
           <el-dropdown trigger="hover">
@@ -135,6 +184,39 @@
       </div>
     </template>
   </el-dialog>
+  <el-dialog style="margin-top: 10%" v-model="showMessage" width="30%" title="发送私信">
+    <el-form>
+      <el-form-item label="发送方">
+        <el-input size="small" v-model="userInfo.username" disabled/>
+      </el-form-item>
+      <el-form-item label="接收方">
+        <el-select placeholder="请选择接收方" v-model="replyUser" size="small">
+          <el-option
+              v-for="item in users"
+              :key="item.id"
+              :label="item.username"
+              :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="内容">
+        <el-input
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            type="textarea"
+            placeholder="请输入私信内容"
+            v-model="content"
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="cancelReply">取消</el-button>
+        <el-button type="primary" @click="sureReply">
+          发送
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>>
 
 <script>
@@ -142,16 +224,26 @@ import request from "@/util/requestUtil";
 import * as echarts from 'echarts';
 import {ElMessage, ElMessageBox} from "element-plus";
 import router from "@/router"
-import store from "@/store";
+import {Delete} from "@element-plus/icons-vue";
+
+
 
 export default {
   name: "Home",
+  components: {Delete},
   data() {
     return {
+      showMessage: false,
       newPassword: null,
       showUser: false,
       showSet: false,
       userInfo: JSON.parse(sessionStorage.getItem("user")),
+      users: [],// 除当前登录用户外的所有用户
+      content: null,
+      messCount: 0, // 未读消息数量
+      replyUser: null, // 回复的用户
+      messages: [],
+      delete:[] //要删除的消息
     }
   },
   methods: {
@@ -202,6 +294,10 @@ export default {
     ,
     // 确定修改用户
     update() {
+      if (this.userInfo.password == null || this.newPassword == null) {
+        ElMessage.error("请输入密码");
+        return;
+      }
       if (this.userInfo.password !== this.newPassword) {
         ElMessage.error("两次密码不一致，请重新输入");
         this.userInfo.password = null;
@@ -240,7 +336,7 @@ export default {
       router.push('/about');
     },
     // 全屏显示
-    fill(){
+    fill() {
       if (document.fullscreenElement) {
         document.exitFullscreen();
       } else {
@@ -287,10 +383,77 @@ export default {
           myChart.setOption(option);
         }
       })
+    },
+    // 消息初始化
+    initMess() {
+      // 消息初始化
+      request.MessageInit(JSON.parse(sessionStorage.getItem("user")).id).then(resp => {
+        if (resp) {
+          // 将要删除的消息的id在返回值中去除
+          this.messages = resp.data.filter(item => !this.delete.includes(item.id));
+          this.messCount = 0;
+          for (let i = 0; i < resp.data.length; i++) {
+            if (resp.data[i].state === false && resp.data[i].send_id !== this.userInfo.id) {
+              this.messCount++;
+            }
+          }
+        }
+      })
+    },
+    // 取消发私信
+    cancelReply() {
+      this.showMessage = false;
+      this.replyUser = null;
+    },
+    // 发私信
+    replyMessage(data) {
+      this.replyUser = data;
+      this.showMessage = true;
+    },
+    // 确认发私信
+    sureReply() {
+      if (this.content == null) {
+        ElMessage.error("请输入私信内容");
+        return;
+      }
+      request.sendMess(this.userInfo.id, this.replyUser, this.content).then(resp => {
+        if (resp.data.code === 200) {
+          ElMessage.success(resp.data.message);
+          this.initMess();
+        } else {
+          ElMessage.error(resp.data.message);
+        }
+      });
+      this.showMessage = false;
+      this.replyUser = null;
+      this.content = null;
+    },
+    // 消息已读
+    havaRead(data) {
+      request.upState(data).then(resp => {
+        if (resp.data.code === 200) {
+          this.initMess();
+        } else {
+          ElMessage.error(resp.data.message);
+        }
+      })
+    },
+    // 删除消息
+    deleteMess(id){
+      // 这里的删除消息并不是去数据库真正删除消息，只是在后端返回来的消息过滤一下
+      this.delete.push(id);
+      this.initMess();
     }
   },
   mounted() {
+    // 折线图初始化
     this.initCount();
+    request.WithOutUser(JSON.parse(sessionStorage.getItem("user")).id).then(resp => {
+      if (resp.data) {
+        this.users = resp.data;
+      }
+    });
+    this.initMess();
   },
 }
 </script>

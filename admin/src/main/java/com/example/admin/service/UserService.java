@@ -49,4 +49,8 @@ public class UserService {
     public User getUserByPhone(Long phone) {
         return userMapper.getUserByPhone(phone);
     }
+
+    public List<User> getOutLogin(Integer id) {
+        return userMapper.getUserOutLogin(id);
+    }
 }

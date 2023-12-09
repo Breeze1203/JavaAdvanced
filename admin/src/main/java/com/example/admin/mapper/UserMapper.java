@@ -27,4 +27,7 @@ public interface UserMapper {
     User getUserById(@Param("id") Integer id);
 
     User getUserByPhone(@Param("phone") Long phone);
+
+    // 获取当前登录用户除外的所有用户，用于私信功能
+    List<User> getUserOutLogin(@Param("id") Integer id);
 }
