@@ -21,26 +21,26 @@
 
 提供两种方式登录 用户名登录 搭配阿里云短信登录
 
-![用户名登录界面](./photo/1.png)
+![用户名登录界面](./photo.pic/1.png)
 
-![验证码登录界面](./photo/10.png)
+![验证码登录界面](./photo.pic/10.png)
 
 ![短信验证码](./photo/11700821522_.pic.jpg)
 
-![Home页面](./photo/2.png)
+![Home页面](./photo.pic/2.png)
 
-![](./photo/5.png)
+![](./photo.pic/5.png)
 
-![权限设置](./photo/4.png)
+![权限设置](./photo.pic/4.png)
 
-![日志](./photo/3.png)
+![日志](./photo.pic/3.png)
 
-![访问权限](./photo/9.png)
+![访问权限](./photo.pic/9.png)
 
-![会话管理](./photo/6.jpg)
+![会话管理](./photo.pic/6.jpg)
 
-![token认证](./photo/7.png)
+![token认证](./photo.pic/7.png)
 
-![rocketmq短信服务](./photo/8.jpg)
+![rocketmq短信服务](./photo.pic/8.jpg)
 
-![用户私信功能](./photo/11.jpg)
+![用户私信功能](./photo.pic/11.jpg)
