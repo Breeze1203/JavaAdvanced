@@ -17,12 +17,12 @@ public class AuthorizationController {
     AuthorizationService authorizationService;
 
     // 获取所有
-    @GetMapping("/api/getAllPermission")
+    @GetMapping("/getAllPermission")
     public List<Authorization> getAll(){
         return authorizationService.getAll();
     }
 
-    @GetMapping("/api/getPermissionByrId")
+    @GetMapping("/getPermissionByrId")
     public List<Integer> getByRid(@RequestParam("rid")Integer rid){
         List<Authorization> all = authorizationService.getPermissionByrId(rid);
         List<Integer> permission=new ArrayList<>();

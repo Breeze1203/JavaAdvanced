@@ -14,7 +14,7 @@ public class RoleAuthorizationController {
     @Resource(name = "RoleAuthorizationService")
     RoleAuthorizationService roleAuthorizationService;
 
-    @PostMapping("/api/updatePermission")
+    @PostMapping("/updatePermission")
     @CheckPermission(permission = "update_per")
     public StatusUtil updatePer(@RequestBody Permission permission){
         int i = roleAuthorizationService.insertPerByRid(permission.getRid(), permission.getAllId());

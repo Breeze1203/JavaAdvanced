@@ -5,10 +5,7 @@ import com.aliyun.dysmsapi20170525.Client;
 import com.aliyun.dysmsapi20170525.models.SendSmsRequest;
 import com.aliyun.teaopenapi.models.Config;
 import com.example.admin.mapper.*;
-import com.example.admin.model.Authorization;
-import com.example.admin.model.OperationData;
-import com.example.admin.model.Organization;
-import com.example.admin.model.User;
+import com.example.admin.model.*;
 import com.example.admin.service.AuthorizationService;
 import com.example.admin.service.RoleService;
 import com.example.admin.util.JwtToken;
@@ -28,6 +25,9 @@ class adminApplicationTests {
 
     @Autowired
     OrganizationMapper organizationMapper;
+
+    @Autowired
+    MessageMapper messageMapper;
 
     @Autowired
     UserRoleMapper userRoleMapper;
@@ -299,5 +299,10 @@ class adminApplicationTests {
         sendSmsRequest.setTemplateParam("{\"user\":\"1234\",\"password\":\"123\"}");
         client.sendSms(sendSmsRequest);
     }
-
+    // 获取私信消息
+    @Test
+    void getMessage(){
+        List<Message> message = messageMapper.getMessage(1);
+        System.out.println(message);
+    }
 }

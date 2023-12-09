@@ -244,6 +244,48 @@ const request = {
                 phone:phone
             }
         })
+    },
+    // 获取除当前用户外的所有用户
+    WithOutUser(id){
+        return instance({
+            method:'get',
+            url:'/WithOutUser',
+            params:{
+                id:id
+            }
+        })
+    },
+    // 获取消息
+    MessageInit(id){
+        return instance({
+            method:'get',
+            url:'/messageInit',
+            params:{
+                mid:id
+            }
+        })
+    },
+    // 发送消息
+    sendMess(sid,rid,content){
+        return instance({
+            method:'post',
+            url:'/sendMessage',
+            params:{
+                sid:sid,
+                rid:rid,
+                content:content
+            }
+        })
+    },
+    // 修改消息状态是否已读
+    upState(id){
+        return instance({
+            method:'get',
+            url:'/updateState',
+            params:{
+                id:id
+            }
+        })
     }
 }
 

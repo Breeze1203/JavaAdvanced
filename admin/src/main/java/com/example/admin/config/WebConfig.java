@@ -26,9 +26,9 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> path=new ArrayList<>();
         path.add("/static/**");
-        path.add("/api/login");
-        path.add("/api/getVerification");
-        path.add("/api/loginByPhone");
+        path.add("/login");
+        path.add("/getVerification");
+        path.add("/loginByPhone");
         registry.addInterceptor(checkAuthorizationInterceptor)
                 .addPathPatterns("/**")   // 所有路径都被拦截
                 .excludePathPatterns(path).order(1);
