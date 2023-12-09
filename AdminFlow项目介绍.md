@@ -42,3 +42,5 @@
 ![token认证](./photo/7.png)
 
 ![rocketmq短信服务](./photo/8.jpg)
+
+![用户私信功能](./photo/11.jpg)
