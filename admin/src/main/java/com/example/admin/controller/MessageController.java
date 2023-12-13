@@ -18,6 +18,8 @@ public class MessageController {
     @Resource(name = "MessageService")
     private MessageService messageService;
 
+
+
     @GetMapping("/messageInit")
     public List<Message> getMessage(@RequestParam("mid")Integer id){
         return messageService.getAllMessage(id);
@@ -44,6 +46,15 @@ public class MessageController {
         Integer i = messageService.upState(id);
         if(i>0){
             return new StatusUtil("修改成功",200,null);
+        }else {
+            return new StatusUtil("网络出现异常,请稍后再试",500,null);
+        }
+    }
+    @PostMapping("/deleteMessage")
+    public StatusUtil deleteMessage(@RequestParam("id")Integer id,@RequestParam("mId")Integer mId){
+        Integer i = messageService.deleteMessage(id, mId);
+        if(i>0){
+            return new StatusUtil("删除成功",200,null);
         }else {
             return new StatusUtil("网络出现异常,请稍后再试",500,null);
         }

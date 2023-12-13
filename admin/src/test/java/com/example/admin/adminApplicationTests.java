@@ -7,8 +7,10 @@ import com.aliyun.teaopenapi.models.Config;
 import com.example.admin.mapper.*;
 import com.example.admin.model.*;
 import com.example.admin.service.AuthorizationService;
+import com.example.admin.service.MessageService;
 import com.example.admin.service.RoleService;
 import com.example.admin.util.JwtToken;
+import io.swagger.models.auth.In;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +37,14 @@ class adminApplicationTests {
     private RedisTemplate<String, String> redisTemplate;
 //    @Resource(name = "MenuMapper")
 //    MenuMapper mapper;
+    @Resource(name = "UserMessageMapper")
+    UserMessageMapper userMessageMapper;
 
     @Autowired
     OperationDataMapper operationDataMapper;
+
+    @Autowired
+    MessageService messageService;
 
 
     @Test
@@ -302,7 +309,26 @@ class adminApplicationTests {
     // 获取私信消息
     @Test
     void getMessage(){
-        List<Message> message = messageMapper.getMessage(1);
+       HashMap<String, Object> map = new HashMap<>();
+        String s="1,2,3,4,5";
+        String[] split = s.split(",");
+        map.put("id",1);
+        map.put("messageIds",null);
+        List<Message> message = messageMapper.getMessage(map);
         System.out.println(message);
+    }
+
+    // 测试私信消息查询
+    @Test
+    void getUserMessage(){
+//        UserMessage userMessage = userMessageMapper.getUserMessage(2);
+//        System.out.println(userMessage);
+//        UserMessage userMessage = new UserMessage();
+//        userMessage.setUId(2);
+//        userMessage.setMId("1,2,3");
+//        Integer i = userMessageMapper.saveUserMessage(userMessage);
+//        System.out.println(i);
+        List<Message> allMessage = messageService.getAllMessage(1);
+        System.out.println(allMessage);
     }
 }

@@ -286,6 +286,17 @@ const request = {
                 id:id
             }
         })
+    },
+    // 删除消息
+    deleteMessage(id,uId){
+        return instance({
+            method:'post',
+            url:'/deleteMessage',
+            params:{
+                id:id,
+                mId:uId
+            }
+        })
     }
 }
 

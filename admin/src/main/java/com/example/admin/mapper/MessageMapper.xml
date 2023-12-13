@@ -18,7 +18,7 @@
         </association>
     </resultMap>
 <!--    获取消息-->
-    <select id="getMessage" resultMap="BaseResult" parameterType="java.lang.Integer">
+    <select id="getMessage" resultMap="BaseResult" parameterType="java.util.Map">
         SELECT message.*,
                sender.username   AS sender_username,
                sender.userFace   AS sender_userFace,
@@ -28,6 +28,12 @@
                  LEFT JOIN user AS sender ON message.send_id = sender.id
                  LEFT JOIN user AS receiver ON message.receive_id = receiver.id
         WHERE (message.send_id = #{id} OR message.receive_id = #{id})
+        <if test="messageIds!=null">
+            AND message.id NOT IN
+            <foreach collection="messageIds" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
         ORDER BY message.id DESC
     </select>
 <!--    插入消息-->

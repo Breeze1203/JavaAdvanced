@@ -16,7 +16,7 @@
           </div>
           <div style="margin-right: 30px;">
             <el-badge :value="messCount" type="danger" :max="10">
-              <el-dropdown trigger="click">
+              <el-dropdown trigger="click" @click="initMess">
                 <el-icon size="20" style="color: #ffffff;border: none">
                   <Bell/>
                 </el-icon>
@@ -242,8 +242,7 @@ export default {
       content: null,
       messCount: 0, // 未读消息数量
       replyUser: null, // 回复的用户
-      messages: [],
-      delete:[] //要删除的消息
+      messages:[]
     }
   },
   methods: {
@@ -386,11 +385,13 @@ export default {
     },
     // 消息初始化
     initMess() {
+      this.messages=[];
       // 消息初始化
       request.MessageInit(JSON.parse(sessionStorage.getItem("user")).id).then(resp => {
         if (resp) {
+          this.messages=resp.data;
           // 将要删除的消息的id在返回值中去除
-          this.messages = resp.data.filter(item => !this.delete.includes(item.id));
+          // this.messages = resp.data.filter(item => !this.delete.includes(item.id));
           this.messCount = 0;
           for (let i = 0; i < resp.data.length; i++) {
             if (resp.data[i].state === false && resp.data[i].send_id !== this.userInfo.id) {
@@ -441,8 +442,13 @@ export default {
     // 删除消息
     deleteMess(id){
       // 这里的删除消息并不是去数据库真正删除消息，只是在后端返回来的消息过滤一下
-      this.delete.push(id);
-      this.initMess();
+      request.deleteMessage(this.userInfo.id,id).then(resp=>{
+        if (resp.data.code === 200) {
+          this.initMess();
+        } else {
+          ElMessage.error(resp.data.message);
+        }
+      })
     }
   },
   mounted() {
