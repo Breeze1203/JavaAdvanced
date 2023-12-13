@@ -8,6 +8,7 @@ import com.example.admin.service.RoleService;
 import com.example.admin.service.UserService;
 import com.example.admin.util.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.Api;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 
+@Api(value = "用户Controller")
 @RestController
 public class UserController {
     @Autowired
