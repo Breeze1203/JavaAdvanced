@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.admin.mapper.UserMessageMapper">
+    <resultMap id="BaseResult" type="com.example.admin.model.UserMessage">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="uId" column="uId" jdbcType="INTEGER"/>
+        <result property="mId" column="mId" jdbcType="VARCHAR"/>
+    </resultMap>
+    <select id="getUserMessage" resultMap="BaseResult" parameterType="java.lang.Integer">
+        select * from user_message where uId=#{id}
+    </select>
+    <insert id="saveUserMessage" parameterType="com.example.admin.model.UserMessage">
+        insert into user_message(id, uId, mId) VALUE (#{id},#{uId},#{mId})
+    </insert>
+    <update id="upUserMessage" parameterType="com.example.admin.model.UserMessage">
+        update user_message set mId=#{mId} where id=#{id}
+    </update>
+</mapper>
