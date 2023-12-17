@@ -28,7 +28,7 @@
             </el-form>
             <el-button @click="loginByName" class="loginButton">Login</el-button>
           </el-tab-pane>
-          <el-tab-pane label="手机号登录" name="two">
+          <el-tab-pane label="验证码登录" name="two">
             <el-form>
               <el-form-item>
                 <el-input prefix-icon="Avatar" type="text" v-model="phoneNumber" placeholder="请输入手机号"/>
