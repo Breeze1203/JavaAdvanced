@@ -1,5 +1,5 @@
 <template>
-  <div class="common-layout" style="margin-top: 25px">
+  <div class="common-layout" style="margin-top: 25px;margin-left: 0px">
     <el-container class="shadow-box">
       <el-aside width="200px">
         <div style="border-bottom: 1px solid;text-align: center">

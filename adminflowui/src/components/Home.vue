@@ -142,11 +142,23 @@
             <div id="main" style="width: 100%;height:350px">
             </div>
           </div>
-          <el-page-header v-if="this.$router.currentRoute.value.path!=='/home'" @back="toHome">
-            <template #content>
-              <span> {{ this.$router.currentRoute.value.name }}</span>
-            </template>
-          </el-page-header>
+          <div v-if="this.$router.currentRoute.value.path!=='/home'" style="border-bottom:1px solid #cccccc">
+            <el-tag
+                v-for="tag in Tags"
+                class="mx-1"
+                :key="tag"
+                closable
+                @click="handleChange(tag)"
+                @close="handleClose(tag)"
+            >
+              {{ tag }}
+            </el-tag>
+          </div>
+          <!--          <el-page-header v-if="this.$router.currentRoute.value.path!=='/home'" @back="toHome">-->
+          <!--            <template #content>-->
+          <!--              <span> {{ this.$router.currentRoute.value.name }}</span>-->
+          <!--            </template>-->
+          <!--          </el-page-header>-->
           <router-view/>
         </el-main>
       </el-container>
@@ -227,7 +239,6 @@ import router from "@/router"
 import {Delete} from "@element-plus/icons-vue";
 
 
-
 export default {
   name: "Home",
   components: {Delete},
@@ -242,7 +253,8 @@ export default {
       content: null,
       messCount: 0, // 未读消息数量
       replyUser: null, // 回复的用户
-      messages:[]
+      messages: [],
+      Tags: ['首页']
     }
   },
   methods: {
@@ -324,11 +336,15 @@ export default {
     // 展开菜单
     change(data) {
       router.push(data.index);
-    },
-    // 回到 /home路径
-    toHome() {
-      this.initCount();
-      router.push('/home');
+      const routes = this.$router.options.routes;
+      for (let i = 0; i < routes[1].children.length; i++) {
+        if (routes[1].children[i].path === data.index) {
+          if (!this.Tags.includes(routes[1].children[i].name)) {
+            this.Tags.push(routes[1].children[i].name);
+          }
+          break; // 找到目标项后，退出循环
+        }
+      }
     },
     // 跳到关于项目介绍
     about() {
@@ -382,14 +398,40 @@ export default {
           myChart.setOption(option);
         }
       })
+    }, // 切换tag
+    handleChange(tag) {
+      if (tag === '首页') {
+        router.push('/home');
+        this.initCount();
+      } else {
+        let routes = this.$router.options.routes;
+        console.log(routes);
+        for (let i = 0; i < routes[1].children.length; i++) {
+          console.log(routes[1].children[i].name);
+          if (routes[1].children[i].name === tag) {
+            console.log(tag);
+            router.push(routes[1].children[i].path);
+            break;
+          }
+        }
+      }
+    },
+    // 关闭tag
+    handleClose(tag) {
+      this.Tags = this.Tags.filter(item => item !== tag)
+      if (this.Tags.length <= 1) {
+        this.initCount();
+        router.push('/home');
+      } else {
+        this.$router.go(-1);
+      }
     },
     // 消息初始化
     initMess() {
-      this.messages=[];
       // 消息初始化
       request.MessageInit(JSON.parse(sessionStorage.getItem("user")).id).then(resp => {
         if (resp) {
-          this.messages=resp.data;
+          this.messages = resp.data;
           // 将要删除的消息的id在返回值中去除
           // this.messages = resp.data.filter(item => !this.delete.includes(item.id));
           this.messCount = 0;
@@ -440,9 +482,9 @@ export default {
       })
     },
     // 删除消息
-    deleteMess(id){
+    deleteMess(id) {
       // 这里的删除消息并不是去数据库真正删除消息，只是在后端返回来的消息过滤一下
-      request.deleteMessage(this.userInfo.id,id).then(resp=>{
+      request.deleteMessage(this.userInfo.id, id).then(resp => {
         if (resp.data.code === 200) {
           this.initMess();
         } else {
@@ -552,6 +594,10 @@ export default {
 
 .mainView {
   margin-top: 10px;
+}
+
+.mx-1 {
+  margin-right: 1rem;
 }
 
 </style>
