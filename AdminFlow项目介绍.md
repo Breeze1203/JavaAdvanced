@@ -25,6 +25,8 @@
 
 ![验证码登录界面](./photo.pic/10.png)
 
+![主页面](./photo/12.jpg)
+
 ![短信验证码](./photo/11700821522_.pic.jpg)
 
 ![Home页面](./photo.pic/2.png)
