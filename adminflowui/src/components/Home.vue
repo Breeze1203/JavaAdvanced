@@ -322,6 +322,7 @@ export default {
             if (resp.data.code === 200) {
               // 删除用户信息
               sessionStorage.removeItem("user");
+              ElMessage.success("密码修改成功，请重新登录");
               router.push("/");
             } else {
               ElMessage.error("网络出现异常，请稍后再试");
