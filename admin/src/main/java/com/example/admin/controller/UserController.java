@@ -180,7 +180,7 @@ public class UserController {
     public StatusUtil updatePassword(@RequestBody User user) {
         Integer i = userService.updateUser(user);
         if (i > 0) {
-            MessageProducer.pushMessage(user);
+            // MessageProducer.pushMessage(user);
             return new StatusUtil("修改成功", 200, null);
         } else {
             return new StatusUtil("网络出现异常,请稍后再试", 500, null);

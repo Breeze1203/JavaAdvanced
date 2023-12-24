@@ -12,6 +12,8 @@ import com.example.admin.service.RoleService;
 import com.example.admin.util.JwtToken;
 import io.swagger.models.auth.In;
 import jakarta.annotation.Resource;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
