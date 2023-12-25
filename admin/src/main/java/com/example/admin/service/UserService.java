@@ -11,7 +11,7 @@ import java.util.List;
 @Service(value = "UserService")
 public class UserService {
     @Resource(name = "UserMapper")
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     public User getUserByName(String username) {
         return userMapper.getUserByName(username);
