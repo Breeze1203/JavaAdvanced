@@ -68,9 +68,9 @@
             <p style="font-weight: bolder;color: white">{{ userInfo.username }}</p>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click="show">个人中心</el-dropdown-item>
-                <el-dropdown-item @click="showSetting">密码设置</el-dropdown-item>
-                <el-dropdown-item @click="loginOut">退出登录</el-dropdown-item>
+                <el-dropdown-item @click="show"><el-icon><User /></el-icon>个人中心</el-dropdown-item>
+                <el-dropdown-item @click="showSetting"><el-icon><Lock /></el-icon>密码设置</el-dropdown-item>
+                <el-dropdown-item @click="loginOut"><el-icon><DCaret /></el-icon>退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -174,6 +174,8 @@
       <el-form-item label="电话号码：">{{ userInfo.phone }}</el-form-item>
       <el-form-item label="邮箱地址：">{{ userInfo.email }}</el-form-item>
       <el-form-item label="个性签名：">{{ userInfo.embod }}</el-form-item>
+      <el-form-item label="所属组织：">{{ userInfo.organization.name }}</el-form-item>
+      <el-form-item label="所属角色：">{{ userInfo.role.nameZh }}</el-form-item>
     </el-form>
   </el-drawer>
   <el-dialog v-model="showSet" width="30%" title="修改用户密码">

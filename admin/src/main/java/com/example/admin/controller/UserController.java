@@ -34,7 +34,7 @@ public class UserController {
     private UserService userService;
 
     @Resource(name = "RoleService")
-    RoleService roleService;
+    private RoleService roleService;
 
     // 用户用户名登录认证的方法
     @GetMapping("/login")
