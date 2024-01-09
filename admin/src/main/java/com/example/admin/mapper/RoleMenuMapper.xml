@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.admin.mapper.RoleMenuMapper">
+<!--    查找指定用户菜单权限-->
+    <select id="getMenuIdByRole" parameterType="java.lang.Integer">
+        select mId from role_menu where rId=#{rId}
+    </select>
+<!--    删除指定用户菜单权限-->
+    <delete id="deleteMenuByRole" parameterType="java.lang.Integer">
+        delete from role_menu where rId=#{rId}
+    </delete>
+    <insert id="updateRoleMenu">
+        insert into role_menu(mId,rId)
+        values
+        <foreach collection="mIds" item="mId" separator=",">
+            (#{mId},#{rId})
+        </foreach>
+    </insert>
+</mapper>
