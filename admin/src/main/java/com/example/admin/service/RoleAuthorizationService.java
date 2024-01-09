@@ -14,7 +14,9 @@ public class RoleAuthorizationService {
     @Resource(name = "RoleAuthorizationMapper")
     RoleAuthorizationMapper roleAuthorizationMapper;
 
-    // 根据角色id插入权限
+    /*
+    根据角色id插入权限
+     */
     @Transactional
     public int insertPerByRid(Integer rId,Integer[] aIds){
         roleAuthorizationMapper.deletePerByRid(rId);
