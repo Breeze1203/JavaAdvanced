@@ -18,6 +18,7 @@
             <result property="name" column="oname" jdbcType="VARCHAR"/>
         </association>
         <association property="role" javaType="com.example.admin.model.Role">
+            <result property="id" column="role_id" jdbcType="INTEGER"/>
             <result property="nameZh" column="nameZh" jdbcType="VARCHAR"/>
         </association>
     </resultMap>
@@ -33,6 +34,7 @@
                u.email,
                u.state,
                o.name   AS oname,
+               r.id     as role_id,
                r.nameZh as nameZh
         FROM user AS u
                  LEFT JOIN organization AS o ON u.organizationId = o.id
@@ -82,7 +84,8 @@
     </update>
     <!--    获取所有用户并获取其所在组织名-->
     <select id="getAllUser" parameterType="com.example.admin.model.User" resultMap="result">
-        SELECT u.id, u.address, u.username, u.userFace,u.phone, u.embod, u.email, u.state, o.name AS oname,r.nameZh as nameZh
+        SELECT u.id, u.address, u.username, u.userFace,u.phone, u.embod, u.email, u.state, o.name AS oname,r.nameZh as
+        nameZh
         FROM user AS u
         LEFT JOIN organization AS o ON u.organizationId = o.id
         LEFT JOIN user_role AS ur on u.id=ur.user_id
@@ -114,17 +117,22 @@
         VALUES (#{id}, #{phone}, #{address}, #{username}, #{password}, #{userFace}, #{embod}, #{email}, #{state},
                 #{organizationId})
     </insert>
-<!--    根据id搜索用户-->
+    <!--    根据id搜索用户-->
     <select id="getUserById" parameterType="java.lang.Integer">
         select *
-        from user where id=#{id}
+        from user
+        where id = #{id}
     </select>
-<!--    根据手机号查询用户-->
+    <!--    根据手机号查询用户-->
     <select id="getUserByPhone" parameterType="java.lang.Long">
-        select * from user where phone=#{phone}
+        select *
+        from user
+        where phone = #{phone}
     </select>
-<!--    私信功能，获取除当前登录用户外的所有用户-->
+    <!--    私信功能，获取除当前登录用户外的所有用户-->
     <select id="getUserOutLogin" parameterType="java.lang.Integer">
-        select * from user where id!=#{id}
+        select *
+        from user
+        where id!=#{id}
     </select>
 </mapper>

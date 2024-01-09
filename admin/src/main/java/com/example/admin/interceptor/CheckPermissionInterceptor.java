@@ -5,6 +5,7 @@ import com.example.admin.permission.CheckPermission;
 import com.example.admin.service.AuthorizationService;
 import com.example.admin.service.RoleService;
 import com.example.admin.util.JwtToken;
+import com.example.admin.util.StatusMessage;
 import com.example.admin.util.StatusUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
@@ -53,7 +54,7 @@ public class CheckPermissionInterceptor implements HandlerInterceptor {
                 }
                 response.setContentType("application/json;charset=utf-8");
                 PrintWriter out = response.getWriter();
-                StatusUtil statusUtil = new StatusUtil("你暂无访问权限", 401, null);
+                StatusUtil statusUtil = new StatusUtil(StatusMessage.ILLEGAL_PERMISSIONS.getMessage(), 401, null);
                 out.write(new ObjectMapper().writeValueAsString(statusUtil));
                 out.flush(); //刷新输出流
                 out.close(); // 关闭输出流

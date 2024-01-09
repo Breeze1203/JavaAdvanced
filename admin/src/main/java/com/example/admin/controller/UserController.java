@@ -1,13 +1,11 @@
 package com.example.admin.controller;
 
 
-import com.example.admin.rocketmq.MessageProducer;
 import com.example.admin.model.User;
 import com.example.admin.permission.CheckPermission;
 import com.example.admin.service.RoleService;
 import com.example.admin.service.UserService;
 import com.example.admin.util.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.Api;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
@@ -36,7 +34,9 @@ public class UserController {
     @Resource(name = "RoleService")
     private RoleService roleService;
 
-    // 用户用户名登录认证的方法
+    /*
+    用户名登录认证
+     */
     @GetMapping("/login")
     public StatusUtil login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("remember") String remember, HttpServletRequest request, HttpServletResponse response) {
         User u = userService.getUserByName(username);
@@ -44,36 +44,40 @@ public class UserController {
         if (u != null && password.equals(u.getPassword())) {
             return loginPublic(u, response, rem);
         } else {
-            return new StatusUtil("用户名或密码错误", 401, null);
+            return new StatusUtil(StatusMessage.AUTHENTICATION_FAILED.getMessage(), 401, null);
         }
 
     }
 
-    // 短信验证码登录
+    /*
+    短信验证码登录
+     */
     @GetMapping("/loginByPhone")
     public StatusUtil loginByPhone(@RequestParam("phone") String phone, @RequestParam("code") String code, @RequestParam("remember") String remember, HttpServletResponse response) {
         String s = redisTemplate.opsForValue().get("code_" + phone);
         if (s == null) {
-            return new StatusUtil("验证码已过期，请稍后再试", 500, null);
+            return new StatusUtil(StatusMessage.CODE_EXPIRED.getMessage(), 500, null);
         }
-        if(code.equals(s)) {
+        if (code.equals(s)) {
             User userByPhone = userService.getUserByPhone(Long.parseLong(phone));
             boolean rem = Boolean.parseBoolean(remember);
             return loginPublic(userByPhone, response, rem);
-        }else {
-            return new StatusUtil("验证码已过期，请稍后再试", 500, null);
+        } else {
+            return new StatusUtil(StatusMessage.CODE_ERROR.getMessage(), 500, null);
         }
     }
 
-
+    /*
+    注销登录
+     */
     @GetMapping("/loginOut")
     public StatusUtil loginOut(@RequestParam("id") Integer id) {
         // 删除token及用户信息
         Boolean token = redisTemplate.delete(id + "token");
         if (Boolean.TRUE.equals(token)) {
-            return new StatusUtil("注销成功", 200, null);
+            return new StatusUtil(StatusMessage.LOGIN_OUT_SUCCESS.getMessage(), 200, null);
         } else {
-            return new StatusUtil("网络出现异常，请稍后再试", 500, null);
+            return new StatusUtil(StatusMessage.NETWORK_ERROR.getMessage(), 500, null);
         }
     }
 
@@ -115,13 +119,17 @@ public class UserController {
         return new CountResult(numbers, score);
     }
 
-    //获取所有用户
+    /*
+    获取所有用户
+     */
     @PostMapping("/getAllUser")
     public List<User> getAllUser(@RequestBody User user) {
         return userService.getAllUser(user);
     }
 
-    // 根据id是否禁用用户
+    /*
+    根据id是否禁用用户
+     */
     @CheckPermission(permission = "update_user")
     @PostMapping("/updateUser")
     public StatusUtil disable(@RequestBody User user) {
@@ -130,39 +138,45 @@ public class UserController {
         }
         Integer i = userService.updateUser(user);
         if (i > 0) {
-            return new StatusUtil("修改成功", 200, null);
+            return new StatusUtil(StatusMessage.UPDATE_SUCCESS.getMessage(), 200, null);
         } else {
-            return new StatusUtil("网络出现异常,请稍后再试", 500, null);
+            return new StatusUtil(StatusMessage.NETWORK_ERROR.getMessage(), 500, null);
         }
     }
 
+    /*
+    删除用户
+     */
     @CheckPermission(permission = "delete_user")
     @GetMapping("/deleteUser")
     public StatusUtil deleteUser(@RequestParam("id") Integer id) {
         // 删除用户前，先判断该用户是否登录
         String s = redisTemplate.opsForValue().get("user_" + id);
         if (s != null) {
-            return new StatusUtil("该用户已经登录，请稍后再试", 500, null);
+            return new StatusUtil(StatusMessage.LOGIN_EXISTS.getMessage(), 500, null);
         } else {
             Integer result = userService.deleteById(id);
             Integer i = roleService.deleteRoleById(id);
             if (result > 0 && i != null) {
-                return new StatusUtil("删除成功", 200, null);
+                return new StatusUtil(StatusMessage.DELETE_SUCCESS.getMessage(), 200, null);
             } else {
-                return new StatusUtil("网络出现异常,请稍后再试", 500, null);
+                return new StatusUtil(StatusMessage.NETWORK_ERROR.getMessage(), 500, null);
             }
         }
     }
 
+    /*
+    添加用户
+     */
     @PostMapping("/addUser")
     @CheckPermission(permission = "add_user")
     public StatusUtil addUser(@RequestBody User user) {
         user.setState(true);
         Integer i = userService.insertUser(user);
         if (i > 0) {
-            return new StatusUtil("添加成功", 200, null);
+            return new StatusUtil(StatusMessage.ADD_SUCCESS.getMessage(), 200, null);
         } else {
-            return new StatusUtil("网络出现异常,请稍后再试", 500, null);
+            return new StatusUtil(StatusMessage.NETWORK_ERROR.getMessage(), 500, null);
         }
     }
 
@@ -170,23 +184,29 @@ public class UserController {
     public StatusUtil updateUserRole(@RequestParam("rid") Integer rid, @RequestParam("id") Integer id) {
         int i = roleService.updateUserById(rid, id);
         if (i > 0) {
-            return new StatusUtil("修改成功", 200, null);
+            return new StatusUtil(StatusMessage.UPDATE_SUCCESS.getMessage(), 200, null);
         } else {
-            return new StatusUtil("网络出现异常,请稍后再试", 500, null);
+            return new StatusUtil(StatusMessage.NETWORK_ERROR.getMessage(), 500, null);
         }
     }
 
+    /*
+    更新用户密码
+     */
     @PostMapping("/updatePassword")
     public StatusUtil updatePassword(@RequestBody User user) {
         Integer i = userService.updateUser(user);
         if (i > 0) {
             // MessageProducer.pushMessage(user);
-            return new StatusUtil("修改成功", 200, null);
+            return new StatusUtil(StatusMessage.UPDATE_SUCCESS.getMessage(), 200, null);
         } else {
-            return new StatusUtil("网络出现异常,请稍后再试", 500, null);
+            return new StatusUtil(StatusMessage.NETWORK_ERROR.getMessage(), 500, null);
         }
     }
 
+    /*
+    根据id获取用户信息
+     */
     @GetMapping("/getUserById")
     public StatusUtil updatePassword(@RequestParam("id") Integer id) {
         User user = userService.getUserById(id);
@@ -201,7 +221,7 @@ public class UserController {
         String pattern = "^1\\d{10}$"; // 匹配以1开头，后面跟着10位数字的手机号码
         boolean matches = Pattern.matches(pattern, phone);
         if (!matches) {
-            return new StatusUtil("请输入正确的手机号格式", 500, null);
+            return new StatusUtil(StatusMessage.WRONG_FORMAT.getMessage(), 500, null);
         }
         // 查看有没有该手机号注册的用户
         User userByPhone = userService.getUserByPhone(Long.parseLong(phone));
@@ -212,9 +232,9 @@ public class UserController {
             redisTemplate.opsForValue().set("code_" + phone, String.valueOf(code));
             // 设置5分钟过期
             redisTemplate.expire("code_" + phone, 5, TimeUnit.MINUTES);
-            return new StatusUtil("验证码发送成功，请注意接收", 200, null);
+            return new StatusUtil(StatusMessage.CODE_SUCCESS.getMessage(), 200, null);
         } else {
-            return new StatusUtil("该手机号尚未注册，请稍后再试", 500, null);
+            return new StatusUtil(StatusMessage.PONE_NOT_REGISTER.getMessage(), 500, null);
         }
     }
 
@@ -233,9 +253,9 @@ public class UserController {
         String token_name = u.getId() + "token";
         if (operations.get(token_name) == null) {
             redisTemplate.opsForValue().set(token_name, token);
-            redisTemplate.expire(token_name, 60*24, TimeUnit.MINUTES);
+            redisTemplate.expire(token_name, 60 * 24, TimeUnit.MINUTES);
         } else {
-            return new StatusUtil("当前已存在登录用户，请稍后再试", 500, null);
+            return new StatusUtil(StatusMessage.LOGIN_EXISTS.getMessage(), 500, null);
         }
         // 将用户信息生成token返回给前端
         Cookie c3 = new Cookie(u.getUsername() + "token", token);
@@ -268,14 +288,16 @@ public class UserController {
             response.addCookie(cookie2);
         }
         u.setPassword(null);
-        return new StatusUtil("登录成功", 200, u);
+        return new StatusUtil(StatusMessage.LOGIN_SUCCESS.getMessage(), 200, u);
     }
 
     /*
     获取当前登录用户除外的所有用户
      */
     @GetMapping("/WithOutUser")
-    public List<User> getOutLogin(@RequestParam("id")Integer id){
+    public List<User> getOutLogin(@RequestParam("id") Integer id) {
         return userService.getOutLogin(id);
     }
+
+
 }

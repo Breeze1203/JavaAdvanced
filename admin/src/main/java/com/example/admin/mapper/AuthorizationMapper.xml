@@ -6,9 +6,9 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="describe" property="describe" jdbcType="VARCHAR"/>
     </resultMap>
-<!--    查询所有权限资源-->
-    <select id="getAllPermission" resultMap="BaseResult">
-        select * from authorization
+<!--    分页查询权限资源-->
+    <select id="getAllPermission" resultMap="BaseResult" parameterType="java.lang.Integer">
+        select * from authorization limit #{size} offset #{page}
     </select>
 <!--    根据用户角色id查询其权限资源-->
     <select id="getPermissionByrId" resultMap="BaseResult">
@@ -17,5 +17,13 @@
                  join role_authorization ra on a.id = ra.aId
                  join role r on r.id = ra.rId
         where r.id = #{roleId}
+    </select>
+<!--    查询总条数-->
+    <select id="getPermissionCount">
+        select count(*) as count from authorization
+    </select>
+<!--            获取所有操作权限-->
+    <select id="getPermissions" resultMap="BaseResult">
+        select * from authorization
     </select>
 </mapper>

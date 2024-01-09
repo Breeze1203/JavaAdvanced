@@ -10,12 +10,18 @@ import java.util.List;
 public interface OrganizationMapper {
     List<Organization> getAll(@Param("parentId") Integer parentId);
 
-    // 根据id删除组织
+    /*
+    根据id删除组织
+     */
     void deleteById(@Param("id")Integer id);
 
-    // 添加组织
+    /*
+    添加组织
+     */
     Integer addOrganization(Organization organization);
 
-    // 查询所有节点
+    /*
+    查询所有组织
+     */
     List<Organization> getAllOrganization();
 }

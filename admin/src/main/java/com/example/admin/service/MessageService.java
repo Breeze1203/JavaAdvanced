@@ -18,6 +18,9 @@ public class MessageService {
     @Resource(name = "UserMessageMapper")
     private UserMessageMapper userMessageMapper;
 
+    /*
+    获取所有消息列表
+     */
     public List<Message> getAllMessage(Integer id){
         UserMessage userMessage = userMessageMapper.getUserMessage(id);
         String mId = userMessage.getMId();
@@ -32,7 +35,9 @@ public class MessageService {
         return messageMapper.getMessage(map);
     }
 
-    // 发送消息
+    /*
+    发送消息
+     */
     public Integer sendMessage(Message message) {
         UserMessage user = userMessageMapper.getUserMessage(message.getSend_id());
         if(user==null){
@@ -41,11 +46,16 @@ public class MessageService {
         return messageMapper.save(message);
     }
 
+    /*
+    更改消息状态
+     */
     public Integer upState(Integer id) {
         return messageMapper.upstate(id);
     }
 
-    // 删除消息 第一个参数是消息所属用户id，第二个是要删除消息的id
+    /*
+     删除消息 第一个参数是消息所属用户id，第二个是要删除消息的id
+     */
     public Integer deleteMessage(Integer id,Integer mId){
         UserMessage user = userMessageMapper.getUserMessage(id);
         if(user.getMId()==null){

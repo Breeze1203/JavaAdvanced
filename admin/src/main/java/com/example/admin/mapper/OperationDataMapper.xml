@@ -8,7 +8,7 @@
         <result column="date" property="date" jdbcType="VARCHAR"/>
         <result column="type" property="type" jdbcType="VARCHAR"/>
     </resultMap>
-    <insert id="addLog" parameterType="com.example.admin.model.OperationData">
+    <insert id="insertLog" parameterType="com.example.admin.model.OperationData">
         insert into operation_data(id, user, operation, date,type)
         values (#{id},#{user},#{operation},#{date},#{type})
     </insert>

@@ -8,26 +8,40 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service(value = "OperationDataService")
-public class OperationDataService {
+public class OperationDataService implements OperationDataMapper{
     @Resource(name = "OperationDataMapper")
     OperationDataMapper operationDataMapper;
 
-    public void insetOperationLog(OperationData operationData) {
-        operationDataMapper.addLog(operationData);
+    /*
+    添加日志
+     */
+    @Override
+    public int insertLog(OperationData operationData) {
+        return operationDataMapper.insertLog(operationData);
     }
 
-    // 分页查询
-    public List<OperationData> getAllLog(String keyword, Integer offset, Integer pageSize) {
+    /*
+    分页查询日志
+     */
+    @Override
+    public List<OperationData> getLogData(String keyword, Integer offset, Integer pageSize) {
         if (offset != null && pageSize != null) {
             offset = (offset - 1) * pageSize;
         }
         return operationDataMapper.getLogData(keyword, offset, pageSize);
     }
-    // 查询总条数
+    /*
+    查询日志总条数
+     */
+    @Override
     public long getTotal(String keyword){
         return operationDataMapper.getTotal(keyword);
     }
 
+    /*
+    删除日志
+     */
+    @Override
     public Integer deleteLog() {
         return operationDataMapper.deleteLog();
     }

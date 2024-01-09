@@ -16,10 +16,17 @@ public class OrganizationService {
 
     @Resource(name = "UserService")
     UserService userService;
+
+    /*
+    查询所有组织
+     */
     public List<Organization> getAllOrganization(Integer parentId){
         return organizationMapper.getAll(parentId);
     }
 
+    /*
+    根据id删除组织
+     */
     public StatusUtil deleteById(Integer id){
         // 先查看该节点下是否有用户，如果有则无法删除
         List<User> userByOid = userService.getUserByOid(id);
@@ -31,10 +38,16 @@ public class OrganizationService {
         }
     }
 
+    /*
+    添加组织
+     */
     public Integer add(Organization organization) {
         return organizationMapper.addOrganization(organization);
     }
 
+    /*
+    获取所有组织
+     */
     public List<Organization> getAll(){
         return organizationMapper.getAllOrganization();
     }
