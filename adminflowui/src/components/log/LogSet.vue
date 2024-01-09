@@ -37,9 +37,9 @@
     <div style="margin-top: 20px">
       <el-pagination
           :page-sizes="[10, 20, 30, 40]"
-          :small="small"
           layout="total, sizes, prev, pager, next, jumper"
           :total=total
+          background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
       />

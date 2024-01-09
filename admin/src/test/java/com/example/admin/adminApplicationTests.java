@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.*;
+
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -37,7 +38,7 @@ class adminApplicationTests {
     UserRoleMapper userRoleMapper;
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-//    @Resource(name = "MenuMapper")
+    //    @Resource(name = "MenuMapper")
 //    MenuMapper mapper;
     @Resource(name = "UserMessageMapper")
     UserMessageMapper userMessageMapper;
@@ -91,7 +92,7 @@ class adminApplicationTests {
         //System.out.println(admin.getUsername());
         Random random = new Random();
         double v = random.nextDouble();
-        System.out.println(v*100000);
+        System.out.println(v * 100000);
     }
 
     @Test
@@ -308,21 +309,22 @@ class adminApplicationTests {
         sendSmsRequest.setTemplateParam("{\"user\":\"1234\",\"password\":\"123\"}");
         client.sendSms(sendSmsRequest);
     }
+
     // 获取私信消息
     @Test
-    void getMessage(){
-       HashMap<String, Object> map = new HashMap<>();
-        String s="1,2,3,4,5";
+    void getMessage() {
+        HashMap<String, Object> map = new HashMap<>();
+        String s = "1,2,3,4,5";
         String[] split = s.split(",");
-        map.put("id",1);
-        map.put("messageIds",null);
+        map.put("id", 1);
+        map.put("messageIds", null);
         List<Message> message = messageMapper.getMessage(map);
         System.out.println(message);
     }
 
     // 测试私信消息查询
     @Test
-    void getUserMessage(){
+    void getUserMessage() {
 //        UserMessage userMessage = userMessageMapper.getUserMessage(2);
 //        System.out.println(userMessage);
 //        UserMessage userMessage = new UserMessage();
@@ -333,4 +335,22 @@ class adminApplicationTests {
         List<Message> allMessage = messageService.getAllMessage(1);
         System.out.println(allMessage);
     }
+
+    @Resource(name = "MenuMapper")
+    private MenuMapper mapper;
+
+    // 测试菜单查询
+    @Test
+    void getMenus() {
+        System.out.println(mapper.getAllMenus().size());
+    }
+
+    @Test
+    void getPermissionCount(){
+//        Long permissionCount = authorizationMapper.getPermissionCount();
+//        System.out.println(permissionCount);
+        List<Authorization> allPermission = authorizationMapper.getAllPermissionByPage(6, 0);
+        System.out.println(allPermission);
+    }
+
 }
