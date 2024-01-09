@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository(value = "OperationDataMapper")
 public interface OperationDataMapper {
-    int addLog(OperationData operationData);
+    int insertLog(OperationData operationData);
 
     // 分页查询
     List<OperationData> getLogData(@Param("keyword")String keyword,@Param("offset")Integer offset,@Param("pageSize")Integer pageSize);

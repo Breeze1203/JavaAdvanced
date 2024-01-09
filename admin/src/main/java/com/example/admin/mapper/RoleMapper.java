@@ -8,17 +8,28 @@ import java.util.List;
 
 @Repository(value = "RoleMapper")
 public interface RoleMapper {
-    // 根据角色id查询用户角色
+    /*
+    根据角色id查询用户角色
+     */
    String getRoleById(@Param("id") Integer id);
 
-   // 获取所有角色
+   /*
+   获取所有角色
+    */
     List<Role> getAllRole();
 
-    // 添加角色
+    /*
+    添加角色
+     */
     int addRole(Role role);
 
-    // 删除角色
+    /*
+    删除角色
+     */
     int deleteRoleById(Integer id);
 
+    /*
+    更新角色
+     */
     Integer updateRole(Role role);
 }

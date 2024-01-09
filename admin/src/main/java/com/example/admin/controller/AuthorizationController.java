@@ -14,16 +14,18 @@ import java.util.List;
 public class AuthorizationController {
 
     @Resource(name = "AuthorizationService")
-    AuthorizationService authorizationService;
+    private AuthorizationService authorizationService;
 
-    // 获取所有
-    @GetMapping("/getAllPermission")
-    public List<Authorization> getAll(){
-        return authorizationService.getAll();
+    /*
+    获取所有操作权限数据
+     */
+    @GetMapping("/getAllPermByPage")
+    public List<Authorization> getAllPermissionByPage(@RequestParam("page")Integer page,@RequestParam("size")Integer size){
+        return authorizationService.getAllPermissionByPage(page,size);
     }
 
     @GetMapping("/getPermissionByrId")
-    public List<Integer> getByRid(@RequestParam("rid")Integer rid){
+    public List<Integer> getPermissionByrId(@RequestParam("rid")Integer rid){
         List<Authorization> all = authorizationService.getPermissionByrId(rid);
         List<Integer> permission=new ArrayList<>();
         for(Authorization a:all){
@@ -31,5 +33,19 @@ public class AuthorizationController {
         }
         return permission;
     }
+    /*
+    获取操作权限数据条数
+     */
+    @GetMapping("/getPermissionCount")
+    public Long getPermissionCount(){
+        return authorizationService.getPermissionCount();
+    }
 
+    /*
+    获取所有操作权限
+     */
+    @GetMapping("/getAllPermissions")
+    public List<Authorization> getPermissions(){
+        return authorizationService.getPermissions();
+    }
 }

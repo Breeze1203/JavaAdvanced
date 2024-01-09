@@ -7,18 +7,41 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service(value ="AuthorizationService")
-public class AuthorizationService {
+@Service(value = "AuthorizationService")
+public class AuthorizationService implements AuthorizationMapper{
     @Resource(name = "AuthorizationMapper")
     AuthorizationMapper authorizationMapper;
 
-    // 获取所有权限
-    public List<Authorization> getAll(){
-        return authorizationMapper.getAllPermission();
+    /*
+    分页获取所有操作权限
+    */
+    @Override
+    public List<Authorization> getAllPermissionByPage(Integer page, Integer size) {
+        page = (page - 1) * size;
+        return authorizationMapper.getAllPermissionByPage(page, size);
     }
 
-    // 根据用户角色获取可以访问的权限
-    public List<Authorization> getPermissionByrId(Integer rid){
+    /*
+    根据用户角色获取可以访问的操作权限
+     */
+    @Override
+    public List<Authorization> getPermissionByrId(Integer rid) {
         return authorizationMapper.getPermissionByrId(rid);
+    }
+
+    /*
+    查询操作权限条数
+     */
+    @Override
+    public Long getPermissionCount() {
+        return authorizationMapper.getPermissionCount();
+    }
+
+    /*
+    获取所有操作权限
+     */
+    @Override
+    public List<Authorization> getPermissions() {
+        return authorizationMapper.getPermissions();
     }
 }

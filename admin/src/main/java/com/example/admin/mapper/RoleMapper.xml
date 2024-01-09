@@ -5,6 +5,8 @@
         <result column="id" property="id" jdbcType="INTEGER"/>
         <result column="role_name" property="role_name" jdbcType="VARCHAR"/>
         <result column="nameZh" property="nameZh" jdbcType="VARCHAR"/>
+        <result column="create_time" property="create_time" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
     </resultMap>
 <!--    根据id获取角色-->
     <select id="getRoleById" parameterType="java.lang.Integer" resultType="java.lang.String">
@@ -16,8 +18,8 @@
     </select>
 <!--    添加角色-->
     <insert id="addRole" parameterType="com.example.admin.model.Role">
-        insert into role(role_name, nameZh)
-        values (#{role_name}, #{nameZh})
+        insert into role(role_name, nameZh,create_time,description)
+        values (#{role_name}, #{nameZh},#{create_time},#{description})
     </insert>
 <!--    删除角色-->
     <delete id="deleteRoleById" parameterType="java.lang.Integer">
@@ -27,7 +29,8 @@
     <update id="updateRole" parameterType="com.example.admin.model.Role">
         update role
         set role_name=#{role_name},
-            nameZh=#{nameZh}
+            nameZh=#{nameZh},
+            description=#{description}
         where id = #{id}
     </update>
 </mapper>

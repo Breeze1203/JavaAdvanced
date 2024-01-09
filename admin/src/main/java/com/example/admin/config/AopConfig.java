@@ -48,7 +48,7 @@ public class AopConfig {
                 break;
             }
         }
-        operationDataService.insetOperationLog(operationData);
+        operationDataService.insertLog(operationData);
     }
 
     /*
@@ -66,7 +66,7 @@ public class AopConfig {
         operationData.setUser("id为" + id + "的用户退出登录");
         operationData.setDate(DateUtil.formatLog(new Date()));
         operationData.setOperation(id + "退出登录");
-        operationDataService.insetOperationLog(operationData);
+        operationDataService.insertLog(operationData);
     }
 
     /*
@@ -82,7 +82,7 @@ public class AopConfig {
         Organization o = (Organization) args[0];
         operationData.setDate(DateUtil.formatLog(new Date()));
         operationData.setOperation("添加" + o.getName());
-        operationDataService.insetOperationLog(operationData);
+        operationDataService.insertLog(operationData);
     }
 
     /*
@@ -98,7 +98,7 @@ public class AopConfig {
         Integer o = (Integer) arg[0];
         operationData.setDate(DateUtil.formatLog(new Date()));
         operationData.setOperation("删除id为" + o + "的组织");
-        operationDataService.insetOperationLog(operationData);
+        operationDataService.insertLog(operationData);
     }
 
     /*
@@ -114,7 +114,7 @@ public class AopConfig {
         User u= (User) arg[0];
         operationData.setDate(DateUtil.formatLog(new Date()));
         operationData.setOperation("添加" + u.getUsername() + "用户");
-        operationDataService.insetOperationLog(operationData);
+        operationDataService.insertLog(operationData);
     }
 
     /*
@@ -130,7 +130,7 @@ public class AopConfig {
         Integer i= (Integer) arg[0];
         operationData.setDate(DateUtil.formatLog(new Date()));
         operationData.setOperation("删除id为" + i + "的用户");
-        operationDataService.insetOperationLog(operationData);
+        operationDataService.insertLog(operationData);
     }
     /*
     添加角色
@@ -145,7 +145,7 @@ public class AopConfig {
         Role role= (Role) arg[0];
         operationData.setDate(DateUtil.formatLog(new Date()));
         operationData.setOperation("添加" + role.getNameZh() + "角色");
-        operationDataService.insetOperationLog(operationData);
+        operationDataService.insertLog(operationData);
     }
 
     /*
@@ -161,7 +161,7 @@ public class AopConfig {
         Integer rid= (Integer) arg[0];
         operationData.setDate(DateUtil.formatLog(new Date()));
         operationData.setOperation("删除id为" + rid + "角色");
-        operationDataService.insetOperationLog(operationData);
+        operationDataService.insertLog(operationData);
     }
     /*
     修改权限
@@ -176,7 +176,7 @@ public class AopConfig {
         Permission permission = (Permission) arg[0];
         operationData.setDate(DateUtil.formatLog(new Date()));
         operationData.setOperation("修改id为" + permission.getRid() + "角色权限,新的权限id为"+ Arrays.toString(permission.getAllId()));
-        operationDataService.insetOperationLog(operationData);
+        operationDataService.insertLog(operationData);
     }
 
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.UserController.loginByPhone(..))",returning = "result")
@@ -188,6 +188,6 @@ public class AopConfig {
         operationData.setType("用户登录");
         operationData.setDate(DateUtil.formatLog(new Date()));
         operationData.setOperation("手机号为" + phone + "用户登录");
-        operationDataService.insetOperationLog(operationData);
+        operationDataService.insertLog(operationData);
     }
 }

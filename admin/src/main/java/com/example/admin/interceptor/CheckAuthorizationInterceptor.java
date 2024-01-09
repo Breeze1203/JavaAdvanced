@@ -1,6 +1,7 @@
 package com.example.admin.interceptor;
 
 import com.example.admin.util.JwtToken;
+import com.example.admin.util.StatusMessage;
 import com.example.admin.util.StatusUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +28,7 @@ public class CheckAuthorizationInterceptor implements HandlerInterceptor {
         }
         response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
-        StatusUtil statusUtil = new StatusUtil("请进行登录授权", 401, null);
+        StatusUtil statusUtil = new StatusUtil(StatusMessage.UNAUTHORIZED_ACCESS.getMessage(), 401, null);
         out.write(new ObjectMapper().writeValueAsString(statusUtil));
         out.flush(); //刷新输出流
         out.close(); // 关闭输出流
