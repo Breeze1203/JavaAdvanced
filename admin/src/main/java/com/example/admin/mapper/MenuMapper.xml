@@ -39,7 +39,9 @@
                m2.path      as m2_path,
                m2.menu_role as m2_menu_role,
                m2.icon      as m2_icon
-        from menu m1,menu m2 where m1.menu_id = m2.parent_id
+        from menu m1,
+             menu m2
+        where m1.menu_id = m2.parent_id
     </select>
 <!--    获取一级菜单-->
     <select id="getParentMenu" resultMap="Result">
@@ -69,5 +71,49 @@
                  left join role r on r.id = rm.rId
         where m1.menu_id = m2.parent_id
           and r.id = #{rId}
+          and m2.menu_role!='按钮'
+        order by m2_id ASC
+    </select>
+<!--    修改菜单信息-->
+    <update id="updateMenuByMenuId" parameterType="com.example.admin.model.Menu">
+        update menu
+        set menu_name=#{menu_name},
+            icon=#{icon}
+        where menu_id = #{menu_id}
+    </update>
+<!--    根据条件查询菜单-->
+    <select id="getMenuByCondition" parameterType="com.example.admin.model.Menu" resultMap="BaseResult">
+        select m1.menu_id as m1_id,
+        m1.menu_name as m1_name,
+        m1.parent_id as m1_parent_id,
+        m1.path as m1_path,
+        m1.menu_role as m1_menu_role,
+        m1.icon as m1_icon,
+        m2.menu_id as m2_id,
+        m2.menu_name as m2_name,
+        m2.parent_id as m2_parent_id,
+        m2.path as m2_path,
+        m2.menu_role as m2_menu_role,
+        m2.icon as m2_icon
+        from menu m1,
+        menu m2
+        <where>
+            m1.menu_id = m2.parent_id
+            <if test="menu_name!=null">
+                And m2.menu_name like CONCAT('%', #{menu_name}, '%')
+            </if>
+            <if test="path!=null">
+                And m2.path like CONCAT('%', #{path}, '%')
+            </if>
+            <if test="parent_id!=null">
+                And m2.parent_id like CONCAT('%', #{parent_id}, '%')
+            </if>
+            <if test="menu_role!=null">
+                And m2.menu_role like CONCAT('%', #{menu_role}, '%')
+            </if>
+            <if test="icon!=null">
+                And m2.icon like CONCAT('%', #{icon}, '%')
+            </if>
+        </where>
     </select>
 </mapper>

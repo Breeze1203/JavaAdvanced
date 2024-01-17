@@ -26,4 +26,14 @@ public interface MenuMapper {
     根据角色获取菜单列表
      */
     List<Menu> getMenuByRole(Integer rid);
+
+    /*
+    修改菜单信息
+     */
+    Integer updateMenuByMenuId(Menu menu);
+
+    /*
+    根据条件查询菜单角色
+     */
+    List<Menu> getMenuByCondition(Menu menu);
 }

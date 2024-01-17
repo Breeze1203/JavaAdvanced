@@ -27,7 +27,7 @@ public class MessageController {
     }
 
     @PostMapping("/sendMessage")
-    public StatusUtil sendMessage(@RequestParam("sid")Integer sid,@RequestParam("rid")Integer rid,@RequestParam("content")String content){
+    public StatusUtil saveMessage(@RequestParam("sid")Integer sid,@RequestParam("rid")Integer rid,@RequestParam("content")String content){
         Message message = new Message();
         message.setContent(content);
         message.setState(false);

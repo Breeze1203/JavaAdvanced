@@ -10,45 +10,52 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service(value = "OrganizationService")
-public class OrganizationService {
+public class OrganizationService implements OrganizationMapper{
     @Resource(name = "OrganizationMapper")
-    OrganizationMapper organizationMapper;
+    private OrganizationMapper organizationMapper;
 
     @Resource(name = "UserService")
-    UserService userService;
+    private UserService userService;
 
     /*
     查询所有组织
      */
-    public List<Organization> getAllOrganization(Integer parentId){
+    public List<Organization> getAll(Integer parentId){
         return organizationMapper.getAll(parentId);
     }
 
     /*
     根据id删除组织
      */
-    public StatusUtil deleteById(Integer id){
+    public Long deleteOrgById(Integer id){
         // 先查看该节点下是否有用户，如果有则无法删除
-        List<User> userByOid = userService.getUserByOid(id);
+        List<User> userByOid = userService.getUserByoId(id);
         if(userByOid.isEmpty()){
-            organizationMapper.deleteById(id);
-            return new StatusUtil("删除成功",200,null);
+            return organizationMapper.deleteOrgById(id);
         }else {
-            return new StatusUtil("该节点下有用户，无法删除该节点",500,null);
+            return 0L;
         }
     }
 
     /*
     添加组织
      */
-    public Integer add(Organization organization) {
+    public Integer addOrganization(Organization organization) {
         return organizationMapper.addOrganization(organization);
     }
 
     /*
     获取所有组织
      */
-    public List<Organization> getAll(){
+    public List<Organization> getAllOrganization(){
         return organizationMapper.getAllOrganization();
+    }
+
+    /*
+    根据id获取组织
+     */
+    @Override
+    public Organization getOrganizationById(Integer id) {
+        return organizationMapper.getOrganizationById(id);
     }
 }

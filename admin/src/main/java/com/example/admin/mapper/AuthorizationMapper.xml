@@ -7,7 +7,7 @@
         <result column="describe" property="describe" jdbcType="VARCHAR"/>
     </resultMap>
 <!--    分页查询权限资源-->
-    <select id="getAllPermission" resultMap="BaseResult" parameterType="java.lang.Integer">
+    <select id="getAllPermissionByPage" resultMap="BaseResult" parameterType="java.lang.Integer">
         select * from authorization limit #{size} offset #{page}
     </select>
 <!--    根据用户角色id查询其权限资源-->

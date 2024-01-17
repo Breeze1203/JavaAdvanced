@@ -1,125 +1,97 @@
 <template>
-  <div class="common-layout" style="margin-top: 25px;margin-left: 0px">
-    <el-container class="shadow-box">
-      <el-aside width="200px">
-        <div style="border-bottom: 1px solid;text-align: center">
-          <h4>用户架构</h4>
-        </div>
-        <div style="margin-top: 25px">
-          <el-tree @node-click="handleNodeClick" :default-expand-all="true" :props="defaultProps" :data="tree">
-            <template #default="{ node, data }">
-              <span>{{ node.label }}</span>
-              <el-dropdown size="small" trigger="hover">
-                <el-icon>
-                  <Setting/>
-                </el-icon>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item @click="add(data)">添加</el-dropdown-item>
-                    <el-dropdown-item @click="Delete(data)">删除</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </template>
-          </el-tree>
-        </div>
-      </el-aside>
-      <el-container>
-        <el-header>
-          <div class="container">
-            <el-input size="small" v-model="username" placeholder="用户名" style="width: 180px" type="text"/>
-            <el-select size="small"
-                       v-model="state"
-                       :clearable="true"
-                       placeholder="状态"
-                       style="width: 100px"
-            >
-              <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-              />
-            </el-select>
-            <el-button size="small" @click="search" type="primary">搜索</el-button>
-            <el-button size="small" type="primary" @click="UserVisible = true">添加用户</el-button>
-          </div>
-        </el-header>
-        <el-main>
-          <el-table stripe border style="width: 100%" :data="userData">
-            <el-table-column align="center" prop="id" label="id" width="90"/>
-            <el-table-column align="center" prop="username" label="姓名" width="90"/>
-            <el-table-column align="center" prop="address" label="地址" width="90"/>
-            <el-table-column align="center" prop="phone" label="联系电话" width="190"/>
-            <el-table-column align="center" prop="organization.name" label="所属节点" width="90"/>
-            <el-table-column align="center" prop="role.nameZh" label="角色" width="90"/>
-            <el-table-column align="center" label="头像" width="100">
-              <template #default="scope">
-                <el-avatar size="small" :src="scope.row.userFace"/>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" prop="embod" label="个性签名" width="180"/>
-            <el-table-column align="center" label="状态" width="90">
-              <template #default="scope">
-                <el-tag type="success" v-if="scope.row.state">启用</el-tag>
-                <el-tag type="danger" v-else>禁用</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column align="center" prop="email" label="邮箱" width="150"/>
-            <el-table-column fixed="right" align="center" label="操作" width="200">
-              <template #default="scope">
-                <el-popconfirm title="确定要禁用?" @confirm="disableUser(scope.row)" v-if="scope.row.state">
-                  <template #reference>
-                    <span style="margin-right: 10px;">
-                    <el-icon><Lock/></el-icon>禁用
-                   </span>
-                  </template>
-                </el-popconfirm>
-                <el-popconfirm title="确定要启用?" @confirm="disableUser(scope.row)" v-else>
-                  <template #reference>
-                    <span style="margin-right: 10px;">
-                    <el-icon><Unlock/></el-icon>启用
-                   </span>
-                  </template>
-                </el-popconfirm>
-                <span style="margin-right: 10px;"><el-icon @click="updateUser(scope.row)"><Edit/></el-icon>修改</span>
-                <span style="margin-right: 10px;color: red"><el-icon @click="deleteUser(scope.row)"><Delete/></el-icon>删除</span>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-main>
-      </el-container>
-    </el-container>
-  </div>
-  <el-dialog
-      v-model="dialogVisible"
-      title="增加节点"
-      width="25%">
+  <div style="margin-top: 30px">
+    <el-row :gutter="6" style="margin-bottom: 30px">
+      <el-col :xs="4" :sm="6" :md="4" :lg="3" :xl="1"
+      ><span>用户名:</span></el-col>
+      <el-col :xs="2" :sm="3" :md="5" :lg="5" :xl="7"
+      >
+        <el-input v-model="username" clearable placeholder="请输入用户名"/>
+      </el-col>
+      <el-col :xs="4" :sm="6" :md="4" :lg="3" :xl="1"
+      ><span>用户状态:</span></el-col>
+      <el-col :xs="2" :sm="3" :md="5" :lg="9" :xl="7"
+      >
+        <el-select
+            v-model="state"
+            :clearable="true"
+            placeholder="状态"
+        >
+          <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          />
+        </el-select>
+      </el-col>
+    </el-row>
     <el-row>
-      <el-col :span="12">
-        <span>上级节点：</span>
+      <el-col :xs="4" :sm="6" :md="4" :lg="3" :xl="1"
+      >
+        <el-button type="primary" plain icon="Search" @click="search">搜索</el-button>
       </el-col>
-      <el-col :span="12">
-        <el-input v-model="nodeName" size="small" disabled/>
+      <el-col :xs="2" :sm="3" :md="5" :lg="5" :xl="7"
+      >
+        <el-button plain icon="Refresh" @click="initAllUser">刷新</el-button>
       </el-col>
-    </el-row>
-    <el-row style="margin-top: 25px">
-      <el-col :span="12">
-        <span>名称</span>
-      </el-col>
-      <el-col :span="12">
-        <el-input v-model="addOrganization.name" size="small"/>
-      </el-col>
-    </el-row>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button size="small" @click="cancelAdd">取消</el-button>
-        <el-button size="small" type="primary" @click="sureAdd">
-          确定
+      <el-col :xs="2" :sm="3" :md="5" :lg="5" :xl="7"
+      >
+        <el-button :disabled="!permissions_data.includes('add_user')" plain type="info" @click="UserVisible = true"
+                   icon="Plus">添加用户
         </el-button>
-      </span>
-    </template>
-  </el-dialog>
+      </el-col>
+      <el-col :xs="2" :sm="3" :md="5" :lg="5" :xl="7"
+      >
+        <el-button :disabled="!permissions_data.includes('export_data')" plain type="success" icon="Upload">导出</el-button>
+      </el-col>
+    </el-row>
+  </div>
+  <div style="margin-top: 30px">
+    <el-table stripe border style="width: 100%" :data="userData">
+      <el-table-column align="center" prop="id" label="id" width="90"/>
+      <el-table-column align="center" prop="username" label="姓名" width="90"/>
+      <el-table-column align="center" prop="address" label="地址" width="90"/>
+      <el-table-column align="center" prop="phone" label="联系电话" width="190"/>
+      <el-table-column align="center" prop="organization.name" label="所属节点" width="90"/>
+      <el-table-column align="center" prop="role.nameZh" label="角色" width="90"/>
+      <el-table-column align="center" label="头像" width="100">
+        <template #default="scope">
+          <el-avatar size="small" :src="scope.row.userFace"/>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="embod" label="个性签名" width="180"/>
+      <el-table-column align="center" label="状态" width="90">
+        <template #default="scope">
+          <el-tag type="success" v-if="scope.row.state">启用</el-tag>
+          <el-tag type="danger" v-else>禁用</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="email" label="邮箱" width="150"/>
+      <el-table-column fixed="right" align="center" label="操作" width="200">
+        <template #default="scope">
+          <el-popconfirm title="确定要禁用?" @confirm="disableUser(scope.row)" v-if="scope.row.state">
+            <template #reference>
+                    <span style="margin-right: 10px;">
+                      <el-button :disabled="!permissions_data.includes('update_user')" icon="Lock" type="text">禁用</el-button>
+                   </span>
+            </template>
+          </el-popconfirm>
+          <el-popconfirm title="确定要启用?" @confirm="disableUser(scope.row)" v-else>
+            <template #reference>
+                    <span style="margin-right: 10px;">
+                    <el-button :disabled="!permissions_data.includes('update_user')" icon="Unlock"
+                               type="text">启用</el-button>
+                   </span>
+            </template>
+          </el-popconfirm>
+          <el-button :disabled="!permissions_data.includes('update_user')" @click="updateUser(scope.row)" icon="Edit"
+                     type="text"><span style="color: #666666">修改</span></el-button>
+          <el-button :disabled="!permissions_data.includes('delete_user')" @click="deleteUser(scope.row)" icon="Delete"
+                     type="text"><span style="color: red">删除</span></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
   <el-dialog v-model="UserVisible" :title="dialogTitle" style="width: 33%">
     <el-row>
       <el-col :span="5">
@@ -223,6 +195,7 @@
 import request from "@/util/requestUtil";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {Unlock} from "@element-plus/icons-vue";
+import {mapState} from "vuex";
 
 
 export default {
@@ -230,7 +203,6 @@ export default {
   components: {Unlock},
   data() {
     return {
-      tree: [],//组织架构数据
       dialogTitle: '添加用户',
       rid: null,//添加用户时用户的角色
       username: null,
@@ -250,9 +222,7 @@ export default {
         organizationId: null,
         role: null
       },
-      dialogVisible: false,//显示增加节点的dialog
       userData: [],//用户表格数据
-      nodeName: '',//添加节点的名称
       options: [
         {
           value: true,
@@ -273,6 +243,9 @@ export default {
         parentId: null,
       }
     }
+  },
+  computed: {
+    ...mapState(["permissions_data"])
   },
   methods: {
     initAllOrganization() {
@@ -298,14 +271,6 @@ export default {
         role: null
       }
     },
-    // 初始化组织架构节点(树状显示)
-    initOrganization() {
-      request.initOrganization().then(resp => {
-        if (resp.data) {
-          this.tree = resp.data;
-        }
-      })
-    },
     // 初始化所有用户信息
     initAllUser(user) {
       request.initAllUser(user).then(resp => {
@@ -315,72 +280,12 @@ export default {
         }
       })
     },
-    add(data) {
-      this.dialogVisible = true;
-      this.nodeName = data.name;
-      this.addOrganization.parentId = data.id;
-    },
     // 按要求搜索用户
     search() {
       this.user.username = this.username;
       this.user.state = this.state;
       this.initAllUser(this.user);
       this.user.state = null;
-    },
-    // 确定添加node
-    sureAdd() {
-      if (this.addOrganization.name === null) {
-        ElMessage.error("请输入节点名称");
-        return;
-      }
-      request.addNode(this.addOrganization).then(resp => {
-        if (resp.data.code === 200) {
-          ElMessage.success(resp.data.message);
-          this.initOrganization();
-          this.addOrganization.name = null
-        } else {
-          ElMessage.error(resp.data.message);
-        }
-      })
-      this.dialogVisible = false;
-    },
-    //取消添加组织
-    cancelAdd() {
-      this.dialogVisible = false;
-      this.addOrganization.name = null
-    },
-    // 删除组织
-    Delete(data) {
-      if (data.children.length > 0) {
-        ElMessage.error("操作失败，该节点下有子节点");
-        return;
-      }
-      ElMessageBox.confirm(
-          '此操作将永久删除【' + data.name + '】节点，是否继续?',
-          {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }
-      )
-          .then(() => {
-            request.deleteNode(data.id).then(resp => {
-              if (resp.data.code === 200) {
-                ElMessage.success(resp.data.message);
-                // 重新初始化用户架构
-                this.initOrganization();
-              } else {
-                ElMessage.error(resp.data.message);
-              }
-            })
-          })
-          .catch(() => {
-            ElMessage({
-              type: 'info',
-              message: '取消操作'
-            })
-          })
-
     },
     // 是否禁用用户
     disableUser(data) {
@@ -448,19 +353,20 @@ export default {
               if (resp.data.code === 200) {
 // 如果修改的是当前登录用户，则重新获取当前用户信息，并存入sessionStorage
                 if (this.user.id === JSON.parse(sessionStorage.getItem("user")).id) {
-                  request.getUserById(this.user.id).then(resp => {
-                    if (resp.data.code === 200) {
-                      sessionStorage.setItem("user", JSON.stringify(resp.data.user));
+                  request.getUserById(this.user.id).then(r => {
+                    if (r.data) {
+                      sessionStorage.setItem("user", JSON.stringify(r.data));
                     }
                   })
                 }
                 if (this.rid != null) {
-                  request.updateUserRole(this.rid, this.user.id).then(resp => {
-                    if (resp.data.code === 200) {
+                  console.log(this.rid);
+                  request.updateUserRole(this.rid, this.user.id).then(re => {
+                    if (re.data.code === 200) {
                       this.initUser();
                       this.initAllUser(this.user);
                     } else {
-                      ElMessage.error(resp.data.message);
+                      ElMessage.error(re.data.message);
                     }
                   })
                 }
@@ -504,7 +410,6 @@ export default {
     }
   },
   mounted() {
-    this.initOrganization();
     this.initAllUser(this.user);
     this.initAllOrganization();
     request.getAllRoles().then(resp => {
@@ -517,15 +422,6 @@ export default {
 </script>
 
 <style scoped>
-.shadow-box {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* 设置阴影效果 */
-  border: 1px solid #ccc; /* 设置边框 */
-  padding: 20px; /* 设置内边距，可根据需要进行调整 */
-}
 
-.container {
-  display: flex;
-  gap: 10px; /* 设置按钮之间的距离 */
-}
 
 </style>

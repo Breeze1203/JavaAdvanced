@@ -118,10 +118,24 @@
                 #{organizationId})
     </insert>
     <!--    根据id搜索用户-->
-    <select id="getUserById" parameterType="java.lang.Integer">
-        select *
-        from user
-        where id = #{id}
+    <select id="getUserById" parameterType="java.lang.Integer" resultMap="result">
+        SELECT u.id,
+               u.address,
+               u.username,
+               u.password,
+               u.userFace,
+               u.phone,
+               u.embod,
+               u.email,
+               u.state,
+               o.name   AS oname,
+               r.id     as role_id,
+               r.nameZh as nameZh
+        FROM user AS u
+                 LEFT JOIN organization AS o ON u.organizationId = o.id
+                 LEFT JOIN user_role AS ur on u.id = ur.user_id
+                 LEFT JOIN role AS r on ur.role_id = r.id
+        where u.id = #{id}
     </select>
     <!--    根据手机号查询用户-->
     <select id="getUserByPhone" parameterType="java.lang.Long">

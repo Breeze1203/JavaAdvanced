@@ -6,7 +6,10 @@ import com.example.admin.permission.CheckPermission;
 import com.example.admin.service.RoleService;
 import com.example.admin.service.UserService;
 import com.example.admin.util.*;
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +24,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-
-@Api(value = "用户Controller")
+@Tag(name = "用户的请求模块", description = "用户的请求接口")
 @RestController
 public class UserController {
     @Autowired
@@ -37,6 +39,12 @@ public class UserController {
     /*
     用户名登录认证
      */
+    @Operation(summary = "用户登录接口", description = "用户登录接口", method = "get")
+    @Parameters({
+            @Parameter(name = "username", description = "用户登录请求用户名", required = true),
+            @Parameter(name = "password", description = "用户密码", required = true),
+            @Parameter(name = "remember", description = "是否记住密码", required = true)
+    })
     @GetMapping("/login")
     public StatusUtil login(@RequestParam("username") String username, @RequestParam("password") String password, @RequestParam("remember") String remember, HttpServletRequest request, HttpServletResponse response) {
         User u = userService.getUserByName(username);
@@ -52,6 +60,12 @@ public class UserController {
     /*
     短信验证码登录
      */
+    @Operation(summary = "短信验证码登录接口", description = "验证码登录接口", method = "get")
+    @Parameters({
+            @Parameter(name = "phone", description = "用户电话号码", required = true),
+            @Parameter(name = "code", description = "验证码", required = true),
+            @Parameter(name = "remember", description = "是否记住密码", required = true)
+    })
     @GetMapping("/loginByPhone")
     public StatusUtil loginByPhone(@RequestParam("phone") String phone, @RequestParam("code") String code, @RequestParam("remember") String remember, HttpServletResponse response) {
         String s = redisTemplate.opsForValue().get("code_" + phone);
@@ -70,6 +84,8 @@ public class UserController {
     /*
     注销登录
      */
+    @Operation(summary = "用户注销登录接口", description = "用户注销登录接口", method = "get")
+    @Parameter(name = "id", description = "登录用户id", required = true)
     @GetMapping("/loginOut")
     public StatusUtil loginOut(@RequestParam("id") Integer id) {
         // 删除token及用户信息
@@ -84,6 +100,7 @@ public class UserController {
     /*
     该方法是获取最近五天项目访问人数
      */
+    @Operation(summary = "最近五天登录统计接口", description = "登录人数统计接口", method = "get")
     @GetMapping("/getCount")
     public CountResult getAccessCount() {
         HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
@@ -122,6 +139,8 @@ public class UserController {
     /*
     获取所有用户
      */
+    @Operation(summary = "获取用户接口", description = "获取用户信息", method = "post")
+    @Parameter(name = "user", required = true, description = "用户json实体类信息")
     @PostMapping("/getAllUser")
     public List<User> getAllUser(@RequestBody User user) {
         return userService.getAllUser(user);
@@ -130,6 +149,8 @@ public class UserController {
     /*
     根据id是否禁用用户
      */
+    @Operation(summary = "修改用户接口", description = "修改用户信息", method = "post")
+    @Parameter(name = "user", description = "用户json实体类信息")
     @CheckPermission(permission = "update_user")
     @PostMapping("/updateUser")
     public StatusUtil disable(@RequestBody User user) {
@@ -147,6 +168,8 @@ public class UserController {
     /*
     删除用户
      */
+    @Operation(method = "get", summary = "删除用户接口接口", description = "根据用户id删除用户接口")
+    @Parameter(name = "user", description = "用户json实体类信息", required = true)
     @CheckPermission(permission = "delete_user")
     @GetMapping("/deleteUser")
     public StatusUtil deleteUser(@RequestParam("id") Integer id) {
@@ -168,11 +191,13 @@ public class UserController {
     /*
     添加用户
      */
+    @Operation(method = "post", summary = "添加用户接口", description = "添加用户接口")
+    @Parameter(name = "user", description = "用户json实体类信息", required = true)
     @PostMapping("/addUser")
     @CheckPermission(permission = "add_user")
     public StatusUtil addUser(@RequestBody User user) {
         user.setState(true);
-        Integer i = userService.insertUser(user);
+        Integer i = userService.addUser(user);
         if (i > 0) {
             return new StatusUtil(StatusMessage.ADD_SUCCESS.getMessage(), 200, null);
         } else {
@@ -180,6 +205,11 @@ public class UserController {
         }
     }
 
+    @Operation(method = "post", summary = "更改用户角色接口", description = "修改用户角色")
+    @Parameters({
+            @Parameter(name = "rid", description = "用户角色id", required = true),
+            @Parameter(name = "id", description = "用户id", required = true)}
+    )
     @PostMapping("/updateUserRole")
     public StatusUtil updateUserRole(@RequestParam("rid") Integer rid, @RequestParam("id") Integer id) {
         int i = roleService.updateUserById(rid, id);
@@ -193,6 +223,8 @@ public class UserController {
     /*
     更新用户密码
      */
+    @Operation(method = "post",summary = "用户更改密码接口",description = "更改用户密码")
+    @Parameter(name = "user",description = "用户json实体类")
     @PostMapping("/updatePassword")
     public StatusUtil updatePassword(@RequestBody User user) {
         Integer i = userService.updateUser(user);
@@ -207,15 +239,18 @@ public class UserController {
     /*
     根据id获取用户信息
      */
+    @Operation(method = "get",summary = "根据用户id获取用户信息接口")
+    @Parameter(name = "id",required = true,description = "用户id")
     @GetMapping("/getUserById")
-    public StatusUtil updatePassword(@RequestParam("id") Integer id) {
-        User user = userService.getUserById(id);
-        return new StatusUtil(null, 200, user);
+    public User updatePassword(@RequestParam("id") Integer id) {
+        return userService.getUserById(id);
     }
 
     /*
     获取短信验证码
      */
+    @Operation(method = "get",summary = "发送短信验证码接口")
+    @Parameter(name = "phone",required = true,description = "用户手机号")
     @GetMapping("/getVerification")
     public StatusUtil getVerification(@RequestParam("phone") String phone) {
         String pattern = "^1\\d{10}$"; // 匹配以1开头，后面跟着10位数字的手机号码
@@ -252,14 +287,14 @@ public class UserController {
         // 根据当前登录成功用户不同将用户信息变成token存储到redis中 因为用户id唯一
         String token_name = u.getId() + "token";
         if (operations.get(token_name) == null) {
-            redisTemplate.opsForValue().set(token_name, token);
-            redisTemplate.expire(token_name, 60 * 24, TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(token_name, token,15,TimeUnit.MINUTES);
         } else {
             return new StatusUtil(StatusMessage.LOGIN_EXISTS.getMessage(), 500, null);
         }
         // 将用户信息生成token返回给前端
         Cookie c3 = new Cookie(u.getUsername() + "token", token);
-        c3.setMaxAge(24 * 60 * 60);
+        // 设置15分钟，15分钟后用户重新登录
+        c3.setMaxAge(15 * 60);
         c3.setPath("/");
         c3.setDomain("localhost");
         response.addCookie(c3);
@@ -294,9 +329,11 @@ public class UserController {
     /*
     获取当前登录用户除外的所有用户
      */
+    @Operation(summary = "获取除当前登录用户外的所有用户接口",method = "get")
+    @Parameter(name = "id",description = "用户id",required = true)
     @GetMapping("/WithOutUser")
     public List<User> getOutLogin(@RequestParam("id") Integer id) {
-        return userService.getOutLogin(id);
+        return userService.getUserOutLogin(id);
     }
 
 

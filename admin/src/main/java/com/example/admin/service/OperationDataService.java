@@ -10,7 +10,7 @@ import java.util.List;
 @Service(value = "OperationDataService")
 public class OperationDataService implements OperationDataMapper{
     @Resource(name = "OperationDataMapper")
-    OperationDataMapper operationDataMapper;
+    private OperationDataMapper operationDataMapper;
 
     /*
     添加日志

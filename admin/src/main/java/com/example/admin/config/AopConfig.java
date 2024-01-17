@@ -6,6 +6,8 @@ import com.example.admin.model.Organization;
 import com.example.admin.model.Role;
 import com.example.admin.model.User;
 import com.example.admin.service.OperationDataService;
+import com.example.admin.service.OrganizationService;
+import com.example.admin.service.UserService;
 import com.example.admin.util.DateUtil;
 import com.example.admin.util.IpUtil;
 import com.example.admin.util.Permission;
@@ -15,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -27,7 +30,11 @@ import java.util.Date;
 @Component
 public class AopConfig {
     @Resource(name = "OperationDataService")
-    OperationDataService operationDataService;
+    private OperationDataService operationDataService;
+
+    @Resource(name = "UserService")
+    private UserService userService;
+
 
     @AfterReturning(pointcut = "execution(* com.example.admin.controller.UserController.login(..))", returning = "result")
     private void afterLoginSuccess(JoinPoint joinPoint, Object result) {
@@ -62,10 +69,10 @@ public class AopConfig {
         if (status.getCode() == 500) return;
         OperationData operationData = new OperationData();
         operationData.setType("退出登录");
-        String id = args[0].toString();
-        operationData.setUser("id为" + id + "的用户退出登录");
+        User u= userService.getUser((Integer) args[0]);
+        operationData.setUser(u.getUsername());
         operationData.setDate(DateUtil.formatLog(new Date()));
-        operationData.setOperation(id + "退出登录");
+        operationData.setOperation(u.getUsername()+"退出登录");
         operationDataService.insertLog(operationData);
     }
 
