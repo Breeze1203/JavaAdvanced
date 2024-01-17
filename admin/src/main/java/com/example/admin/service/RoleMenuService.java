@@ -19,9 +19,6 @@ public class RoleMenuService implements RoleMenuMapper {
         return roleMenuMapper.getMenuIdByRole(rId);
     }
 
-    /*
-    更新用户菜单权限
-     */
     @Transactional
     @Override
     public Long updateRoleMenu(String[] mIds, Integer rId) {
@@ -33,9 +30,6 @@ public class RoleMenuService implements RoleMenuMapper {
     }
 
 
-    /*
-    根据角色id删除之前具有的菜单权限
-     */
     @Override
     public Long deleteMenuByRole(Integer rid) {
         return roleMenuMapper.deleteMenuByRole(rid);

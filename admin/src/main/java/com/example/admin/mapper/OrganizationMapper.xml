@@ -14,7 +14,7 @@
         select * from organization where parentId=#{parentId}
     </select>
 <!--    根据id删除组织-->
-    <delete id="deleteById" parameterType="java.lang.Integer">
+    <delete id="deleteOrgById" parameterType="java.lang.Integer">
         delete from organization where id=#{id}
     </delete>
 <!--    添加组织-->
@@ -24,5 +24,9 @@
     </insert>
     <select id="getAllOrganization" resultMap="BaseResult">
         select * from organization
+    </select>
+<!--    根据id获取组织-->
+    <select id="getOrganizationById" resultMap="BaseResult" parameterType="java.lang.Integer">
+        select * from organization where id=#{id}
     </select>
 </mapper>

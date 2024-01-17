@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
 import java.io.PrintWriter;
 
 @Component
@@ -20,15 +21,15 @@ public class CheckAuthorizationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        response.setContentType("application/json;charset=utf-8");
         String authorization = request.getHeader("Authorization");
         Integer i = JwtToken.verifyToken(authorization);
         String s = redisTemplate.opsForValue().get(i + "token");
         if (i > 0 && s != null && authorization != null) {
             return true;
         }
-        response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
-        StatusUtil statusUtil = new StatusUtil(StatusMessage.UNAUTHORIZED_ACCESS.getMessage(), 401, null);
+        StatusUtil statusUtil = new StatusUtil(StatusMessage.UNAUTHORIZED_ACCESS.getMessage(), 403, null);
         out.write(new ObjectMapper().writeValueAsString(statusUtil));
         out.flush(); //刷新输出流
         out.close(); // 关闭输出流

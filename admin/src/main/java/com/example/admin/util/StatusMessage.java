@@ -26,6 +26,7 @@ public enum StatusMessage {
     LOGIN_OUT_SUCCESS("注销成功"),
     CODE_SUCCESS("验证发送成功,请注意接收"),
     EXISTS_USER("该角色下存在用户，无法删除"),
+    DELETE_FAILED("该组织下存在用户，无法删除"),
     NETWORK_ERROR("网络出现异常,请稍后再试");
 
     private final String message;

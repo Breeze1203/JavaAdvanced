@@ -53,8 +53,8 @@
 <script>
 import request from "@/util/requestUtil";
 import {ElMessage} from 'element-plus';
-import store from "@/store";
 import {getCookie} from "@/util/cookieUtil";
+import router from "@/router";
 
 
 export default {
@@ -89,13 +89,9 @@ export default {
         let rem = this.remember.toString();
         request.login(this.username, this.password, rem).then(resp => {
           if (resp.data.code === 200) {
-            // let token = this.getCookieValue(resp.data.user.username + 'token');
-            // // 将token存入到store
-            // store.commit('getToken', token);
-            // 获取当前用户信息
             let user = JSON.stringify(resp.data.user);
             sessionStorage.setItem("user", user);
-            this.$router.push('/home');
+            router.push('/home');
           } else {
             ElMessage.error(resp.data.message);
           }
@@ -115,7 +111,7 @@ export default {
           // 获取当前用户信息
           let user = JSON.stringify(resp.data.user);
           sessionStorage.setItem("user", user);
-          this.$router.push('/home');
+          router.push('/home');
           this.phoneNumber=null;
           this.verificationCode=null;
         }else {

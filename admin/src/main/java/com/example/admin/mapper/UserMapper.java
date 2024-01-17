@@ -55,4 +55,9 @@ public interface UserMapper {
      */
     List<User> getUserOutLogin(@Param("id") Integer id);
 
+    /*
+    根据id查询用户
+     */
+    User getUser(@Param("id")Integer id);
+
 }

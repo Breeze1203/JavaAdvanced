@@ -43,4 +43,17 @@ public class MenuService implements MenuMapper {
     public List<Menu> getMenuByRole(Integer rid) {
         return mapper.getMenuByRole(rid);
     }
+
+    /*
+    修改菜单信息
+     */
+    @Override
+    public Integer updateMenuByMenuId(Menu menu) {
+        return mapper.updateMenuByMenuId(menu);
+    }
+
+    @Override
+    public List<Menu> getMenuByCondition(Menu menu) {
+        return mapper.getMenuByCondition(menu);
+    }
 }

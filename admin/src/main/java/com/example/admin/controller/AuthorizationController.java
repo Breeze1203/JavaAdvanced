@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,13 +24,8 @@ public class AuthorizationController {
     }
 
     @GetMapping("/getPermissionByrId")
-    public List<Integer> getPermissionByrId(@RequestParam("rid")Integer rid){
-        List<Authorization> all = authorizationService.getPermissionByrId(rid);
-        List<Integer> permission=new ArrayList<>();
-        for(Authorization a:all){
-            permission.add(a.getId());
-        }
-        return permission;
+    public List<Authorization> getPermissionByrId(@RequestParam("rid")Integer rid){
+        return authorizationService.getPermissionByrId(rid);
     }
     /*
     获取操作权限数据条数

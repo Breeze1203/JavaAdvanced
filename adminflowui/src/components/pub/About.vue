@@ -25,8 +25,8 @@ export default {
 <style scoped>
 .main {
   margin-top: 25px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* 设置阴影效果 */
-  border: 1px solid #ccc; /* 设置边框 */
+  /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); !* 设置阴影效果 *!*/
+  /*border: 1px solid #ccc; !* 设置边框 *!*/
   padding: 20px; /* 设置内边距，可根据需要进行调整 */
 }
 </style>

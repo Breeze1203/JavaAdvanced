@@ -9,20 +9,29 @@ import org.springframework.transaction.annotation.Transactional;
 该类处理角色与权限直接的关联
  */
 @Service(value = "RoleAuthorizationService")
-public class RoleAuthorizationService {
+public class RoleAuthorizationService implements RoleAuthorizationMapper{
 
     @Resource(name = "RoleAuthorizationMapper")
-    RoleAuthorizationMapper roleAuthorizationMapper;
+    private RoleAuthorizationMapper roleAuthorizationMapper;
 
     /*
     根据角色id插入权限
      */
     @Transactional
     public int insertPerByRid(Integer rId,Integer[] aIds){
-        roleAuthorizationMapper.deletePerByRid(rId);
+        /*
+        删除之前有的权限
+         */
+        deletePerByRid(rId);
         if(aIds.length==0){
             return 1;
         }
         return roleAuthorizationMapper.insertPerByRid(rId,aIds);
     }
+
+    @Override
+    public void deletePerByRid(Integer rid) {
+        roleAuthorizationMapper.deletePerByRid(rid);
+    }
+
 }

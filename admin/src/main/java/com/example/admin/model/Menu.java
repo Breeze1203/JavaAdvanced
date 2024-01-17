@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Menu implements Serializable {
+    @Serial
+    private static final long serialVersionUID=1L;
     private Integer menu_id;
     private String menu_name;
     private Integer parent_id;

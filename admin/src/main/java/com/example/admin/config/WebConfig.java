@@ -29,6 +29,10 @@ public class WebConfig implements WebMvcConfigurer {
         path.add("/login");
         path.add("/getVerification");
         path.add("/loginByPhone");
+        path.add("/swagger-ui-custom.html");
+        path.add("/swagger-ui/**");
+        path.add("/swagger-resources/**");
+        path.add("/v3/api-docs/**");
         registry.addInterceptor(checkAuthorizationInterceptor)
                 .addPathPatterns("/**")   // 所有路径都被拦截
                 .excludePathPatterns(path).order(1);

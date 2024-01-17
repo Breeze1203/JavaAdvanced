@@ -1,15 +1,13 @@
 package com.example.admin.controller;
 
 import com.example.admin.model.Menu;
+import com.example.admin.permission.CheckPermission;
 import com.example.admin.service.MenuService;
 import com.example.admin.service.RoleMenuService;
 import com.example.admin.util.StatusMessage;
 import com.example.admin.util.StatusUtil;
 import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class MenuController {
     获取所有菜单展示
      */
     @GetMapping("/getAllMenus")
-    private List<Menu> getAllMenu() {
+    private List<Menu> getAllMenus() {
         return menuService.getAllMenus();
     }
 
@@ -74,5 +72,27 @@ public class MenuController {
         } else {
             return new StatusUtil(StatusMessage.NETWORK_ERROR.getMessage(), 500, null);
         }
+    }
+
+    /*
+    修改菜单信息
+     */
+    @CheckPermission(permission = "update_menu")
+    @PostMapping("/updateMenu")
+    private StatusUtil updateMenu(@RequestBody Menu menu){
+        Integer i = menuService.updateMenuByMenuId(menu);
+        if (i > 0) {
+            return new StatusUtil(StatusMessage.UPDATE_SUCCESS.getMessage(), 200, null);
+        } else {
+            return new StatusUtil(StatusMessage.NETWORK_ERROR.getMessage(), 500, null);
+        }
+    }
+
+    /*
+    根据条件查询菜单要求
+     */
+    @PostMapping("/getMenuByCondition")
+    private List<Menu> getMenuByCondition(@RequestBody Menu menu){
+       return menuService.getMenuByCondition(menu);
     }
 }

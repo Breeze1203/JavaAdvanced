@@ -9,9 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service(value = "MessageService")
-public class MessageService {
+public class MessageService implements MessageMapper{
     @Resource(name = "MessageMapper")
     private MessageMapper messageMapper;
 
@@ -32,7 +33,7 @@ public class MessageService {
             String[] split = mId.split(",");
             map.put("messageIds",split);
         }
-        return messageMapper.getMessage(map);
+        return getMessage(map);
     }
 
     /*
@@ -43,14 +44,14 @@ public class MessageService {
         if(user==null){
            userMessageMapper.saveUserMessage(new UserMessage(null,message.getSend_id(),null));
         }
-        return messageMapper.save(message);
+        return save(message);
     }
 
     /*
     更改消息状态
      */
     public Integer upState(Integer id) {
-        return messageMapper.upstate(id);
+        return upstate(id);
     }
 
     /*
@@ -64,5 +65,20 @@ public class MessageService {
             user.setMId(user.getMId()+","+mId);
         }
         return userMessageMapper.upUserMessage(user);
+    }
+
+    @Override
+    public List<Message> getMessage(Map<String, Object> paramMap) {
+        return messageMapper.getMessage(paramMap);
+    }
+
+    @Override
+    public Integer save(Message message) {
+        return messageMapper.save(message);
+    }
+
+    @Override
+    public Integer upstate(Integer id) {
+        return messageMapper.upstate(id);
     }
 }

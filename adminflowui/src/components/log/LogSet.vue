@@ -21,7 +21,7 @@
           <el-button type="primary" @click="initLogData(this.keyword,this.offset,this.pageSize)">刷新日志</el-button>
         </el-col>
         <el-col :span="3">
-          <el-button type="danger" @click="deleteLog">清空日志</el-button>
+          <el-button :disabled="!permissions_data.includes('delete_log')" type="danger" @click="deleteLog">清空日志</el-button>
         </el-col>
       </el-row>
     </div>
@@ -49,6 +49,7 @@
 <script>
 import request from "@/util/requestUtil";
 import {ElMessage} from "element-plus";
+import {mapState} from "vuex";
 
 export default {
   name: 'LogSet',
@@ -94,9 +95,16 @@ export default {
         {
           value: '修改权限',
           label: '修改权限',
+        },
+        {
+          value: '修改菜单',
+          label: '修改菜单',
         }
       ]
     }
+  },
+  computed:{
+    ...mapState(['permissions_data'])
   },
   methods: {
     // 初始化日期数据

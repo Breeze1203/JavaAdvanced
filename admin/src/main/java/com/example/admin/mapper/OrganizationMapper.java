@@ -13,7 +13,7 @@ public interface OrganizationMapper {
     /*
     根据id删除组织
      */
-    void deleteById(@Param("id")Integer id);
+    Long deleteOrgById(@Param("id")Integer id);
 
     /*
     添加组织
@@ -24,4 +24,9 @@ public interface OrganizationMapper {
     查询所有组织
      */
     List<Organization> getAllOrganization();
+
+    /*
+    根据id查询组织
+     */
+    Organization getOrganizationById(@Param("id") Integer id);
 }

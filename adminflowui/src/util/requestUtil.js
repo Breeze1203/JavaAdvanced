@@ -146,33 +146,6 @@ const request = {
             url: '/getAllRole',
         })
     },
-    // 获取所有权限
-    getAllPermission() {
-        return instance({
-            method: 'get',
-            url: '/getAllPermission',
-        })
-    },
-    // 根据用户获取用户的权限
-    getPermissionByRole(id) {
-        return instance({
-            method: 'get',
-            url: '/getPermissionByrId',
-            params: {
-                rid: id
-            }
-        })
-    },
-    updatePermission(permission) {
-        return instance({
-            method:'post',
-            url:'/updatePermission',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data:permission
-        })
-    },
     // 添加角色
     addRole(role){
         return instance({
@@ -232,7 +205,9 @@ const request = {
         return instance({
             method: 'get',
             url: '/getUserById',
-            params: id
+            params: {
+                id:id
+            }
         })
     },
     // 用户验证码登录 获取短信验证码
@@ -297,7 +272,7 @@ const request = {
                 mId:uId
             }
         })
-    }
+    },
 }
 
 export default request;

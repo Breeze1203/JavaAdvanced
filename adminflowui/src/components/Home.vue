@@ -5,19 +5,27 @@
         <div class="head">AdminFlow</div>
         <div class="header-wrapper">
           <div style="margin-right: 30px;">
-            <el-icon style="color: #ffffff" @click="showMessage=true">
+            <el-icon size="23" v-if="isCollapse!=true" style="color: #ffffff" @click="isCollapse=!isCollapse">
+              <Fold/>
+            </el-icon>
+            <el-icon size="23" v-if="isCollapse!=false" style="color: #ffffff" @click="isCollapse=!isCollapse">
+              <Expand/>
+            </el-icon>
+          </div>
+          <div style="margin-right: 30px;">
+            <el-icon size="23" style="color: #ffffff" @click="showMessage=true">
               <Edit/>
             </el-icon>
           </div>
           <div style="margin-right: 30px;">
-            <el-icon @click="fill" style="color: #ffffff">
+            <el-icon size="23" @click="fill" style="color: #ffffff">
               <FullScreen/>
             </el-icon>
           </div>
           <div style="margin-right: 30px;">
-            <el-badge :value="messCount" type="danger" :max="10">
+            <el-badge :value="messCount" type="info" :max="10">
               <el-dropdown trigger="click" @click="initMess">
-                <el-icon size="20" style="color: #ffffff;border: none">
+                <el-icon size="23" style="color: #ffffff;border: none">
                   <Bell/>
                 </el-icon>
                 <template #dropdown>
@@ -68,9 +76,24 @@
             <p style="font-weight: bolder;color: white">{{ userInfo.username }}</p>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click="show"><el-icon><User /></el-icon>个人中心</el-dropdown-item>
-                <el-dropdown-item @click="showSetting"><el-icon><Lock /></el-icon>密码设置</el-dropdown-item>
-                <el-dropdown-item @click="loginOut"><el-icon><DCaret /></el-icon>退出登录</el-dropdown-item>
+                <el-dropdown-item @click="this.showUser = true">
+                  <el-icon>
+                    <User/>
+                  </el-icon>
+                  个人中心
+                </el-dropdown-item>
+                <el-dropdown-item @click="this.showSet = true;">
+                  <el-icon>
+                    <Lock/>
+                  </el-icon>
+                  密码设置
+                </el-dropdown-item>
+                <el-dropdown-item @click="loginOut">
+                  <el-icon>
+                    <DCaret/>
+                  </el-icon>
+                  退出登录
+                </el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -78,58 +101,22 @@
       </el-header>
       <el-container>
         <el-aside width="200px">
-          <div class="common-layout">
-            <el-menu style="height: 100%">
-              <el-sub-menu index="1">
+          <div>
+            <el-menu :collapse="isCollapse" v-for="(item,index) in menu" :key="index" @select="handleOpen">
+              <el-sub-menu :index="index">
                 <template #title>
                   <el-icon>
-                    <Setting/>
+                    <component :is="item.icon"/>
                   </el-icon>
-                  <span>系统管理</span>
+                  <span>{{ item.menu_name }}</span>
                 </template>
-                <el-menu-item-group>
-                  <el-menu-item @click=change index="/UserSet">
-                    <el-icon>
-                      <UserFilled/>
-                    </el-icon>
-                    用户管理
-                  </el-menu-item>
-                  <el-menu-item @click="change" index="/RoleSet">
-                    <el-icon>
-                      <Tickets/>
-                    </el-icon>
-                    角色管理
-                  </el-menu-item>
-                  <el-menu-item @click="change" index="/Permissions">
-                    <el-icon>
-                      <Collection/>
-                    </el-icon>
-                    权限管理
-                  </el-menu-item>
-                </el-menu-item-group>
-              </el-sub-menu>
-              <el-sub-menu>
-                <template #title>
+                <el-menu-item v-for="(child,index) in item.menus" @click=change :index="child.path">
                   <el-icon>
-                    <Timer/>
+                    <component :is="child.icon"/>
                   </el-icon>
-                  <span>日志管理</span>
-                </template>
-                <el-menu-item-group>
-                  <el-menu-item @click="change" index="/log">
-                    <el-icon>
-                      <EditPen/>
-                    </el-icon>
-                    操作日志
-                  </el-menu-item>
-                </el-menu-item-group>
+                  {{ child.menu_name }}
+                </el-menu-item>
               </el-sub-menu>
-              <el-menu-item @click="about">
-                <el-icon>
-                  <Document/>
-                </el-icon>
-                <span>关于项目</span>
-              </el-menu-item>
             </el-menu>
           </div>
         </el-aside>
@@ -142,7 +129,14 @@
             <div id="main" style="width: 100%;height:350px">
             </div>
           </div>
-          <div v-if="this.$router.currentRoute.value.path!=='/home'" style="border-bottom:1px solid #cccccc">
+          <div>
+            <el-breadcrumb v-if="this.$router.currentRoute.value.path!=='/home'">
+              <el-breadcrumb-item @click="toHome">首页</el-breadcrumb-item>
+              <el-breadcrumb-item>{{ this.$router.currentRoute.value.name }}</el-breadcrumb-item>
+            </el-breadcrumb>
+          </div>
+          <div v-if="this.$router.currentRoute.value.path!=='/home'"
+               style="border-bottom:1px solid #cccccc;margin-top: 20px">
             <el-tag
                 v-for="tag in Tags"
                 class="mx-1"
@@ -154,29 +148,101 @@
               {{ tag }}
             </el-tag>
           </div>
-          <!--          <el-page-header v-if="this.$router.currentRoute.value.path!=='/home'" @back="toHome">-->
-          <!--            <template #content>-->
-          <!--              <span> {{ this.$router.currentRoute.value.name }}</span>-->
-          <!--            </template>-->
-          <!--          </el-page-header>-->
           <router-view/>
         </el-main>
       </el-container>
     </el-container>
   </div>
   <el-drawer v-model="showUser" title="个人信息" size="23%">
-    <el-form>
-      <el-form-item label="头像：">
+    <el-descriptions style="height: 100%"
+                     :column="1"
+                     size="large"
+                     border
+    >
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon size="25">
+              <el-icon>
+                <Picture/>
+              </el-icon>
+            </el-icon>
+          </div>
+        </template>
         <el-avatar size="samll" :src="userInfo.userFace"/>
-      </el-form-item>
-      <el-form-item label="用户名：">{{ userInfo.username }}</el-form-item>
-      <el-form-item label="地址：">{{ userInfo.address }}</el-form-item>
-      <el-form-item label="电话号码：">{{ userInfo.phone }}</el-form-item>
-      <el-form-item label="邮箱地址：">{{ userInfo.email }}</el-form-item>
-      <el-form-item label="个性签名：">{{ userInfo.embod }}</el-form-item>
-      <el-form-item label="所属组织：">{{ userInfo.organization.name }}</el-form-item>
-      <el-form-item label="所属角色：">{{ userInfo.role.nameZh }}</el-form-item>
-    </el-form>
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div>
+            <el-icon size="25">
+              <User/>
+            </el-icon>
+          </div>
+        </template>
+        {{ userInfo.username }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div>
+            <el-icon size="25">
+              <Location/>
+            </el-icon>
+          </div>
+        </template>
+        {{ userInfo.address }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon size="25">
+              <iphone/>
+            </el-icon>
+          </div>
+        </template>
+        {{ userInfo.phone }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div>
+            <el-icon size="25">
+              <Promotion/>
+            </el-icon>
+          </div>
+        </template>
+        {{ userInfo.email }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div>
+            <el-icon size="25">
+              <Tickets/>
+            </el-icon>
+          </div>
+        </template>
+        {{ userInfo.embod }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon size="25">
+              <OfficeBuilding/>
+            </el-icon>
+          </div>
+        </template>
+        {{ userInfo.organization.name }}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            <el-icon size="25">
+              <Avatar/>
+            </el-icon>
+          </div>
+        </template>
+        {{ userInfo.role.nameZh }}
+      </el-descriptions-item>
+    </el-descriptions>
+    <p>{{ menu }}</p>
   </el-drawer>
   <el-dialog v-model="showSet" width="30%" title="修改用户密码">
     <template #default>
@@ -239,6 +305,10 @@ import * as echarts from 'echarts';
 import {ElMessage, ElMessageBox} from "element-plus";
 import router from "@/router"
 import {Delete} from "@element-plus/icons-vue";
+import store from "@/store";
+import menu_request from "@/api/menu";
+import {mapState} from "vuex";
+import permissions_request from "@/api/permissions";
 
 
 export default {
@@ -246,6 +316,7 @@ export default {
   components: {Delete},
   data() {
     return {
+      isCollapse: false,//menu是否展开
       showMessage: false,
       newPassword: null,
       showUser: false,
@@ -256,8 +327,11 @@ export default {
       messCount: 0, // 未读消息数量
       replyUser: null, // 回复的用户
       messages: [],
-      Tags: ['首页']
     }
+  },
+  computed: {
+    ...mapState(["menu"]),
+    ...mapState(["Tags"])
   },
   methods: {
     // 退出登录
@@ -289,14 +363,6 @@ export default {
             })
           })
     },
-    show() {
-      this.showUser = true;
-    }
-    ,
-    showSetting() {
-      this.showSet = true;
-    }
-    ,
     // 取消修改密码
     cancel() {
       this.userInfo.password = null;
@@ -350,8 +416,9 @@ export default {
       }
     },
     // 跳到关于项目介绍
-    about() {
-      router.push('/about');
+    toHome() {
+      router.push('/home');
+      this.initCount();
     },
     // 全屏显示
     fill() {
@@ -366,39 +433,37 @@ export default {
     initCount() {
       request.getCount().then(resp => {
         if (resp.data != null) {
-          // 基于准备好的dom，初始化echarts实例
-          let myChart = echarts.init(document.getElementById('main'));
-          window.addEventListener('resize', function () {
-            myChart.resize({
-              width: 800,
-              height: 300
-            });
-          });
-          const option = {
-            tooltip: {
-              trigger: 'axis'
+          const date = Object.values(resp.data.numbers);
+          date.unshift('日期')
+          const count = Object.values(resp.data.count);
+          count.unshift('项目访问人数')
+          let chartDom = document.getElementById('main');
+          let myChart = echarts.init(chartDom);
+          let option;
+          option = {
+            legend: {},
+            tooltip: {},
+            dataset: {
+              source: [
+                date,
+                count
+              ]
             },
-            xAxis: {
-              type: 'category',
-              name: '日期',
-              boundaryGap: false,
-              data: resp.data.numbers
-            },
-            yAxis: {
-              type: 'value',
-              name: '访问人数',
-            },
+            xAxis: [
+              {type: 'category', gridIndex: 0},
+              {type: 'category', gridIndex: 1}
+            ],
+            yAxis: [{gridIndex: 0}, {gridIndex: 1}],
+            grid: [{bottom: '55%'}, {top: '55%'}],
             series: [
-              {
-                name: '登录人数',
-                type: 'line',
-                smooth: true,
-                data: resp.data.count
-              },
+              {type: 'bar', seriesLayoutBy: 'row'},
+              {type: 'bar', xAxisIndex: 1, yAxisIndex: 1},
+              {type: 'bar', xAxisIndex: 1, yAxisIndex: 1},
+              {type: 'bar', xAxisIndex: 1, yAxisIndex: 1},
+              {type: 'bar', xAxisIndex: 1, yAxisIndex: 1}
             ]
           };
-          // 绘制图表
-          myChart.setOption(option);
+          option && myChart.setOption(option);
         }
       })
     }, // 切换tag
@@ -408,11 +473,8 @@ export default {
         this.initCount();
       } else {
         let routes = this.$router.options.routes;
-        console.log(routes);
         for (let i = 0; i < routes[1].children.length; i++) {
-          console.log(routes[1].children[i].name);
           if (routes[1].children[i].name === tag) {
-            console.log(tag);
             router.push(routes[1].children[i].path);
             break;
           }
@@ -421,12 +483,13 @@ export default {
     },
     // 关闭tag
     handleClose(tag) {
-      this.Tags = this.Tags.filter(item => item !== tag)
+      let Tag = this.Tags.filter(item => item !== tag);
+      store.commit("initTag",Tag)
       if (this.Tags.length <= 1) {
         this.initCount();
         router.push('/home');
       } else {
-        this.$router.go(-1);
+        router.go(-1);
       }
     },
     // 消息初始化
@@ -435,8 +498,6 @@ export default {
       request.MessageInit(JSON.parse(sessionStorage.getItem("user")).id).then(resp => {
         if (resp) {
           this.messages = resp.data;
-          // 将要删除的消息的id在返回值中去除
-          // this.messages = resp.data.filter(item => !this.delete.includes(item.id));
           this.messCount = 0;
           for (let i = 0; i < resp.data.length; i++) {
             if (resp.data[i].state === false && resp.data[i].send_id !== this.userInfo.id) {
@@ -504,7 +565,20 @@ export default {
         this.users = resp.data;
       }
     });
+    menu_request.getMenusByRole(JSON.parse(sessionStorage.getItem("user")).role.id).then(resp => {
+      store.commit("initMenu", resp.data);
+    });
     this.initMess();
+    // 获取权限
+    permissions_request.getPermissionByRole(JSON.parse(sessionStorage.getItem("user")).role.id).then(resp => {
+      if (resp.data != null) {
+        const permissions = [];
+        for (let i = 0; i < resp.data.length; i++) {
+          permissions.push(resp.data[i].name);
+        }
+        store.commit('initPermission', permissions);
+      }
+    })
   },
 }
 </script>

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serial;
+
 /*
 用户角色关联表实体类
  */
@@ -13,6 +15,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class MenuRole {
+    @Serial
+    private static final long serialVersionUID=1L;
     /*
     用户角色关联表主键
      */
