@@ -4,19 +4,16 @@ import {ElMessage} from 'element-plus';
 import {getCookie} from "@/util/cookieUtil";
 
 const errorHandle = (status) => {
-    switch (status) {
+    switch (status.code) {
         case 400:
             ElMessage.error("语义有误");
             break;
-        case 401:
-            ElMessage.error("请进行登录授权");
-            break;
         case 403:
+            router.replace('/');
             break;
         case 404:
             break;
         case 500:
-            ElMessage.error("服务器遇到意外");
             break;
         case 502:
             ElMessage.error("服务器无响应");
@@ -34,35 +31,35 @@ const instance = axios.create({
     headers: {'Content-Type': 'application/json'}
 })
 
-// 请求拦截器(发送请求之前)
+
 instance.interceptors.request.use(
     config => {
-        if (JSON.parse(sessionStorage.getItem("user")) != null) {
+        if (sessionStorage.getItem("user") !== null) {
             let user = JSON.parse(sessionStorage.getItem("user"));
             let token = getCookie(user.username + 'token');
-            // 当token不为null时，将其添加到请求头里面
-            if (token == null) {
-                ElMessage.error("会话过期，请重新登录");
-                sessionStorage.removeItem("user");
-                router.push('/');
-            }else{
-                config.headers["Authorization"] = token;
-            }
+            config.headers["Authorization"] = token;
         }
-        return config
+        return config;
     },
     error => {
-        errorHandle(error.response.status)
-        return Promise.reject(error)
+        errorHandle(error.response.status);
+        return Promise.reject(error);
+    }
+);
+
+
+
+instance.interceptors.response.use(
+    success => {
+        if(success.data.hasOwnProperty("code")){
+            errorHandle(success.data);
+        }
+        return success;
+    },
+    error => {
+        return Promise.reject(error);
     }
 )
-
-// 响应
-instance.interceptors.response.use(function (response) {
-    return response;
-}, function (error) {
-    return Promise.reject(error);
-});
 
 // 导出网络实例
 export default instance;

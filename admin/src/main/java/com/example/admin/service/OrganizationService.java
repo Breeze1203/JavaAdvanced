@@ -3,7 +3,6 @@ package com.example.admin.service;
 import com.example.admin.mapper.OrganizationMapper;
 import com.example.admin.model.Organization;
 import com.example.admin.model.User;
-import com.example.admin.util.StatusUtil;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +16,10 @@ public class OrganizationService implements OrganizationMapper{
     @Resource(name = "UserService")
     private UserService userService;
 
-    /*
-    查询所有组织
-     */
-    public List<Organization> getAll(Integer parentId){
-        return organizationMapper.getAll(parentId);
-    }
 
     /*
-    根据id删除组织
-     */
+        根据id删除组织
+         */
     public Long deleteOrgById(Integer id){
         // 先查看该节点下是否有用户，如果有则无法删除
         List<User> userByOid = userService.getUserByoId(id);
@@ -57,5 +50,18 @@ public class OrganizationService implements OrganizationMapper{
     @Override
     public Organization getOrganizationById(Integer id) {
         return organizationMapper.getOrganizationById(id);
+    }
+
+    /*
+    树状展示所有组织
+     */
+    public Organization getTree() {
+        List<Organization> allOrganization = organizationMapper.getAllOrganization();
+        return Organization.covertToTree(allOrganization);
+    }
+
+    @Override
+    public Integer updateOrganization(Organization organization) {
+        return organizationMapper.updateOrganization(organization);
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository(value = "OrganizationMapper")
 public interface OrganizationMapper {
-    List<Organization> getAll(@Param("parentId") Integer parentId);
+
 
     /*
     根据id删除组织
@@ -29,4 +29,6 @@ public interface OrganizationMapper {
     根据id查询组织
      */
     Organization getOrganizationById(@Param("id") Integer id);
+
+    Integer updateOrganization(Organization organization);
 }

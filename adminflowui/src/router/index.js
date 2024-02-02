@@ -9,6 +9,8 @@ import About from "@/components/pub/About.vue";
 import MenuSet from "@/components/set/MenuSet.vue";
 import Department from "@/components/info/Department.vue";
 import Position from "@/components/info/Position.vue";
+import {ElMessage} from "element-plus";
+import {getCookie} from "@/util/cookieUtil";
 
 const routes = [
     {
@@ -16,15 +18,15 @@ const routes = [
         name: 'Login',
         component: Login
     },
-   {
+    {
         path: '/home',
         name: 'Home',
         component: Home,
-        children:[
+        children: [
             {
-                path:'/log',
-                name:'操作日志',
-                component:LogSet
+                path: '/log',
+                name: '操作日志',
+                component: LogSet
             },
             {
                 path: '/system/user',
@@ -80,5 +82,26 @@ const router = createRouter({
     history: createWebHashHistory(process.env.BASE_URL),
     routes
 })
+
+router.beforeEach((to, from, next) => {
+    if (to.path === '/') {
+        next();
+    } else {
+        const user = sessionStorage.getItem('user');
+        if (user != null) {
+            const token = getCookie(JSON.parse(user).username + 'token');
+            if (token != null && token !=='') {
+                next();
+            } else {
+                ElMessage.error('会话过期，请重新登录');
+                next({name: 'Login'});
+            }
+        } else {
+            ElMessage.info('尚未登录，请登录');
+            next({name: 'Login'});
+        }
+    }
+});
+
 
 export default router

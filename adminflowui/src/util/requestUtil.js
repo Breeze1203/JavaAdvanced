@@ -82,24 +82,6 @@ const request = {
             data: user
         })
     },
-    // 删除节点
-    deleteNode(id) {
-        return instance({
-            method: 'get',
-            url: '/Organization/deleteById',
-            params: {
-                id: id
-            }
-        })
-    },
-    // 添加节点
-    addNode(organization) {
-        return instance({
-            method: 'post',
-            url: '/Organization/addOrganization',
-            data: organization
-        })
-    },
     // 修改用户
     updateUser(user) {
         return instance({
@@ -130,13 +112,6 @@ const request = {
                 'Content-Type': 'application/json'
             },
             data: user
-        })
-    },
-    // 获取所有节点
-    getAllOrganization() {
-        return instance({
-            method: 'get',
-            url: '/Organization/getAllOrganization',
         })
     },
     // 获取所有角色

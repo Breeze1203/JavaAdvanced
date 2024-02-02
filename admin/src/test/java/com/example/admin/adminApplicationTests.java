@@ -357,12 +357,35 @@ class adminApplicationTests {
 
     @Resource(name = "MenuMapper")
     private MenuMapper mapper;
+
+    @Resource(name = "UserMapper")
+    private UserMapper userMapper;
     @Test
     void getMenu(){
-        Menu menu = new Menu();
-        menu.setMenu_name("用户");
-        List<Menu> menuByCondition = mapper.getMenuByCondition(menu);
-        System.out.println(menuByCondition);
+//        Menu menu = new Menu();
+//        menu.setMenu_name("用户");
+//        List<Menu> menuByCondition = mapper.getMenuByCondition(menu);
+//        System.out.println(menuByCondition);
+        User userById = userMapper.getUserById(1);
+        System.out.println(userById);
     }
+
+    @Test
+    void getTree(){
+        List<Organization> list = Arrays.asList(
+                new Organization(1, "总部", -1),
+                new Organization(2, "财务部", 1),
+                new Organization(3, "人力资源部", 1),
+                new Organization(4, "市场部", 1),
+                new Organization(5, "技术部", 1),
+                new Organization(6, "研发部", 5),
+                new Organization(7, "测试部", 6)
+        );
+
+        Organization root = Organization.covertToTree(list);
+        System.out.println(root);
+    }
+
+
 
 }

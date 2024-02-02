@@ -242,7 +242,7 @@ public class UserController {
     @Operation(method = "get",summary = "根据用户id获取用户信息接口")
     @Parameter(name = "id",required = true,description = "用户id")
     @GetMapping("/getUserById")
-    public User updatePassword(@RequestParam("id") Integer id) {
+    public User getUserById(@RequestParam("id") Integer id) {
         return userService.getUserById(id);
     }
 
@@ -287,14 +287,14 @@ public class UserController {
         // 根据当前登录成功用户不同将用户信息变成token存储到redis中 因为用户id唯一
         String token_name = u.getId() + "token";
         if (operations.get(token_name) == null) {
-            redisTemplate.opsForValue().set(token_name, token,15,TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(token_name, token,25,TimeUnit.MINUTES);
         } else {
             return new StatusUtil(StatusMessage.LOGIN_EXISTS.getMessage(), 500, null);
         }
         // 将用户信息生成token返回给前端
         Cookie c3 = new Cookie(u.getUsername() + "token", token);
-        // 设置15分钟，15分钟后用户重新登录
-        c3.setMaxAge(15 * 60);
+        // 设置25分钟，25分钟后用户重新登录
+        c3.setMaxAge(25 * 60);
         c3.setPath("/");
         c3.setDomain("localhost");
         response.addCookie(c3);

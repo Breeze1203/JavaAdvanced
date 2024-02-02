@@ -76,7 +76,7 @@
             <p style="font-weight: bolder;color: white">{{ userInfo.username }}</p>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item @click="this.showUser = true">
+                <el-dropdown-item @click="showUser=true">
                   <el-icon>
                     <User/>
                   </el-icon>
@@ -242,7 +242,6 @@
         {{ userInfo.role.nameZh }}
       </el-descriptions-item>
     </el-descriptions>
-    <p>{{ menu }}</p>
   </el-drawer>
   <el-dialog v-model="showSet" width="30%" title="修改用户密码">
     <template #default>
@@ -311,6 +310,8 @@ import {mapState} from "vuex";
 import permissions_request from "@/api/permissions";
 
 
+
+
 export default {
   name: "Home",
   components: {Delete},
@@ -321,7 +322,7 @@ export default {
       newPassword: null,
       showUser: false,
       showSet: false,
-      userInfo: JSON.parse(sessionStorage.getItem("user")),
+      userInfo:JSON.parse(sessionStorage.getItem("user")),
       users: [],// 除当前登录用户外的所有用户
       content: null,
       messCount: 0, // 未读消息数量
@@ -331,7 +332,7 @@ export default {
   },
   computed: {
     ...mapState(["menu"]),
-    ...mapState(["Tags"])
+    ...mapState(["Tags"]),
   },
   methods: {
     // 退出登录
@@ -555,7 +556,8 @@ export default {
           ElMessage.error(resp.data.message);
         }
       })
-    }
+    },
+
   },
   mounted() {
     // 折线图初始化
