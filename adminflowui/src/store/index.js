@@ -5,7 +5,6 @@ const store=createStore({
     menu:[],
     Tags:[],
     permissions_data:[],
-    user:null,
   },
   getters: {
     // 对数据进行过滤
@@ -20,9 +19,6 @@ const store=createStore({
     initPermission(state,permission){
       state.permissions_data=permission;
     },
-    getUser(state,user){
-      state.user=user;
-    }
   },
   actions: {
   },

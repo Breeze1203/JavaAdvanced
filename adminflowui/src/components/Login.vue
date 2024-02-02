@@ -55,6 +55,7 @@ import request from "@/util/requestUtil";
 import {ElMessage} from 'element-plus';
 import {getCookie} from "@/util/cookieUtil";
 import router from "@/router";
+import store from "@/store";
 
 
 export default {

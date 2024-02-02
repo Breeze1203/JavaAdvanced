@@ -29,7 +29,7 @@ public class CheckAuthorizationInterceptor implements HandlerInterceptor {
             return true;
         }
         PrintWriter out = response.getWriter();
-        StatusUtil statusUtil = new StatusUtil(StatusMessage.UNAUTHORIZED_ACCESS.getMessage(), 403, null);
+        StatusUtil statusUtil = new StatusUtil("请登录授权", 403, null);
         out.write(new ObjectMapper().writeValueAsString(statusUtil));
         out.flush(); //刷新输出流
         out.close(); // 关闭输出流

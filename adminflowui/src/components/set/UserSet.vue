@@ -196,6 +196,7 @@ import request from "@/util/requestUtil";
 import {ElMessage, ElMessageBox} from "element-plus";
 import {Unlock} from "@element-plus/icons-vue";
 import {mapState} from "vuex";
+import organization_request from "@/api/organization";
 
 
 export default {
@@ -249,7 +250,7 @@ export default {
   },
   methods: {
     initAllOrganization() {
-      request.getAllOrganization().then(resp => {
+      organization_request.getAllOrganization().then(resp => {
             if (resp.data != null) {
               this.organization = resp.data;
             }
