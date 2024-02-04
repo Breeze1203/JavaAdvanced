@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springsecurity.mapper.UserMapper">
+    <resultMap id="BaseResult" type="com.example.springsecurity.model.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="passWord" property="passWord" jdbcType="VARCHAR"/>
+        <result column="isAccountNonExpired" property="isAccountNonExpired" jdbcType="BOOLEAN"/>
+        <result column="isAccountNonLocked" property="isAccountNonLocked" jdbcType="BOOLEAN"/>
+        <result column="isCredentialsNonExpired" property="isCredentialsNonExpired" jdbcType="BOOLEAN"/>
+        <result column="isEnabled" property="isEnabled" jdbcType="BOOLEAN"/>
+    </resultMap>
+    <select id="getUserByUserName" parameterType="java.lang.String" resultMap="BaseResult">
+        select * from user where userName=#{userName}
+    </select>
+</mapper>

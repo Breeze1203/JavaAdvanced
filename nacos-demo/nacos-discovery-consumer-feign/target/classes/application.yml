@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  application:
+    name: nacos-discovery-consumer-openFeign
+server:
+  port: 8852

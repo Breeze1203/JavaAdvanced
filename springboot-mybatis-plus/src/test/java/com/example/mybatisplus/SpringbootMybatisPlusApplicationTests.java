@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 @SpringBootTest
 class SpringbootMybatisPlusApplicationTests {
@@ -32,6 +33,7 @@ class SpringbootMybatisPlusApplicationTests {
 
     @Test
     void select() {
+        
         /*
         查询参数为null
          */
