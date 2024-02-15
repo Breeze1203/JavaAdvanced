@@ -138,10 +138,24 @@
         where u.id = #{id}
     </select>
     <!--    根据手机号查询用户-->
-    <select id="getUserByPhone" parameterType="java.lang.Long">
-        select *
-        from user
-        where phone = #{phone}
+    <select id="getUserByPhone" parameterType="java.lang.Long" resultMap="result">
+        SELECT u.id,
+               u.address,
+               u.username,
+               u.password,
+               u.userFace,
+               u.phone,
+               u.embod,
+               u.email,
+               u.state,
+               o.name   AS oname,
+               r.id     as role_id,
+               r.nameZh as nameZh
+        FROM user AS u
+                 LEFT JOIN organization AS o ON u.organizationId = o.id
+                 LEFT JOIN user_role AS ur on u.id = ur.user_id
+                 LEFT JOIN role AS r on ur.role_id = r.id
+        where u.phone = #{phone}
     </select>
     <!--    私信功能，获取除当前登录用户外的所有用户-->
     <select id="getUserOutLogin" parameterType="java.lang.Integer">
