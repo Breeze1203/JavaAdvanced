@@ -3,12 +3,11 @@
 <mapper namespace="com.example.mybatisplus.mapper.UserDao">
     <resultMap id="BaseResult" type="com.example.mybatisplus.model.User">
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="name" property="name" jdbcType="VARCHAR"/>
-        <result column="age" property="age" jdbcType="INTEGER"/>
-        <result column="date" property="date" jdbcType="DATE"/>
-        <result column="departmentId" property="departmentId" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="rid" property="rid" jdbcType="INTEGER"/>
     </resultMap>
     <select id="getUserById" resultMap="BaseResult">
-        select * from user where departmentId=-1
+        select * from user where id=1
     </select>
 </mapper>

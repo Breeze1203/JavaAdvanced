@@ -1,2 +1,0 @@
-vedio filter=lfs diff=lfs merge=lfs -text
-vedio/admin.mov filter=lfs diff=lfs merge=lfs -text

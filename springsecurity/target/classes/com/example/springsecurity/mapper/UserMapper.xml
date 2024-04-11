@@ -11,6 +11,6 @@
         <result column="isEnabled" property="isEnabled" jdbcType="BOOLEAN"/>
     </resultMap>
     <select id="getUserByUserName" parameterType="java.lang.String" resultMap="BaseResult">
-        select * from user where userName=#{userName}
+        select * from User where userName=#{userName}
     </select>
 </mapper>

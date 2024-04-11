@@ -13,8 +13,7 @@ import org.apache.ibatis.type.JdbcType;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+
 
 @ToString
 @AllArgsConstructor
@@ -27,12 +26,10 @@ public class User implements Serializable {
 
     @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
-    @TableField(value = "name",jdbcType = JdbcType.VARCHAR)
-    private String name;
-    @TableField(value = "age",jdbcType = JdbcType.INTEGER)
-    private Integer age;
-    @TableField(value = "date",jdbcType = JdbcType.DATE)
-    private Date date;
-    @TableField(value = "departmentId",jdbcType = JdbcType.INTEGER)
-    private Integer departmentId;
+    @TableField(value = "username",jdbcType = JdbcType.VARCHAR)
+    private String username;
+    @TableField(value = "email",jdbcType = JdbcType.VARCHAR)
+    private String email;
+    @TableField(value = "rid",jdbcType = JdbcType.INTEGER)
+    private Integer rid;
 }
