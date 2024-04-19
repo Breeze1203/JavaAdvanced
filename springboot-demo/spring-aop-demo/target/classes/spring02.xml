@@ -1,0 +1,34 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       https://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+        <!-- 开启自动化扫描 -->
+        <context:component-scan base-package="com.xxxx"/>
+
+        <!-- aop 相关配置 -->
+        <aop:config>
+                <!-- aop 切面 -->
+                <aop:aspect ref="logCut02">
+                        <!-- 定义 aop 切入点 -->
+                        <aop:pointcut id="cut" expression="execution(* com.xxxx.service..*.*(..))"/>
+                        <!-- 配置前置通知，设置前置通知对应的方法名及切入点 -->
+                        <aop:before method="before" pointcut-ref="cut"/>
+                        <!-- 配置返回通知，设置返回通知对应的方法名及切入点 -->
+                        <aop:after-returning method="afterReturn" pointcut-ref="cut"/>
+                        <!-- 配置最终通知，设置最终通知对应的方法名及切入点 -->
+                        <aop:after method="after" pointcut-ref="cut"/>
+                        <!-- 配置异常通知，设置异常通知对应的方法名及切入点 -->
+                        <aop:after-throwing method="afterThrow" pointcut-ref="cut" throwing="e" />
+                        <!-- 配置环绕通知，设置环绕通知对应的方法名及切入点 -->
+                        <aop:around method="around" pointcut-ref="cut"/>
+                </aop:aspect>
+        </aop:config>
+
+</beans>
