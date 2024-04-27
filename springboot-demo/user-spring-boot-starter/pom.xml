@@ -34,7 +34,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.pt.Main</mainClass>
+                            <mainClass>org.pt.SpringBootOauthApplication</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
