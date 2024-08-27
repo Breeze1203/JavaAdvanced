@@ -33,6 +33,7 @@ public class WebConfig implements WebMvcConfigurer {
         path.add("/swagger-ui/**");
         path.add("/swagger-resources/**");
         path.add("/v3/api-docs/**");
+        path.add("/getToken");
         registry.addInterceptor(checkAuthorizationInterceptor)
                 .addPathPatterns("/**")   // 所有路径都被拦截
                 .excludePathPatterns(path).order(1);

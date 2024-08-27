@@ -25,6 +25,9 @@
                 <el-checkbox id="check" v-model="remember"><p style="font-size: 15px;font-weight: 700">
                   记住我</p></el-checkbox>
               </el-form-item>
+              <el-form-item size="small"><img @click="loginWithGitHub" src="../assets/github-mark.png" width="15" height="15">
+                Authorize with GitHub
+              </el-form-item>
             </el-form>
             <el-button @click="loginByName" class="loginButton">Login</el-button>
           </el-tab-pane>
@@ -41,6 +44,10 @@
                 <el-checkbox id="check" v-model="rememberWithPhone"><p style="font-size: 15px;font-weight: 700">
                   记住我</p></el-checkbox>
               </el-form-item>
+              <el-form-item size="small"><img @click="loginWithGitHub" src="../assets/github-mark.png" width="18"
+                                              height="18">
+                Authorize with GitHub
+              </el-form-item>
             </el-form>
             <el-button @click="loginByPhone" class="loginButton">Login</el-button>
           </el-tab-pane>
@@ -55,7 +62,7 @@ import request from "@/util/requestUtil";
 import {ElMessage} from 'element-plus';
 import {getCookie} from "@/util/cookieUtil";
 import router from "@/router";
-import store from "@/store";
+import {useRouter} from "vue-router";
 
 
 export default {
@@ -108,17 +115,24 @@ export default {
         return;
       }
       request.loginByPhone(this.phoneNumber, this.verificationCode, this.rememberWithPhone).then(resp => {
-        if(resp.data.code===200){
+        if (resp.data.code === 200) {
           // 获取当前用户信息
           let user = JSON.stringify(resp.data.user);
           sessionStorage.setItem("user", user);
           router.push('/home');
-          this.phoneNumber=null;
-          this.verificationCode=null;
-        }else {
+          this.phoneNumber = null;
+          this.verificationCode = null;
+        } else {
           ElMessage.error(resp.data.message);
         }
       })
+    },
+    loginWithGitHub() {
+      const clientId = 'Ov23lixOu2dURyaQJyJk';
+      const redirectUri = 'http://localhost:8080/go_auth';
+      const scope = 'user:email,read:user';
+      const authorizationUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}`;
+      window.location.href = authorizationUrl;
     }
     ,//获取验证码
     getCode() {
@@ -224,7 +238,7 @@ export default {
   float: right;
   width: 50%;
   height: 100%;
-  margin-right: 15px; /* 调整左右两个子元素之间的间距 */
+  margin-right: 10px; /* 调整左右两个子元素之间的间距 */
   top: 0;
 }
 
@@ -258,7 +272,7 @@ export default {
 
 #login-box {
   width: 50%;
-  height: 370px;
+  height: 400px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: space-between;

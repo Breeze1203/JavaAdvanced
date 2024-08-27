@@ -18,7 +18,7 @@ public class SyncProducer {
                 DefaultMQProducer("please_rename_unique_group_name");
 
         //指定nameserver地址
-        producer.setNamesrvAddr("localhost:9876");
+        producer.setNamesrvAddr("47.113.114.112:9876");
 
         //启动生产者示例
         producer.start();

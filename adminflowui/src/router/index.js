@@ -9,6 +9,7 @@ import About from "@/components/pub/About.vue";
 import MenuSet from "@/components/set/MenuSet.vue";
 import Department from "@/components/info/Department.vue";
 import Position from "@/components/info/Position.vue";
+import OAuthCallback from "@/components/OAuthCallback.vue";
 import {ElMessage} from "element-plus";
 import {getCookie} from "@/util/cookieUtil";
 
@@ -17,6 +18,11 @@ const routes = [
         path: '/',
         name: 'Login',
         component: Login
+    },
+    {
+        path: '/gh_auth',
+        name: 'LoginAuth',
+        component: OAuthCallback
     },
     {
         path: '/home',

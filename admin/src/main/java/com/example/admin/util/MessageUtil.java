@@ -6,9 +6,9 @@ import com.aliyun.teaopenapi.models.Config;
 import com.example.admin.model.User;
 
 public class MessageUtil {
-    private static final String key_ID="LTAI5tFszS2AtLqKqPFwdpq9";
+    private static final String key_ID="LTAI5tDmaE5x1rRacpr58yML";
 
-    private static final String Key_Secret="yC4xvTPqZA9XBHVZ1PINspyqF9xuMU";
+    private static final String Key_Secret="jMsxELSFbEyEve4TK2uxVgCucVvBQC";
 
     private static final String point="dysmsapi.aliyuncs.com";
     // 发送短信提示密码更改

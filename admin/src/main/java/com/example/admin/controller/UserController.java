@@ -15,10 +15,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +30,13 @@ import java.util.regex.Pattern;
 @Tag(name = "用户的请求模块", description = "用户的请求接口")
 @RestController
 public class UserController {
+
+    @Value("${github.clientId}")
+    private String clientId;
+
+    @Value("${github.clientSecret}")
+    private String clientSecret;
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
@@ -337,4 +347,25 @@ public class UserController {
     }
 
 
+    @GetMapping("/getToken")
+    public String githubCallback(@RequestParam("code") String code) {
+        String tokenUrl = "https://github.com/login/oauth/access_token";
+        String requestBody = "client_id=" + clientId + "&client_secret=" + clientSecret + "&code=" + code;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange(tokenUrl, HttpMethod.POST, requestEntity, String.class);
+        if (response.getStatusCode() == HttpStatus.OK) {
+            // Extract access token from response body
+            String[] parts = response.getBody().split("&");
+            for (String part : parts) {
+                if (part.startsWith("access_token")) {
+                    String[] split = part.split("=");
+                    return split[1];
+                }
+            }
+        }
+        return null;
+    }
 }

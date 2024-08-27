@@ -25,8 +25,16 @@ const request = {
                 remember: remember
             }
         })
-    }
-    ,
+    },
+    oauth(code){
+        return instance({
+            method: 'get',
+            url: '/getToken',
+            params: {
+                code:code,
+            }
+        })
+    },
     // 退出登录
     loginOut(id) {
         return instance({
