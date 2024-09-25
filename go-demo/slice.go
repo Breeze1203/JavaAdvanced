@@ -75,4 +75,14 @@ func main() {
 	newSliceE := make([]int, 3)
 	copy(newSliceE, sliceD[1:4])
 	fmt.Println("newSliceE", newSliceE)
+
+	a := [...]int{1, 2, 3, 4, 5, 7, 8, 9}
+	s := a[2:6:8]
+	//切片操作 a[start:end:cap] 包含三个参数：
+	//start：切片开始的索引（包含该索引对应的元素）。
+	//end：切片结束的索引（不包含该索引对应的元素）。
+	//cap：切片的容量，即从开始索引到原数组末尾的元素数量
+	fmt.Println(s)
+	fmt.Println(len(s), cap(s))
+	// 2  6
 }
