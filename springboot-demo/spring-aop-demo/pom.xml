@@ -8,7 +8,7 @@
   <artifactId>spring-aop-demo</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>spring05</name>
+  <name>spring-aop-demo</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
