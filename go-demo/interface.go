@@ -36,3 +36,24 @@ type Bird struct {
 func (b *Bird) MakeSound() {
 	fmt.Println(b.Name, "says: Tweet!")
 }
+
+type People interface {
+	Speak(string) string
+}
+
+type student struct{}
+
+func (stu *student) Speak(think string) (talk string) {
+	if think == "sb" {
+		talk = "你是个大帅比"
+	} else {
+		talk = "您好"
+	}
+	return
+}
+
+func main() {
+	var peo People = &student{}
+	think := "bitch"
+	fmt.Println(peo.Speak(think))
+}
