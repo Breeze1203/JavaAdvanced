@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-type Person struct {
+type Person1 struct {
 	Name  string
 	Power int
 }
@@ -15,7 +15,7 @@ type Student struct {
 
 // 声明和初始化
 func main() {
-	goku := &Person{
+	goku := &Person1{
 		Name:  "PengTao",
 		Power: 22,
 	}
@@ -38,7 +38,7 @@ func main() {
 	fmt.Println(newStudent.Name)
 }
 
-func Super(s *Person) {
+func Super(s *Person1) {
 	s.Power += 10000
 }
 

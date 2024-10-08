@@ -58,7 +58,7 @@ func main3() {
 	// 创建管道
 	output1 := make(chan string, 10)
 	// 子协程写数据
-	go write(output1)
+	go write2(output1)
 	// 取数据
 	for s := range output1 {
 		fmt.Println("res:", s)
@@ -66,7 +66,7 @@ func main3() {
 	}
 }
 
-func write(ch chan string) {
+func write2(ch chan string) {
 	for {
 		select {
 		// 写数据
