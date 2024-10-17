@@ -39,4 +39,10 @@ public class Book implements Cloneable{
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
+    public void change(String name, Long price){
+        System.out.println("change"+this.hashCode());
+        this.name=name;
+        this.price=price;
+    }
 }
