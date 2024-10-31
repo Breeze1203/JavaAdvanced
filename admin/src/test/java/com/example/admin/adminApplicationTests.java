@@ -15,9 +15,14 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.BootstrapRegistryInitializer;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.*;
+import org.springframework.util.ClassUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -366,8 +371,20 @@ class adminApplicationTests {
 //        menu.setMenu_name("用户");
 //        List<Menu> menuByCondition = mapper.getMenuByCondition(menu);
 //        System.out.println(menuByCondition);
-        User userById = userMapper.getUserById(1);
-        System.out.println(userById);
+//        User userById = userMapper.getUserById(1);
+//        System.out.println(userById);
+//        SpringApplication application = new SpringApplication();
+//        SpringFactoriesLoader.ArgumentResolver argumentResolver =
+//                SpringFactoriesLoader.ArgumentResolver.of(SpringApplication.class,application);
+//        String[] args={"a","b","c"};
+//        SpringFactoriesLoader.ArgumentResolver and = argumentResolver.and(String[].class, args);
+        ClassLoader loader = ClassUtils.getDefaultClassLoader();
+        System.out.println(loader.getName());
+        List<BootstrapRegistryInitializer> load = SpringFactoriesLoader.forDefaultResourceLocation(loader).load(BootstrapRegistryInitializer.class, (SpringFactoriesLoader.ArgumentResolver) null);
+        System.out.println(load.size());
+        for (BootstrapRegistryInitializer b:load) {
+            System.out.println(b.toString());
+        }
     }
 
     @Test
