@@ -34,7 +34,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.pt.SpringBootOauthApplication</mainClass>
+                            <mainClass>com.trip.paygateway.infrastructure.SpringBootOauthApplication</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

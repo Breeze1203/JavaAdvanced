@@ -1,9 +1,14 @@
 package org.pt.thread.sync;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public class AccountingSync implements Runnable{
+    private ReentrantLock lock=new ReentrantLock();
     static int i=0;
     public synchronized void increase(){
+        //lock.lock();
         i++;
+        //lock.unlock();
     }
     @Override
     public void run() {

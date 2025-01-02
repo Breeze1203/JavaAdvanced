@@ -13,6 +13,7 @@
         <module>spring-boot-oAuth2</module>
         <module>ExcelDemo</module>
         <module>webscoket-netty</module>
+<!--        <module>wechatpay</module>-->
     </modules>
 
     <properties>

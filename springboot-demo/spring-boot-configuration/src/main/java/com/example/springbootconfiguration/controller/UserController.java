@@ -2,8 +2,8 @@ package com.example.springbootconfiguration.controller;
 
 
 import jakarta.annotation.Resource;
-import org.pt.config.User;
-import org.pt.service.UserService;
+import com.trip.paygateway.infrastructure.config.User;
+import com.trip.paygateway.infrastructure.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
