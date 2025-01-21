@@ -1,3 +1,3 @@
-org/pt/service/UserService.class
-org/pt/config/UserAutoConfiguration.class
-org/pt/config/User.class
+com/trip/paygateway/infrastructure/service/UserService.class
+com/trip/paygateway/infrastructure/config/User.class
+com/trip/paygateway/infrastructure/config/UserAutoConfiguration.class

@@ -2,11 +2,15 @@ package com.trip.paygateway.infrastructure.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.Date;
+
 @ConfigurationProperties(prefix = "user")
 public class User {
     private String name;
     private String email;
     private Integer age;
+
+    private Date date;
 
     public String getName() {
         return name;
@@ -32,12 +36,21 @@ public class User {
         this.age = age;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", age=" + age +
+                ", date=" + date +
                 '}';
     }
 }

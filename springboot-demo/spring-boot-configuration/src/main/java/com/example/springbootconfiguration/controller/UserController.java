@@ -7,6 +7,8 @@ import com.trip.paygateway.infrastructure.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @RestController
 public class UserController {
 
@@ -18,8 +20,7 @@ public class UserController {
 
     @GetMapping("/getUser")
     public String getUser(){
-        String s = userService.userInfo();
-        System.out.println(s);
+        user.setDate(new Date());
         return user.toString();
     }
 }
