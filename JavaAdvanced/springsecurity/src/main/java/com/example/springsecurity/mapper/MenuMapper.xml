@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springsecurity.mapper.MenuMapper">
+    <resultMap id="BaseResult" type="com.example.springsecurity.model.Menu">
+        <id property="menu_id" column="m1_id" jdbcType="INTEGER"/>
+        <result property="menu_name" column="m1_name" jdbcType="VARCHAR"/>
+        <result property="parent_id" column="m1_parent_id" jdbcType="INTEGER"/>
+        <result property="path" column="m1_path" jdbcType="VARCHAR"/>
+        <collection property="menus" ofType="com.example.springsecurity.model.Menu">
+            <id property="menu_id" column="m2_id" jdbcType="INTEGER"/>
+            <result property="menu_name" column="m2_nam" jdbcType="VARCHAR"/>
+            <result property="parent_id" column="m2_parent_id" jdbcType="INTEGER"/>
+            <result property="path" column="m2_path" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <select id="getMenuByRole" resultMap="BaseResult">
+        select m1.menu_id   as m1_id,
+               m1.menu_name as m1_name,
+               m1.parent_id as m1_parent_id,
+               m1.path      as m1_path,
+               m2.menu_id   as m2_id,
+               m2.menu_name as m2_name,
+               m2.parent_id as m2_parent_id,
+               m2.path      as m2_path
+        from menu m1
+                 left join menu m2 on m1.menu_id = m2.parent_id
+    </select>
+</mapper>

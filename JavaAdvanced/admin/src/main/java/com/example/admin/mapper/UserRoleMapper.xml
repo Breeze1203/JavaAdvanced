@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.admin.mapper.UserRoleMapper" >
+    <resultMap id="BaseResultMap" type="com.example.admin.model.Urole">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="user_id" jdbcType="INTEGER"/>
+        <result column="role_id" property="role_id" jdbcType="INTEGER"/>
+    </resultMap>
+<!--    根据用户id查询其角色id-->
+    <select id="getRoleByUser" parameterType="java.lang.Integer">
+        select ur.role_id
+        from user_role ur
+                 join user u on u.id = ur.user_id
+        where u.id = #{id}
+    </select>
+<!--    修改用户的角色-->
+    <update id="updateRoleById" parameterType="java.lang.Integer">
+        update user_role set role_id=#{rid} where user_id=#{id}
+    </update>
+<!--    插入角色与权限关联数据-->
+    <insert id="insertRole" parameterType="java.lang.Integer">
+        insert into user_role(user_id,role_id) values (#{id},#{rid})
+    </insert>
+<!--    查看当前用户有没有角色-->
+    <select id="getRole" parameterType="java.lang.Integer">
+        select * from user_role where user_id =#{id}
+    </select>
+<!--    查看当前角色下面有没有用户-->
+    <select id="getUserByRole" parameterType="java.lang.Integer">
+        select * from user_role where role_id=#{rid}
+    </select>
+<!--    删除已删除用户的关联角色-->
+    <delete id="deleteRoleById" parameterType="java.lang.Integer">
+        delete from user_role where user_id =#{id}
+    </delete>
+</mapper>

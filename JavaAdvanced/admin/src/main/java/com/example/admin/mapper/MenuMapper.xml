@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.admin.mapper.MenuMapper">
+    <resultMap id="BaseResult" type="com.example.admin.model.Menu">
+        <id property="menu_id" column="m1_id" jdbcType="INTEGER"/>
+        <result property="menu_name" column="m1_name" jdbcType="VARCHAR"/>
+        <result property="parent_id" column="m1_parent_id" jdbcType="INTEGER"/>
+        <result property="path" column="m1_path" jdbcType="VARCHAR"/>
+        <result property="menu_role" column="m1_menu_role" jdbcType="VARCHAR"/>
+        <result property="icon" column="m1_icon" jdbcType="VARCHAR"/>
+        <collection property="menus" ofType="com.example.admin.model.Menu">
+            <id property="menu_id" column="m2_id" jdbcType="INTEGER"/>
+            <result property="menu_name" column="m2_name" jdbcType="VARCHAR"/>
+            <result property="parent_id" column="m2_parent_id" jdbcType="INTEGER"/>
+            <result property="path" column="m2_path" jdbcType="VARCHAR"/>
+            <result property="menu_role" column="m2_menu_role" jdbcType="VARCHAR"/>
+            <result property="icon" column="m2_icon" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <resultMap id="Result" type="com.example.admin.model.Menu">
+        <id property="menu_id" column="menu_id" jdbcType="INTEGER"/>
+        <result property="menu_name" column="menu_name" jdbcType="VARCHAR"/>
+        <result property="parent_id" column="parent_id" jdbcType="INTEGER"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="menu_role" column="menu_role" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+    </resultMap>
+<!--    获取所有菜单-->
+    <select id="getAllMenus" resultMap="BaseResult">
+        select m1.menu_id   as m1_id,
+               m1.menu_name as m1_name,
+               m1.parent_id as m1_parent_id,
+               m1.path      as m1_path,
+               m1.menu_role as m1_menu_role,
+               m1.icon      as m1_icon,
+               m2.menu_id   as m2_id,
+               m2.menu_name as m2_name,
+               m2.parent_id as m2_parent_id,
+               m2.path      as m2_path,
+               m2.menu_role as m2_menu_role,
+               m2.icon      as m2_icon
+        from menu m1,
+             menu m2
+        where m1.menu_id = m2.parent_id
+    </select>
+<!--    获取一级菜单-->
+    <select id="getParentMenu" resultMap="Result">
+        select * from menu where parent_id=0
+    </select>
+<!--    获取所有菜单图标-->
+    <select id="getIcons">
+        SELECT icon FROM menu WHERE icon IS NOT NULL;
+    </select>
+<!--    根据角色获取菜单列表-->
+    <select id="getMenuByRole" resultMap="BaseResult" parameterType="java.lang.Integer">
+        select m1.menu_id   as m1_id,
+               m1.menu_name as m1_name,
+               m1.parent_id as m1_parent_id,
+               m1.path      as m1_path,
+               m1.menu_role as m1_menu_role,
+               m1.icon      as m1_icon,
+               m2.menu_id   as m2_id,
+               m2.menu_name as m2_name,
+               m2.parent_id as m2_parent_id,
+               m2.path      as m2_path,
+               m2.menu_role as m2_menu_role,
+               m2.icon      as m2_icon
+        from menu m1,
+             menu m2
+                 left join role_menu rm on m2.menu_id = rm.mId
+                 left join role r on r.id = rm.rId
+        where m1.menu_id = m2.parent_id
+          and r.id = #{rId}
+          and m2.menu_role!='按钮'
+        order by m2_id ASC
+    </select>
+<!--    修改菜单信息-->
+    <update id="updateMenuByMenuId" parameterType="com.example.admin.model.Menu">
+        update menu
+        set menu_name=#{menu_name},
+            icon=#{icon}
+        where menu_id = #{menu_id}
+    </update>
+<!--    根据条件查询菜单-->
+    <select id="getMenuByCondition" parameterType="com.example.admin.model.Menu" resultMap="BaseResult">
+        select m1.menu_id as m1_id,
+        m1.menu_name as m1_name,
+        m1.parent_id as m1_parent_id,
+        m1.path as m1_path,
+        m1.menu_role as m1_menu_role,
+        m1.icon as m1_icon,
+        m2.menu_id as m2_id,
+        m2.menu_name as m2_name,
+        m2.parent_id as m2_parent_id,
+        m2.path as m2_path,
+        m2.menu_role as m2_menu_role,
+        m2.icon as m2_icon
+        from menu m1,
+        menu m2
+        <where>
+            m1.menu_id = m2.parent_id
+            <if test="menu_name!=null">
+                And m2.menu_name like CONCAT('%', #{menu_name}, '%')
+            </if>
+            <if test="path!=null">
+                And m2.path like CONCAT('%', #{path}, '%')
+            </if>
+            <if test="parent_id!=null">
+                And m2.parent_id like CONCAT('%', #{parent_id}, '%')
+            </if>
+            <if test="menu_role!=null">
+                And m2.menu_role like CONCAT('%', #{menu_role}, '%')
+            </if>
+            <if test="icon!=null">
+                And m2.icon like CONCAT('%', #{icon}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>

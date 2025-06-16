@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.admin.mapper.MessageMapper">
+    <resultMap id="BaseResult" type="com.example.admin.model.Message">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="send_id" property="send_id" jdbcType="INTEGER"/>
+        <result column="receive_id" property="receive_id" jdbcType="INTEGER"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="time" property="time" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="BOOLEAN"/>
+        <association property="send_user" javaType="com.example.admin.model.User">
+            <result column="sender_username" property="username"/>
+            <result column="sender_userFace" property="userFace"/>
+        </association>
+        <association property="receive_user" javaType="com.example.admin.model.User">
+            <result column="receiver_username" property="username"/>
+            <result column="receiver_userFace" property="userFace"/>
+        </association>
+    </resultMap>
+<!--    获取消息-->
+    <select id="getMessage" resultMap="BaseResult" parameterType="java.util.Map">
+        SELECT message.*,
+               sender.username   AS sender_username,
+               sender.userFace   AS sender_userFace,
+               receiver.username AS receiver_username,
+               receiver.userFace AS receiver_userFace
+        FROM message
+                 LEFT JOIN user AS sender ON message.send_id = sender.id
+                 LEFT JOIN user AS receiver ON message.receive_id = receiver.id
+        WHERE (message.send_id = #{id} OR message.receive_id = #{id})
+        <if test="messageIds!=null">
+            AND message.id NOT IN
+            <foreach collection="messageIds" item="id" open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        ORDER BY message.id DESC
+    </select>
+<!--    插入消息-->
+    <insert id="save" parameterType="com.example.admin.model.Message">
+        insert into message(id, send_id, receive_id, content, time, state) VALUE ( #{id}, #{send_id}, #{receive_id}, #{content}, #{time}, #{state})
+    </insert>
+<!--    修改消息状态-->
+    <update id="upstate" parameterType="java.lang.Integer">
+        update message set state=true where id=#{id}
+    </update>
+</mapper>

@@ -1,0 +1,5 @@
+spring:
+  data:
+    redis:
+      password: 123
+      port: 6379

@@ -1,0 +1,11 @@
+# 临时文件
+*.tmp
+*.log
+*.cache
+
+# Maven / Gradle 编译输出
+target/
+build/
+
+# IDE 配置文件 (例如 IntelliJ IDEA)
+.idea/

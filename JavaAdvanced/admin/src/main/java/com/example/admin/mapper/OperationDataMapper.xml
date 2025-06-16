@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.admin.mapper.OperationDataMapper">
+    <resultMap id="BaseResult" type="com.example.admin.model.OperationData">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user" property="user" jdbcType="VARCHAR"/>
+        <result column="operation" property="operation" jdbcType="VARCHAR"/>
+        <result column="date" property="date" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+    </resultMap>
+    <insert id="insertLog" parameterType="com.example.admin.model.OperationData">
+        insert into operation_data(id, user, operation, date,type)
+        values (#{id},#{user},#{operation},#{date},#{type})
+    </insert>
+<!--    分页查询-->
+    <select id="getLogData" resultMap="BaseResult">
+        SELECT *
+        FROM operation_data
+        <if test="keyword != null and keyword != ''">
+            WHERE type LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        ORDER BY id DESC
+        <if test="offset!=null and pageSize!=null">
+            LIMIT #{offset}, #{pageSize}
+        </if>
+    </select>
+<!--    查询总条数-->
+    <select id="getTotal" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT COUNT(*) from operation_data
+        <if test="keyword!=null and keyword!=''">
+            WHERE type LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </select>
+<!--    删除日志-->
+    <delete id="deleteLog">
+        DELETE FROM operation_data
+    </delete>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.admin.mapper.RoleAuthorizationMapper">
+    <resultMap id="BaseResult" type="com.example.admin.model.RoleAuthorization">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="rId" property="rId" jdbcType="INTEGER"/>
+        <result column="aId" property="aId" jdbcType="INTEGER"/>
+    </resultMap>
+    <!--    根据角色id插入所具有的权限-->
+    <insert id="insertPerByRid" parameterType="java.util.Map">
+        INSERT INTO role_authorization (rId, aId)
+        VALUES
+        <foreach item="item" collection="aIds" separator=",">
+            (#{rId}, #{item})
+        </foreach>
+    </insert>
+<!--    删除rId之前所拥有的权限-->
+    <delete id="deletePerByRid" parameterType="java.lang.Integer">
+        delete from role_authorization where rId=#{rId}
+    </delete>
+</mapper>

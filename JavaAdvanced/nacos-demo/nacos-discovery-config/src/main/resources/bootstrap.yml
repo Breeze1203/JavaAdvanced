@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: pro
+  application:
+    name: nacos-discovery-config
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+server:
+  port: 8854
