@@ -13,12 +13,6 @@ import org.springframework.stereotype.Service;
 @Service(value = "BlockedListNotifier")
 public class BlockedListNotifier implements ApplicationListener<BlockedListEvent> {
 
-    private String notificationAddress;
-
-    public void setNotificationAddress(String notificationAddress) {
-        this.notificationAddress = notificationAddress;
-    }
-
     @Async
     public void onApplicationEvent(BlockedListEvent event) {
         System.out.println("接收邮件的线程"+Thread.currentThread().getName());

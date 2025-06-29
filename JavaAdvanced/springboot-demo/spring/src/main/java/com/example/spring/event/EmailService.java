@@ -31,7 +31,6 @@ public class EmailService implements ApplicationEventPublisherAware {
         System.out.println("发邮件的线程"+Thread.currentThread().getName());
         if (blockedList.contains(address)) {
             publisher.publishEvent(new BlockedListEvent(this, address, content));
-            return;
         }
     }
 }

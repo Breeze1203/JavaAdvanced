@@ -13,6 +13,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -39,13 +40,13 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.GcBehaviorDemo">
-    <configuration name="GcBehaviorDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.pt.gc.GcBehaviorDemo" />
+  <component name="RunManager" selected="Application.AttendanceBitmap">
+    <configuration name="AttendanceBitmap" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.pt.year.AttendanceBitmap" />
       <module name="JavaSE" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.pt.gc.*" />
+          <option name="PATTERN" value="org.pt.year.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -53,12 +54,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="IOvsNIOTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.pt.io.IOvsNIOTest" />
+    <configuration name="ImageToBase64" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.pt.image.ImageToBase64" />
       <module name="JavaSE" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.pt.io.*" />
+          <option name="PATTERN" value="org.pt.image.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -66,12 +67,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MultiThreadConsumerTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.pt.kafka.MultiThreadConsumerTest" />
+    <configuration name="SynchronizedAllCases" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.pt.thread.SynchronizedAllCases" />
       <module name="JavaSE" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.pt.kafka.*" />
+          <option name="PATTERN" value="org.pt.thread.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -79,45 +80,39 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringInternMemoryTest.testStringCreationWithIntern" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="WeatherStation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.pt.design.observerdesign.WeatherStation" />
       <module name="JavaSE" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.pt.string.*" />
+          <option name="PATTERN" value="org.pt.design.observerdesign.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.pt.string" />
-      <option name="MAIN_CLASS_NAME" value="org.pt.string.StringInternMemoryTest" />
-      <option name="METHOD_NAME" value="testStringCreationWithIntern" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="StringInternMemoryTest.testStringCreationWithoutIntern" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="cat" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.pt.demo.cat" />
       <module name="JavaSE" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.pt.string.*" />
+          <option name="PATTERN" value="org.pt.demo.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="org.pt.string" />
-      <option name="MAIN_CLASS_NAME" value="org.pt.string.StringInternMemoryTest" />
-      <option name="METHOD_NAME" value="testStringCreationWithoutIntern" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.GcBehaviorDemo" />
-        <item itemvalue="JUnit.StringInternMemoryTest.testStringCreationWithIntern" />
-        <item itemvalue="JUnit.StringInternMemoryTest.testStringCreationWithoutIntern" />
-        <item itemvalue="Application.IOvsNIOTest" />
-        <item itemvalue="Application.MultiThreadConsumerTest" />
+        <item itemvalue="Application.AttendanceBitmap" />
+        <item itemvalue="Application.cat" />
+        <item itemvalue="Application.SynchronizedAllCases" />
+        <item itemvalue="Application.ImageToBase64" />
+        <item itemvalue="Application.WeatherStation" />
       </list>
     </recent_temporary>
   </component>
@@ -145,7 +140,16 @@
       <workItem from="1749990657868" duration="2774000" />
       <workItem from="1749994697623" duration="1565000" />
       <workItem from="1750069577734" duration="10000" />
-      <workItem from="1750069612842" duration="4691000" />
+      <workItem from="1750069612842" duration="5227000" />
+      <workItem from="1750075207911" duration="1098000" />
+      <workItem from="1750221332631" duration="1823000" />
+      <workItem from="1750250415633" duration="2910000" />
+      <workItem from="1750508579411" duration="2588000" />
+      <workItem from="1750594652022" duration="6000" />
+      <workItem from="1750818268560" duration="1874000" />
+      <workItem from="1750943731828" duration="174000" />
+      <workItem from="1751113292320" duration="1574000" />
+      <workItem from="1751194812879" duration="559000" />
     </task>
     <servers />
   </component>
