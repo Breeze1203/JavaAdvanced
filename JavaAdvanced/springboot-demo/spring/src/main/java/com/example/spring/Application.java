@@ -1,6 +1,7 @@
 package com.example.spring;
 
 import com.example.spring.bean.MySpringBean;
+import com.example.spring.bean.dependency.ServiceA;
 import com.example.spring.event.EmailService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +16,9 @@ public class Application {
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(Application.class, args);
         ApplicationStartup applicationStartup = run.getApplicationStartup();
+        // 从容器中获取Bean
+        ServiceA serviceA = run.getBean(ServiceA.class);
+        serviceA.doSomethingA();
         EmailService emailService = (EmailService) run.getBean("EmailService");
         emailService.sendEmail("pt","3548297839@qq.com");
         MySpringBean mySpringBean = run.getBean(MySpringBean.class);

@@ -1,0 +1,45 @@
+流程总结图
+
+```
+                  +--------------------------------+
+                  |  main(String[] args)           |
+                  |  SpringApplication.run(...)    |
+                  +--------------------------------+
+                                 |
+                                 v
++--------------------------------------------------------------------------+
+| 1. 创建 SpringApplication 实例                                            |
+|    - 推断应用类型 (Servlet, Reactive, None)                                |
+|    - 加载 Initializers 和 Listeners (从 spring.factories)                 |
++--------------------------------------------------------------------------+
+                                 |
+                                 v
++--------------------------------------------------------------------------+
+| 2. 执行 run() 方法                                                        |
+|    a. 启动 RunListeners, 广播 starting 事件                                |
+|    b. 创建和准备 Environment (加载 application.properties, 系统变量等)       |
+|    c. 创建 ApplicationContext (Spring 容器)                               |
+|    d. 准备 Context (设置 Environment, 调用 Initializers)                   |
+|                                                                          |
+|    e. **刷新 Context (context.refresh())** <-- [核心]                     |
+|       - 扫描用户定义的 Beans (@ComponentScan)                              |
+|       - **执行自动配置 (@EnableAutoConfiguration)**                        |
+|         -> AutoConfigurationImportSelector 根据条件加载配置类               |
+|       - 实例化所有单例 Bean (DI 依赖注入)                                    |
+|       - **启动内嵌 Web 服务器 (如 Tomcat)**                                 |
+|                                                                          |
+|    f. 广播 ApplicationReadyEvent, 表示应用已就绪                            |
++--------------------------------------------------------------------------+
+                                 |
+                                 v
++--------------------------------------------------------------------------+
+| 3. 调用 Runner                                                            |
+|    - 查找并执行 CommandLineRunner 和 ApplicationRunner 的 run 方法          |
++--------------------------------------------------------------------------+
+                                 |
+                                 v
+                       +-----------------------+
+                       |   应用运行中...        |
+                       +-----------------------+
+
+```
