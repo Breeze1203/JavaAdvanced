@@ -31,9 +31,7 @@ public class ReentrantExclusiveLock {
             CuratorFramework client2 = CuratorFrameworkFactory.newClient(ZK_URL, new ExponentialBackoffRetry(1000, 3));
             client1.start();
             client2.start();
-
             System.out.println("客户端1和客户端2已启动...");
-
             // 线程1尝试获取锁
             executor.submit(() -> {
                 InterProcessMutex lock = new InterProcessMutex(client1, LOCK_PATH);
