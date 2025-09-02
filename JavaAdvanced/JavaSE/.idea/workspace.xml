@@ -40,7 +40,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.AttendanceBitmap">
+  <component name="RunManager" selected="Application.MyThreadPool">
     <configuration name="AttendanceBitmap" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.pt.year.AttendanceBitmap" />
       <module name="JavaSE" />
@@ -54,12 +54,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ImageToBase64" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.pt.image.ImageToBase64" />
+    <configuration name="MyThreadPool" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.pt.thread.MyThreadPool" />
       <module name="JavaSE" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.pt.image.*" />
+          <option name="PATTERN" value="org.pt.thread.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -80,12 +80,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="WeatherStation" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.pt.design.observerdesign.WeatherStation" />
+    <configuration name="SynchronizedLockUpgradeDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.pt.thread.SynchronizedLockUpgradeDemo" />
       <module name="JavaSE" />
+      <option name="PROGRAM_PARAMETERS" value="-XX:+UseBiasedLocking" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.pt.design.observerdesign.*" />
+          <option name="PATTERN" value="org.pt.thread.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -106,13 +107,20 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.MyThreadPool" />
+      <item itemvalue="Application.AttendanceBitmap" />
+      <item itemvalue="Application.cat" />
+      <item itemvalue="Application.SynchronizedAllCases" />
+      <item itemvalue="Application.SynchronizedLockUpgradeDemo" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.MyThreadPool" />
+        <item itemvalue="Application.SynchronizedLockUpgradeDemo" />
         <item itemvalue="Application.AttendanceBitmap" />
         <item itemvalue="Application.cat" />
         <item itemvalue="Application.SynchronizedAllCases" />
-        <item itemvalue="Application.ImageToBase64" />
-        <item itemvalue="Application.WeatherStation" />
       </list>
     </recent_temporary>
   </component>
@@ -150,6 +158,9 @@
       <workItem from="1750943731828" duration="174000" />
       <workItem from="1751113292320" duration="1574000" />
       <workItem from="1751194812879" duration="559000" />
+      <workItem from="1751719515571" duration="4536000" />
+      <workItem from="1752063317321" duration="1091000" />
+      <workItem from="1752409484296" duration="1524000" />
     </task>
     <servers />
   </component>
