@@ -1,0 +1,12 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 123
+
+rate-limiter:
+  enabled: true
+  # 将默认算法切换为Redis的实现
+  default-algorithm: redisTokenBucket
+  default-key-resolver: ipKeyResolver
