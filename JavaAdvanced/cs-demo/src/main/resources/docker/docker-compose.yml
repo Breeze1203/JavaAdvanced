@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: digital-exhibition-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: digital_exhibition
+      MYSQL_ROOT_PASSWORD: "!@#qwer12"
+      MYSQL_ROOT_HOST: "%"
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ~/my-docker-data/digital-exhibition/mysql:/var/lib/mysql
