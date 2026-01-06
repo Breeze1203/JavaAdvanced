@@ -1,0 +1,6 @@
+server.tomcat.accept-count=1000
+server.tomcat.max-connections=10000
+server.tomcat.max-threads=500
+server.tomcat.min-spare-threads=100
+server.tomcat.keepAliveTimeOut=1800000
+server.tomcat.maxKeepAliveRequests=100
